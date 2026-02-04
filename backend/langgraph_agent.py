@@ -45,7 +45,13 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
     def generate(state: ChatState) -> dict:
         context = state.get("context", "").strip()
         if not context:
-            return {"answer": "I don't have that information in my knowledge base yet."}
+            if _is_greeting(state.get("question", "")):
+                return {
+                    "answer": "Hi! Ask me about projects, skills, experience, or education, and I’ll answer from my knowledge base."
+                }
+            return {
+                "answer": "I don't have that information in my knowledge base yet. Try asking about projects, skills, experience, or education."
+            }
 
         if not settings.openrouter_api_key:
             return {
@@ -96,3 +102,23 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
     graph.add_edge("generate", END)
 
     return graph.compile()
+
+
+def _is_greeting(text: str) -> bool:
+    normalized = " ".join(text.lower().split())
+    greetings = {
+        "hi",
+        "hello",
+        "hey",
+        "hiya",
+        "yo",
+        "good morning",
+        "good afternoon",
+        "good evening",
+        "thanks",
+        "thank you",
+        "thx",
+    }
+    if normalized in greetings:
+        return True
+    return any(normalized.startswith(greet + " ") for greet in greetings)
