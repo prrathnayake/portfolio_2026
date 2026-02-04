@@ -44,20 +44,9 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
 
     def generate(state: ChatState) -> dict:
         context = state.get("context", "").strip()
-        if not context:
-            if _is_greeting(state.get("question", "")):
-                return {
-                    "answer": "Hi! Ask me about projects, skills, experience, or education, and I’ll answer from my knowledge base."
-                }
-            return {
-                "answer": "I don't have that information in my knowledge base yet. Try asking about projects, skills, experience, or education."
-            }
 
         if not settings.openrouter_api_key:
-            return {
-                "answer": "AI is not configured. Add OPENROUTER_API_KEY in .env to enable full answers.\n\n"
-                f"Relevant context:\n{context}",
-            }
+            raise RuntimeError("OpenRouter API key is not configured.")
 
         system_prompt = _load_system_prompt(settings.prompts_dir / "system.md")
 
@@ -92,8 +81,8 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
             data = response.json()
             answer = data["choices"][0]["message"]["content"]
             return {"answer": (answer or "").strip()}
-        except Exception:
-            return {"answer": "AI request failed. Please try again later."}
+        except Exception as exc:
+            raise RuntimeError("OpenRouter request failed.") from exc
 
     graph.add_node("retrieve", retrieve)
     graph.add_node("generate", generate)
@@ -102,23 +91,3 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
     graph.add_edge("generate", END)
 
     return graph.compile()
-
-
-def _is_greeting(text: str) -> bool:
-    normalized = " ".join(text.lower().split())
-    greetings = {
-        "hi",
-        "hello",
-        "hey",
-        "hiya",
-        "yo",
-        "good morning",
-        "good afternoon",
-        "good evening",
-        "thanks",
-        "thank you",
-        "thx",
-    }
-    if normalized in greetings:
-        return True
-    return any(normalized.startswith(greet + " ") for greet in greetings)

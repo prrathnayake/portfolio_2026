@@ -64,5 +64,10 @@ def chat(payload: ChatRequest) -> dict:
     if chat_graph is None:
         raise HTTPException(status_code=503, detail="Knowledge base is not available.")
 
-    state = chat_graph.invoke({"question": payload.message})
-    return {"answer": state.get("answer", ""), "sources": state.get("sources", [])}
+    try:
+        state = chat_graph.invoke({"question": payload.message})
+        return {"answer": state.get("answer", ""), "sources": state.get("sources", [])}
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail="AI request failed.") from exc
