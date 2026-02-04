@@ -403,8 +403,35 @@
         </header>
 
         <div class="chat-window__body" data-chat-messages>
-          <div class="chat-bubble chat-bubble--ai">
-            Ask me about projects, skills, or experience. Answers are based on my knowledge base.
+          <div class="chat-suggestions" data-chat-suggestions aria-label="Suggested questions">
+            <button
+              class="chip chip--suggestion"
+              type="button"
+              data-chat-suggestion="What projects best show your backend architecture skills?"
+            >
+              What projects best show your backend architecture skills?
+            </button>
+            <button
+              class="chip chip--suggestion"
+              type="button"
+              data-chat-suggestion="Can you summarize your AI and automation projects?"
+            >
+              Can you summarize your AI and automation projects?
+            </button>
+            <button
+              class="chip chip--suggestion"
+              type="button"
+              data-chat-suggestion="What is your strongest programming stack and why?"
+            >
+              What is your strongest programming stack and why?
+            </button>
+            <button
+              class="chip chip--suggestion"
+              type="button"
+              data-chat-suggestion="What is your education background?"
+            >
+              What is your education background?
+            </button>
           </div>
         </div>
 

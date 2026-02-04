@@ -230,6 +230,7 @@
   const chatInput = document.querySelector("[data-chat-input]");
   const chatMessages = document.querySelector("[data-chat-messages]");
   const chatStatus = document.querySelector("[data-chat-status]");
+  const chatSuggestions = document.querySelector("[data-chat-suggestions]");
 
   function setChatOpen(isOpen) {
     if (!chatModal) return;
@@ -348,6 +349,17 @@
   chatCloseButtons.forEach((btn) => btn.addEventListener("click", () => setChatOpen(false)));
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && chatModal?.dataset.open === "true") setChatOpen(false);
+  });
+
+  chatSuggestions?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const button = target.closest("[data-chat-suggestion]");
+    if (!(button instanceof HTMLElement)) return;
+    const suggestion = button.getAttribute("data-chat-suggestion");
+    if (!suggestion || !(chatInput instanceof HTMLTextAreaElement)) return;
+    chatInput.value = suggestion;
+    chatInput.focus();
   });
 
   chatForm?.addEventListener("submit", async (e) => {
