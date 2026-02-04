@@ -8,6 +8,7 @@ import httpx
 from langgraph.graph import END, START, StateGraph
 import time
 
+from .logging_utils import log_llm_error, log_llm_request, log_llm_response
 from .rag import RagStore
 from .settings import Settings
 
@@ -82,6 +83,7 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
         with httpx.Client(timeout=20) as client:
             for model in models:
                 payload = {**base_payload, "model": model}
+                log_llm_request(model=model, url=url, messages=payload["messages"])
                 response = _post_with_retries(
                     client,
                     url,
@@ -92,6 +94,11 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
                 )
                 last_response = response
                 if response.status_code >= 400:
+                    log_llm_error(
+                        model=model,
+                        status_code=response.status_code,
+                        message=_extract_response_text(response),
+                    )
                     # Try next fallback model if available.
                     if model != models[-1]:
                         continue
@@ -100,6 +107,7 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
                 try:
                     data = response.json()
                     answer = data["choices"][0]["message"]["content"]
+                    log_llm_response(model=model, status_code=response.status_code, content=answer or "")
                     return {"answer": (answer or "").strip()}
                 except Exception as exc:
                     last_error = exc
@@ -134,6 +142,13 @@ def _format_openrouter_error(response: httpx.Response) -> str:
     except Exception:
         message = response.text or "Unknown error"
     return f"OpenRouter error {response.status_code}: {message}"
+
+
+def _extract_response_text(response: httpx.Response) -> str:
+    try:
+        return response.text
+    except Exception:
+        return "Unable to read response text"
 
 
 def _post_with_retries(

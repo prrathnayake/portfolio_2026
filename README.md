@@ -31,6 +31,10 @@ If no OpenRouter key is set, the API returns a helpful fallback message plus rel
 
 **Note:** LangGraph 0.6.x supports Python 3.9. If you upgrade to Python 3.10+, you can pin a newer LangGraph version.
 
+## LLM Call Logs
+
+All LLM requests/responses are logged to `logs/llm_calls.log` (git-ignored). This includes full message payloads sent to the model.
+
 ## Tests
 
 - `python -m pytest -q`
