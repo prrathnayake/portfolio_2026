@@ -12,3 +12,4 @@
 - Chat modal includes suggestion buttons (`data-chat-suggestions`) to prefill the input.
 - `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.
 - Optional security controls exist via `.env` (`API_ACCESS_TOKEN`, `RATE_LIMIT_*`, `LLM_LOG_*`).
+- Installation/setup instructions live in `INSTALLATION.md`.

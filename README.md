@@ -1,56 +1,45 @@
-# Pasan — Developer Portfolio
+# Pasan Rathnayake — Developer Portfolio
 
-Single-page developer portfolio (dark theme) with a FastAPI backend and an SMTP-backed contact form.
+Single-page developer portfolio with a dark lo‑fi zine aesthetic, a FastAPI backend, and an AI portfolio assistant.
 
-## Quickstart
+![Portfolio preview](frontend/assets/og.png)
 
-1. Create a virtualenv and install deps:
-   - `python3 -m venv .venv`
-   - `source .venv/bin/activate`
-   - `python -m pip install -r requirements.txt`
+## Highlights
 
-2. Configure env:
-   - `cp .env.example .env`
-   - Edit `.env` with your SMTP details.
+- Full‑screen, sectioned layout with scroll reveal animations and a focused navigation bar.
+- Data‑driven content from JSON files for About, Skills, Projects, Experience, and Education.
+- AI portfolio assistant powered by LangGraph + OpenRouter with a local RAG index.
+- SMTP-backed contact form with validation.
+- Optional API access token and basic rate limiting for chat/contact endpoints.
+- LLM logging controls with redaction options for safer production usage.
 
-3. Run:
-   - `python -m uvicorn backend.main:app --reload`
+## Tech Stack
 
-Then open `http://127.0.0.1:8000`.
+- **Frontend:** HTML, CSS, vanilla JavaScript
+- **Backend:** FastAPI, Uvicorn
+- **AI/RAG:** LangGraph, TF‑IDF vector store, OpenRouter
+- **Email:** SMTP (TLS/SSL)
 
-## AI Agent (RAG)
+## Architecture
 
-On startup, the app reads all files in the `knowledge/` folder, builds a vector embedding store, and uses a LangGraph-based agent to answer questions in the “Ask AI about me” chat window.
+- **Frontend:** Static assets served by FastAPI from `frontend/`.
+- **Backend:** REST endpoints for contact and chat in `backend/`.
+- **RAG pipeline:** Indexes `knowledge/` at startup; uses top‑K retrieval to augment answers.
+- **AI agent:** LangGraph state machine with OpenRouter chat completions.
 
-Optional OpenRouter config (for higher‑quality answers):
-- Add `OPENROUTER_API_KEY` and optionally `OPENROUTER_MODEL` in `.env`.
-- Set `OPENROUTER_FALLBACK_MODELS` (comma‑separated) to try alternate models on 429/5xx errors.
-- Tweak retry behavior with `OPENROUTER_MAX_RETRIES` and `OPENROUTER_RETRY_BACKOFF`.
+## Content & Data
 
-If no OpenRouter key is set, the API returns a helpful fallback message plus relevant context snippets.
+- **Content JSON:** `frontend/data/about.json`, `skills.json`, `projects.json`, `experience.json`, `education.json`
+- **Social links:** `frontend/data/links.json`
+- **Knowledge base:** `knowledge/` (source files for the AI agent)
 
-**Note:** LangGraph 0.6.x supports Python 3.9. If you upgrade to Python 3.10+, you can pin a newer LangGraph version.
+## Security & Privacy
 
-## LLM Call Logs
+- Optional API access token for `/api/chat` and `/api/contact`.
+- Per‑IP rate limiting for chat/contact requests.
+- LLM call logging can be disabled or redacted via environment flags.
 
-All LLM requests/responses are logged to `logs/llm_calls.log` (git-ignored). This includes full message payloads sent to the model.
+## Documentation
 
-## Tests
-
-- `python -m pytest -q`
-
-## Resume
-
-The site expects an optional resume at `frontend/assets/resume.pdf` (linked from the Home section).
-Replace it with your latest PDF (or delete the link in `frontend/index.html`).
-
-## Environment variables
-
-All secrets/config live in `.env` (never commit it).
-
-- `RAG_KNOWLEDGE_DIR`, `RAG_CHUNK_SIZE`, `RAG_CHUNK_OVERLAP`, `RAG_TOP_K`
-- `OPENROUTER_API_KEY`, `OPENROUTER_MODEL`, `OPENROUTER_BASE_URL`, `OPENROUTER_REFERER`, `OPENROUTER_TITLE`
-- `OPENROUTER_FALLBACK_MODELS`, `OPENROUTER_MAX_RETRIES`, `OPENROUTER_RETRY_BACKOFF`
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`
-- `SMTP_FROM`, `SMTP_TO`
-- `SMTP_USE_TLS` (STARTTLS) or `SMTP_USE_SSL` (SMTPS)
+- Setup & installation: `INSTALLATION.md`
+- Environment variables reference: `.env.example`

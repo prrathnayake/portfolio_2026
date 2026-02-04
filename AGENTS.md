@@ -12,6 +12,7 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - `prompts/system.md` avoids “Based on Pasan’s …” phrasing; answers should start with “Pasan …”.
 - `tests/`: Pytest suite (API validation and contact form behavior).
 - `knowledge/`: Source/reference materials not served by the app.
+- `INSTALLATION.md`: Setup/run/test instructions (README should not duplicate install steps).
 
 ## Build, Test, and Development Commands
 - Create env + install deps:
