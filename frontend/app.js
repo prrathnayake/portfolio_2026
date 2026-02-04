@@ -427,6 +427,29 @@
 
   // Footer social links
   const footerSocial = document.querySelector("[data-footer-social]");
+  function buildSocialIcon(label) {
+    const key = label.toLowerCase();
+    const iconMap = {
+      github: "github",
+    };
+    const slug = iconMap[key];
+    if (slug) {
+      const img = document.createElement("img");
+      img.className = "social-link__img";
+      img.src = `/static/assets/icons/${slug}.svg`;
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.setAttribute("aria-hidden", "true");
+      return img;
+    }
+    const span = document.createElement("span");
+    span.className = "social-link__icon";
+    span.textContent = getSocialIconFallback(label);
+    span.setAttribute("aria-hidden", "true");
+    return span;
+  }
+
   async function loadFooterLinks() {
     if (!footerSocial) return;
     try {
@@ -444,10 +467,11 @@
         a.target = "_blank";
         a.rel = "noreferrer";
         a.className = "social-link";
-        a.innerHTML = `
-          <span class="social-link__icon" aria-hidden="true">${getSocialIcon(label)}</span>
-          <span class="sr-only">${label}</span>
-        `;
+        a.appendChild(buildSocialIcon(label));
+        const sr = document.createElement("span");
+        sr.className = "sr-only";
+        sr.textContent = label;
+        a.appendChild(sr);
         footerSocial.appendChild(a);
       }
     } catch {
@@ -469,7 +493,7 @@
   }
   checkResume();
 
-  function getSocialIcon(label) {
+  function getSocialIconFallback(label) {
     const key = label.toLowerCase();
     if (key.includes("linkedin")) {
       return "in";

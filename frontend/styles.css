@@ -548,6 +548,12 @@ textarea:focus-visible {
   font-size: 0.9rem;
 }
 
+.social-link__img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
 /* Chat window */
 .chat-modal {
   position: fixed;
