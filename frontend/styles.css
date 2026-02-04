@@ -191,6 +191,40 @@ main,
   gap: 14px;
 }
 
+.nav__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav__icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.nav__icon-link:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav__icon-link:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.nav__icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
+}
+
 .nav__links a {
   padding: 8px 10px;
   border-radius: 12px;
@@ -826,6 +860,10 @@ textarea:focus-visible {
 
   .site-header[data-open="true"] .nav__links {
     display: flex;
+  }
+
+  .nav__actions {
+    margin-left: auto;
   }
 
   .nav__links a {
