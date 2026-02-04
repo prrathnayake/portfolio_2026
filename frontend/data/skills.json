@@ -1,0 +1,37 @@
+[
+  {
+    "category": "Backend & Languages",
+    "items": ["Python", "C++", "JavaScript", "Dart", "SQL"]
+  },
+  {
+    "category": "Distributed & DevOps",
+    "items": ["Kafka", "Docker", "Git", "GitHub Actions", "AWS (fundamentals)"]
+  },
+  {
+    "category": "AI & Automation",
+    "items": ["LangChain", "LangGraph", "OpenAI API", "n8n"]
+  },
+  {
+    "category": "Frameworks & Data",
+    "items": ["Node.js", "React", "Flutter", "REST", "MongoDB", "MySQL", "Firebase"]
+  },
+  {
+    "category": "Security & Practices",
+    "items": ["Secure Coding", "Threat-aware Design", "Agile / SDLC", "CI/CD"]
+  },
+  {
+    "category": "Developer Tools",
+    "items": [
+      "Postman",
+      "Wireshark",
+      "Metasploit",
+      "Kali Linux",
+      "VS Code",
+      "Linux",
+      "WSL",
+      "Docker Desktop",
+      "Claude Code",
+      "Codex"
+    ]
+  }
+]

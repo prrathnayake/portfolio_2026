@@ -1,0 +1,41 @@
+[
+  {
+    "title": "Information Technology Analyst",
+    "company": "Mentone Furniture Clearance",
+    "location": "Mentone",
+    "start": "2025-09",
+    "end": "2025-12",
+    "bullets": [
+      "Supported backend systems and technical operations for eCommerce platforms.",
+      "Developed and maintained custom features using WordPress and Shopify.",
+      "Delivered troubleshooting, enhancements, and backend improvements for stability.",
+      "Improved maintainability through structured enhancements and documentation."
+    ]
+  },
+  {
+    "title": "Technician & System Integrator",
+    "company": "AVI Solutions",
+    "location": "",
+    "start": "2023-12",
+    "end": "2025-08",
+    "bullets": [
+      "Installed and configured IoT networks and automation systems.",
+      "Diagnosed and resolved hardware, software, and connectivity issues.",
+      "Collaborated with engineering teams to improve system reliability.",
+      "Documented internal processes to support onboarding and maintenance."
+    ]
+  },
+  {
+    "title": "Software Engineer Intern",
+    "company": "London Stock Exchange Group",
+    "location": "",
+    "start": "2022-12",
+    "end": "2023-06",
+    "bullets": [
+      "Developed backend components using C++ and Python.",
+      "Built and supported Kafka-based stream processing systems.",
+      "Participated in Agile ceremonies and technical design reviews.",
+      "Contributed to performance and throughput improvements in distributed architectures."
+    ]
+  }
+]

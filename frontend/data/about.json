@@ -1,0 +1,11 @@
+{
+  "headline": "Graduate Software Engineer — AI Systems & Automation",
+  "summary": "Graduate software engineer with experience in software development, AI-assisted workflows, and distributed systems. Experienced in C++, Python, JavaScript, SQL, Kafka, and containerised tooling. Skilled in building real-time and event-driven systems using LangGraph, LangChain, and modern APIs.",
+  "highlights": [
+    "Backend API development in Python with REST services and event-driven architecture.",
+    "Distributed systems and stream processing with Kafka, focused on performance and throughput.",
+    "AI-assisted automation workflows using LangChain, LangGraph, and modern AI APIs.",
+    "Containerised development and CI/CD practices with Docker and GitHub Actions.",
+    "eCommerce platform enhancements with WordPress and Shopify integrations."
+  ]
+}

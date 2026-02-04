@@ -1,0 +1,20 @@
+[
+  {
+    "degree": "Master of Information Technology (Cyber Security)",
+    "institution": "Deakin University",
+    "location": "Australia",
+    "graduated": "2025-08"
+  },
+  {
+    "degree": "Bachelor of Computer Science (Software Engineering)",
+    "institution": "Edith Cowan University",
+    "location": "Australia",
+    "graduated": "2023-03"
+  },
+  {
+    "degree": "Certificate in Computer Applications",
+    "institution": "University of Colombo (IHRA)",
+    "location": "Sri Lanka",
+    "graduated": "2020-03"
+  }
+]
