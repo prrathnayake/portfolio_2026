@@ -34,14 +34,24 @@ def answer_question(message: str, rag_store: RagStore, settings: Settings) -> di
     context = "\n\n".join(context_blocks)
     system_prompt = _load_system_prompt(settings.prompts_dir / "system.md")
 
-    if not settings.openai_api_key:
+    if not settings.openrouter_api_key:
         return {
-            "answer": "AI is not configured. Add OPENAI_API_KEY in .env to enable full answers.\n\n"
+            "answer": "AI is not configured. Add OPENROUTER_API_KEY in .env to enable full answers.\n\n"
             f"Relevant context:\n{context}",
             "sources": sources,
         }
 
-    client = OpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url or None)
+    headers = {}
+    if settings.openrouter_referer:
+        headers["HTTP-Referer"] = settings.openrouter_referer
+    if settings.openrouter_title:
+        headers["X-Title"] = settings.openrouter_title
+
+    client = OpenAI(
+        api_key=settings.openrouter_api_key,
+        base_url=settings.openrouter_base_url,
+        default_headers=headers or None,
+    )
     user_prompt = (
         "Use the following context to answer the question.\n\n"
         f"Context:\n{context}\n\n"
@@ -50,7 +60,7 @@ def answer_question(message: str, rag_store: RagStore, settings: Settings) -> di
     )
 
     response = client.chat.completions.create(
-        model=settings.openai_model,
+        model=settings.openrouter_model,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},

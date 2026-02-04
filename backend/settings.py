@@ -25,9 +25,11 @@ class Settings:
     rag_top_k: int
     prompts_dir: Path
 
-    openai_api_key: str | None
-    openai_model: str
-    openai_base_url: str | None
+    openrouter_api_key: str | None
+    openrouter_model: str
+    openrouter_base_url: str
+    openrouter_referer: str | None
+    openrouter_title: str | None
 
     smtp_host: str | None
     smtp_port: int
@@ -76,9 +78,11 @@ def get_settings() -> Settings:
         rag_chunk_overlap=int(os.getenv("RAG_CHUNK_OVERLAP", "160")),
         rag_top_k=int(os.getenv("RAG_TOP_K", "4")),
         prompts_dir=root_dir / "prompts",
-        openai_api_key=os.getenv("OPENAI_API_KEY"),
-        openai_model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-        openai_base_url=os.getenv("OPENAI_BASE_URL"),
+        openrouter_api_key=os.getenv("OPENROUTER_API_KEY"),
+        openrouter_model=os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini"),
+        openrouter_base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
+        openrouter_referer=os.getenv("OPENROUTER_REFERER"),
+        openrouter_title=os.getenv("OPENROUTER_TITLE"),
         smtp_host=os.getenv("SMTP_HOST"),
         smtp_port=smtp_port,
         smtp_username=os.getenv("SMTP_USERNAME"),
