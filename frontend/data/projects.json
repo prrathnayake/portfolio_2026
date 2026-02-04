@@ -3,54 +3,54 @@
     "title": "Uber Backend (Educational Architecture)",
     "description": "Built an educational C++ backend inspired by Uber’s architecture using a custom modular framework. Implemented three multithreaded microservices and centralized logging via a Singleton pattern for clarity, maintainability, and observability.",
     "stack": ["C++", "Conan", "appWrite", "HTTP", "gRPC", "Kafka", "RabbitMQ", "H3", "Database", "Protobuf"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/uber_backend"
   },
   {
     "title": "Uber Rider App (Frontend)",
     "description": "Designed and developed a rider-facing Flutter app integrated with a modular C++ microservices backend. Implemented JWT-based authentication, real-time ride status tracking, and location updates with maps integration.",
     "stack": ["Flutter", "Dart", "REST API", "JWT", "State Management", "Google Maps", "HTTP Client"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/uber_frontend_rider"
   },
   {
     "title": "C++ Modular Framework",
     "description": "Created a high‑performance C++ framework for distributed systems with integrated Kafka, RabbitMQ, and Uber H3 for geospatial indexing. Includes a robust utilities toolkit and a Singleton Logger for console/file logging.",
     "stack": ["C++", "Conan", "Kafka", "RabbitMQ", "H3", "Database", "Protobuf"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/cpp-base"
   },
   {
     "title": "WhatsApp UI Clone (Mobile)",
     "description": "Replicated the core WhatsApp interface to demonstrate UI/UX implementation and component-based mobile architecture.",
     "stack": ["React Native"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/React-Native-WhatsAppUI"
   },
   {
     "title": "Instagram Clone (Mobile)",
     "description": "Built a mobile clone with profile management, image upload/deletion, and post interactions (likes) to demonstrate full-stack mobile workflows.",
     "stack": ["React Native", "Node.js", "MongoDB", "Redux"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/Insta-ui-clone"
   },
   {
     "title": "Plan + Approve Web-Search AI Agent (CLI)",
     "description": "Implemented a stateful AI agent that plans, pauses for approval, and conditionally performs web search. Used LangGraph for interrupt/resume, conversation summarization, memory checkpointing, and structured JSON planning with detailed logging.",
     "stack": ["Python", "LangGraph", "LangChain", "OpenAI API", "Firecrawl", "dotenv", "Logging"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/agents_learning"
   },
   {
     "title": "eHealth Medical System (University Final Project)",
     "description": "Developed a full‑stack web and mobile platform for physiotherapists and clients to manage profiles, appointments, and medical reports with SDLC and unit testing.",
     "stack": ["ReactJS", "NodeJS", "Flutter", "Docker", "MySQL", "Python", "Firebase"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/myHealthSystem"
   },
   {
     "title": "Employee Management System (University Group Project)",
     "description": "Built a centralized web application to streamline monthly payroll processing and automate payslip distribution.",
     "stack": ["JavaScript", "Database"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/SIT725_Group_Project"
   },
   {
     "title": "CRUD Web Application",
     "description": "Created a web app for direct database manipulation through the UI to showcase CRUD operations and real‑time interactions.",
     "stack": ["ReactJS", "NodeJS", "MySQL"],
-    "link": ""
+    "github": "https://github.com/prrathnayake/CRUDwebApp"
   }
 ]

@@ -391,6 +391,40 @@ p {
   flex-wrap: wrap;
 }
 
+.card__links {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card__icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  transition: transform 160ms ease, background 160ms ease;
+}
+
+.card__icon-link:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card__icon-link:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.card__icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
+}
+
 .card__link {
   color: rgba(255, 255, 255, 0.9);
   font-weight: 800;

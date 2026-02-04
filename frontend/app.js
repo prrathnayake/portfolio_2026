@@ -395,15 +395,33 @@
         const description = String(project?.description ?? "").trim();
         const stack = Array.isArray(project?.stack) ? project.stack : [];
         const link = String(project?.link ?? "").trim();
+        const github = String(project?.github ?? "").trim();
 
         if (!title || !description) continue;
+
+        const linkItems = [];
+        if (github) {
+          linkItems.push(`
+            <a class="card__icon-link" href="${github}" target="_blank" rel="noreferrer" aria-label="View on GitHub">
+              <img class="card__icon" src="/static/assets/icons/github.svg" alt="" aria-hidden="true" />
+            </a>
+          `);
+        }
+        if (link) {
+          linkItems.push(
+            `<a class="card__link" href="${link}" target="_blank" rel="noreferrer">View</a>`
+          );
+        }
+        const linkMarkup = linkItems.length
+          ? `<div class="card__links">${linkItems.join("")}</div>`
+          : "";
 
         const card = document.createElement("article");
         card.className = "card";
         card.innerHTML = `
           <div class="card__top">
             <h3 class="card__title"></h3>
-            ${link ? `<a class="card__link" href="${link}" target="_blank" rel="noreferrer">View</a>` : ""}
+            ${linkMarkup}
           </div>
           <p class="muted"></p>
           ${
