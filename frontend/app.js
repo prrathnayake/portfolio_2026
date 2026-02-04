@@ -67,6 +67,43 @@
     sectionEls.forEach((el) => observer.observe(el));
   }
 
+  // Scroll reveal animations
+  const revealItems = Array.from(document.querySelectorAll("main .container"));
+  revealItems.forEach((el, index) => {
+    el.classList.add("reveal");
+    const delay = Math.min(index * 80, 320);
+    el.style.setProperty("--delay", `${delay}ms`);
+  });
+
+  function elementInView(el) {
+    const rect = el.getBoundingClientRect();
+    return rect.top < window.innerHeight * 0.85 && rect.bottom > 0;
+  }
+
+  if (!prefersReducedMotion && "IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    revealItems.forEach((el) => {
+      if (elementInView(el)) {
+        el.classList.add("is-visible");
+      } else {
+        revealObserver.observe(el);
+      }
+    });
+  } else {
+    revealItems.forEach((el) => el.classList.add("is-visible"));
+  }
+
   // Contact form
   const form = document.querySelector("[data-contact-form]");
   const statusEl = document.querySelector("[data-contact-status]");
@@ -195,4 +232,3 @@
     });
   }
 })();
-

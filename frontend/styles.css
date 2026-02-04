@@ -175,7 +175,9 @@ a:hover {
 }
 
 .section {
-  padding: 72px 0;
+  padding: 96px 0;
+  min-height: 100vh;
+  scroll-margin-top: 90px;
 }
 
 .hero {
@@ -200,7 +202,7 @@ a:hover {
 
 .hero__title {
   margin: 0 0 12px;
-  font-size: clamp(2.2rem, 3vw, 3.1rem);
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
   line-height: 1.1;
 }
 
@@ -477,6 +479,27 @@ textarea:focus-visible {
   flex-wrap: wrap;
 }
 
+/* Scroll reveal */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms ease;
+  transition-delay: var(--delay, 0ms);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @media (max-width: 920px) {
   .hero__grid {
     grid-template-columns: 1fr;
@@ -523,5 +546,8 @@ textarea:focus-visible {
   .form {
     grid-template-columns: 1fr;
   }
-}
 
+  .section {
+    padding: 72px 0;
+  }
+}
