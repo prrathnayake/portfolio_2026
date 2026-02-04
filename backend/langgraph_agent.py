@@ -77,12 +77,18 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
         try:
             with httpx.Client(timeout=20) as client:
                 response = client.post(url, headers=headers, json=payload)
-            response.raise_for_status()
+        except httpx.RequestError as exc:
+            raise RuntimeError(f"OpenRouter request error: {exc}") from exc
+
+        if response.status_code >= 400:
+            raise RuntimeError(_format_openrouter_error(response))
+
+        try:
             data = response.json()
             answer = data["choices"][0]["message"]["content"]
             return {"answer": (answer or "").strip()}
         except Exception as exc:
-            raise RuntimeError("OpenRouter request failed.") from exc
+            raise RuntimeError("OpenRouter returned an unexpected response.") from exc
 
     graph.add_node("retrieve", retrieve)
     graph.add_node("generate", generate)
@@ -91,3 +97,17 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
     graph.add_edge("generate", END)
 
     return graph.compile()
+
+
+def _format_openrouter_error(response: httpx.Response) -> str:
+    try:
+        data = response.json()
+        error = data.get("error") if isinstance(data, dict) else None
+        if isinstance(error, dict):
+            message = error.get("message") or error.get("code") or str(error)
+        else:
+            message = data.get("message") if isinstance(data, dict) else None
+        message = message or response.text or "Unknown error"
+    except Exception:
+        message = response.text or "Unknown error"
+    return f"OpenRouter error {response.status_code}: {message}"
