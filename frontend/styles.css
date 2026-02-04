@@ -609,6 +609,27 @@ textarea:focus-visible {
   line-height: 1.45;
 }
 
+.chat-bubble p {
+  margin: 0 0 8px;
+}
+
+.chat-bubble p:last-child {
+  margin-bottom: 0;
+}
+
+.chat-bubble strong {
+  font-weight: 800;
+}
+
+.chat-list {
+  margin: 0 0 8px 18px;
+  padding: 0;
+}
+
+.chat-list li {
+  margin: 4px 0;
+}
+
 .chat-bubble--user {
   align-self: flex-end;
   background: #ffffff;

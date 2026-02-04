@@ -241,11 +241,79 @@
     }
   }
 
+  function appendBoldText(el, text) {
+    const parts = text.split("**");
+    parts.forEach((part, index) => {
+      if (!part) return;
+      if (index % 2 === 1) {
+        const strong = document.createElement("strong");
+        strong.textContent = part;
+        el.appendChild(strong);
+      } else {
+        el.appendChild(document.createTextNode(part));
+      }
+    });
+  }
+
+  function renderChatMessage(text) {
+    const fragment = document.createDocumentFragment();
+    const lines = text.split(/\r?\n/);
+    let paragraphParts = [];
+    let listEl = null;
+
+    function flushParagraph() {
+      if (paragraphParts.length === 0) return;
+      const p = document.createElement("p");
+      appendBoldText(p, paragraphParts.join(" "));
+      fragment.appendChild(p);
+      paragraphParts = [];
+    }
+
+    function flushList() {
+      if (!listEl) return;
+      fragment.appendChild(listEl);
+      listEl = null;
+    }
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushParagraph();
+        flushList();
+        continue;
+      }
+
+      const isBullet =
+        trimmed.startsWith("- ") || trimmed.startsWith("* ") || trimmed.startsWith("• ");
+      if (isBullet) {
+        flushParagraph();
+        if (!listEl) {
+          listEl = document.createElement("ul");
+          listEl.className = "chat-list";
+        }
+        const li = document.createElement("li");
+        appendBoldText(li, trimmed.slice(2).trim());
+        listEl.appendChild(li);
+      } else {
+        flushList();
+        paragraphParts.push(trimmed);
+      }
+    }
+
+    flushParagraph();
+    flushList();
+    return fragment;
+  }
+
   function addChatBubble(role, text) {
     if (!chatMessages) return;
     const bubble = document.createElement("div");
     bubble.className = `chat-bubble ${role === "user" ? "chat-bubble--user" : "chat-bubble--ai"}`;
-    bubble.textContent = text;
+    if (role === "user") {
+      bubble.textContent = text;
+    } else {
+      bubble.appendChild(renderChatMessage(text));
+    }
     chatMessages.appendChild(bubble);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
