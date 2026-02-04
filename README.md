@@ -2,7 +2,7 @@
 
 Single-page developer portfolio with a dark lo‑fi zine aesthetic, a FastAPI backend, and an AI portfolio assistant.
 
-![Portfolio preview](frontend/assets/og.png)
+![Portfolio preview](frontend/assets/website-preview.png)
 
 ## Highlights
 
