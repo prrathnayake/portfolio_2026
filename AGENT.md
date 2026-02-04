@@ -7,6 +7,7 @@
 - Commit changes at the end of each task when a Git repo is available; if not, ask to initialize Git.
 - `frontend/data/projects.json` supports a `github` link used to render repo icons.
 - `prompts/guardrails.md` exists and is mirrored into `prompts/system.md`.
+- System prompt requires third-person references to Pasan (e.g., “Pasan is…”).
 - Chat modal includes suggestion buttons (`data-chat-suggestions`) to prefill the input.
 - `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.
 - Optional security controls exist via `.env` (`API_ACCESS_TOKEN`, `RATE_LIMIT_*`, `LLM_LOG_*`).

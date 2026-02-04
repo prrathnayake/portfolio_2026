@@ -8,6 +8,7 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - `frontend/assets/`: Site assets (favicon, optional `resume.pdf`).
 - `frontend/data/`: Optional `projects.json` used to populate the Projects section (supports a `github` link for the repo icon).
 - `prompts/`: LLM system prompt (`system.md`) plus guardrails (`guardrails.md`), keep them aligned.
+- `prompts/system.md` must address Pasan in third person.
 - `tests/`: Pytest suite (API validation and contact form behavior).
 - `knowledge/`: Source/reference materials not served by the app.
 
