@@ -8,3 +8,4 @@
 - `frontend/data/projects.json` supports a `github` link used to render repo icons.
 - `prompts/guardrails.md` exists and is mirrored into `prompts/system.md`.
 - Chat modal includes suggestion buttons (`data-chat-suggestions`) to prefill the input.
+- `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.

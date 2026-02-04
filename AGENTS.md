@@ -48,3 +48,4 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - Keep `AGENT.md` and `AGENTS.md` in sync.
 - Commit changes at the end of each task when a Git repo is available; if not, ask to initialize Git.
 - Chat modal includes suggestion buttons in `frontend/index.html` (`data-chat-suggestions`) that prefill the input.
+- `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.
