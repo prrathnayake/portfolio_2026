@@ -47,7 +47,7 @@ def build_rag_store(knowledge_dir: Path, *, chunk_size: int, chunk_overlap: int)
         if not text:
             continue
         for chunk in _chunk_text(text, chunk_size, chunk_overlap):
-            chunks.append(RagChunk(text=chunk, source=str(path)))
+            chunks.append(RagChunk(text=chunk, source=_format_source(path, knowledge_dir)))
 
     if not chunks:
         return None
@@ -101,3 +101,9 @@ def _chunk_text(text: str, chunk_size: int, chunk_overlap: int) -> Iterable[str]
         chunks.append(chunk)
     return chunks
 
+
+def _format_source(path: Path, knowledge_dir: Path) -> str:
+    try:
+        return str(path.relative_to(knowledge_dir))
+    except Exception:
+        return path.name

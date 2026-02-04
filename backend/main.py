@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
+import time
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -19,6 +20,45 @@ FRONTEND_DIR = ROOT_DIR / "frontend"
 app = FastAPI(title="Pasan Portfolio")
 
 app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
+
+_RATE_LIMIT_STORE: dict[str, list[float]] = {}
+
+
+def _get_client_id(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    if request.client:
+        return request.client.host
+    return "unknown"
+
+
+def _enforce_rate_limit(request: Request, *, bucket: str, limit: int, window_seconds: int) -> None:
+    if limit <= 0 or window_seconds <= 0:
+        return
+    key = f"{bucket}:{_get_client_id(request)}"
+    now = time.monotonic()
+    timestamps = _RATE_LIMIT_STORE.get(key, [])
+    cutoff = now - window_seconds
+    timestamps = [ts for ts in timestamps if ts > cutoff]
+    if len(timestamps) >= limit:
+        raise HTTPException(status_code=429, detail="Too many requests. Please try again later.")
+    timestamps.append(now)
+    _RATE_LIMIT_STORE[key] = timestamps
+
+
+def _require_api_key(request: Request, settings) -> None:
+    token = settings.api_access_token
+    if not token:
+        return
+    header = request.headers.get("authorization") or request.headers.get("x-api-key") or ""
+    header = header.strip()
+    if header.lower().startswith("bearer "):
+        provided = header.split(" ", 1)[1].strip()
+    else:
+        provided = header
+    if not provided or provided != token:
+        raise HTTPException(status_code=401, detail="Unauthorized.")
 
 
 @app.on_event("startup")
@@ -45,8 +85,15 @@ def health() -> dict:
 
 
 @app.post("/api/contact")
-def contact(payload: ContactRequest) -> dict:
+def contact(payload: ContactRequest, request: Request) -> dict:
     settings = get_settings()
+    _require_api_key(request, settings)
+    _enforce_rate_limit(
+        request,
+        bucket="contact",
+        limit=settings.rate_limit_contact_max,
+        window_seconds=settings.rate_limit_window_seconds,
+    )
     if not settings.smtp_configured:
         raise HTTPException(status_code=503, detail="Email delivery is not configured.")
 
@@ -59,8 +106,16 @@ def contact(payload: ContactRequest) -> dict:
 
 
 @app.post("/api/chat")
-def chat(payload: ChatRequest) -> dict:
+def chat(payload: ChatRequest, request: Request) -> dict:
     chat_graph = getattr(app.state, "chat_graph", None)
+    settings = get_settings()
+    _require_api_key(request, settings)
+    _enforce_rate_limit(
+        request,
+        bucket="chat",
+        limit=settings.rate_limit_chat_max,
+        window_seconds=settings.rate_limit_window_seconds,
+    )
     if chat_graph is None:
         raise HTTPException(status_code=503, detail="Knowledge base is not available.")
 

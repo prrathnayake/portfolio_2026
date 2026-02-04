@@ -40,6 +40,7 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - Secrets live only in `.env`; never commit it.
 - Update `.env.example` when adding new config keys.
 - `frontend/assets/resume.pdf` is optional; remove the link in `frontend/index.html` if not used.
+- Optional security controls: `API_ACCESS_TOKEN` for protected endpoints, rate limiting via `RATE_LIMIT_*`, and LLM logging controls via `LLM_LOG_*`.
 
 ## Agent Notes
 - Always read all files in `.codex-memory/` at the start of each task.

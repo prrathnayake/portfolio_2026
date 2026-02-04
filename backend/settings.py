@@ -25,6 +25,14 @@ class Settings:
     rag_top_k: int
     prompts_dir: Path
 
+    api_access_token: str | None
+    rate_limit_window_seconds: int
+    rate_limit_contact_max: int
+    rate_limit_chat_max: int
+
+    llm_log_enabled: bool
+    llm_log_redact: bool
+
     openrouter_api_key: str | None
     openrouter_model: str
     openrouter_base_url: str
@@ -73,14 +81,23 @@ def get_settings() -> Settings:
     smtp_use_ssl = _parse_bool(os.getenv("SMTP_USE_SSL"), default=False)
     smtp_use_tls = _parse_bool(os.getenv("SMTP_USE_TLS"), default=not smtp_use_ssl)
 
+    app_env = os.getenv("APP_ENV", "development").strip()
+    llm_log_redact_default = app_env.lower() != "development"
+
     return Settings(
         app_name=os.getenv("APP_NAME", "Pasan Portfolio").strip(),
-        app_env=os.getenv("APP_ENV", "development").strip(),
+        app_env=app_env,
         rag_knowledge_dir=knowledge_dir,
         rag_chunk_size=int(os.getenv("RAG_CHUNK_SIZE", "800")),
         rag_chunk_overlap=int(os.getenv("RAG_CHUNK_OVERLAP", "160")),
         rag_top_k=int(os.getenv("RAG_TOP_K", "4")),
         prompts_dir=root_dir / "prompts",
+        api_access_token=os.getenv("API_ACCESS_TOKEN"),
+        rate_limit_window_seconds=int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60")),
+        rate_limit_contact_max=int(os.getenv("RATE_LIMIT_CONTACT_MAX", "5")),
+        rate_limit_chat_max=int(os.getenv("RATE_LIMIT_CHAT_MAX", "10")),
+        llm_log_enabled=_parse_bool(os.getenv("LLM_LOG_ENABLED"), default=True),
+        llm_log_redact=_parse_bool(os.getenv("LLM_LOG_REDACT"), default=llm_log_redact_default),
         openrouter_api_key=os.getenv("OPENROUTER_API_KEY"),
         openrouter_model=os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini"),
         openrouter_base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
