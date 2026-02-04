@@ -4,8 +4,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import TypedDict
 
+import httpx
 from langgraph.graph import END, START, StateGraph
-from openai import OpenAI
 
 from .rag import RagStore
 from .settings import Settings
@@ -55,35 +55,39 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
 
         system_prompt = _load_system_prompt(settings.prompts_dir / "system.md")
 
-        headers: dict[str, str] = {}
-        if settings.openrouter_referer:
-            headers["HTTP-Referer"] = settings.openrouter_referer
-        if settings.openrouter_title:
-            headers["X-Title"] = settings.openrouter_title
-
-        client = OpenAI(
-            api_key=settings.openrouter_api_key,
-            base_url=settings.openrouter_base_url,
-            default_headers=headers or None,
-        )
-
         user_prompt = (
             "Use the following context to answer the question.\n\n"
             f"Context:\n{context}\n\n"
             f"Question: {state['question']}\n\n"
             "Answer in a concise, professional tone."
         )
+        headers: dict[str, str] = {
+            "Authorization": f"Bearer {settings.openrouter_api_key}",
+        }
+        if settings.openrouter_referer:
+            headers["HTTP-Referer"] = settings.openrouter_referer
+        if settings.openrouter_title:
+            headers["X-Title"] = settings.openrouter_title
 
-        response = client.chat.completions.create(
-            model=settings.openrouter_model,
-            messages=[
+        payload = {
+            "model": settings.openrouter_model,
+            "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            temperature=0.2,
-        )
-        answer = response.choices[0].message.content or ""
-        return {"answer": answer.strip()}
+            "temperature": 0.2,
+        }
+
+        url = settings.openrouter_base_url.rstrip("/") + "/chat/completions"
+        try:
+            with httpx.Client(timeout=20) as client:
+                response = client.post(url, headers=headers, json=payload)
+            response.raise_for_status()
+            data = response.json()
+            answer = data["choices"][0]["message"]["content"]
+            return {"answer": (answer or "").strip()}
+        except Exception:
+            return {"answer": "AI request failed. Please try again later."}
 
     graph.add_node("retrieve", retrieve)
     graph.add_node("generate", generate)
