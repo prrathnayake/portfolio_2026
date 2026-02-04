@@ -24,6 +24,8 @@ On startup, the app reads all files in the `knowledge/` folder, builds a vector 
 
 Optional OpenRouter config (for higher‑quality answers):
 - Add `OPENROUTER_API_KEY` and optionally `OPENROUTER_MODEL` in `.env`.
+- Set `OPENROUTER_FALLBACK_MODELS` (comma‑separated) to try alternate models on 429/5xx errors.
+- Tweak retry behavior with `OPENROUTER_MAX_RETRIES` and `OPENROUTER_RETRY_BACKOFF`.
 
 If no OpenRouter key is set, the API returns a helpful fallback message plus relevant context snippets.
 
@@ -44,6 +46,7 @@ All secrets/config live in `.env` (never commit it).
 
 - `RAG_KNOWLEDGE_DIR`, `RAG_CHUNK_SIZE`, `RAG_CHUNK_OVERLAP`, `RAG_TOP_K`
 - `OPENROUTER_API_KEY`, `OPENROUTER_MODEL`, `OPENROUTER_BASE_URL`, `OPENROUTER_REFERER`, `OPENROUTER_TITLE`
+- `OPENROUTER_FALLBACK_MODELS`, `OPENROUTER_MAX_RETRIES`, `OPENROUTER_RETRY_BACKOFF`
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`
 - `SMTP_FROM`, `SMTP_TO`
 - `SMTP_USE_TLS` (STARTTLS) or `SMTP_USE_SSL` (SMTPS)

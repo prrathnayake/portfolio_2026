@@ -6,6 +6,7 @@ from typing import TypedDict
 
 import httpx
 from langgraph.graph import END, START, StateGraph
+import time
 
 from .rag import RagStore
 from .settings import Settings
@@ -64,8 +65,7 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
         if settings.openrouter_title:
             headers["X-Title"] = settings.openrouter_title
 
-        payload = {
-            "model": settings.openrouter_model,
+        base_payload = {
             "messages": [
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
@@ -74,21 +74,44 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
         }
 
         url = settings.openrouter_base_url.rstrip("/") + "/chat/completions"
-        try:
-            with httpx.Client(timeout=20) as client:
-                response = client.post(url, headers=headers, json=payload)
-        except httpx.RequestError as exc:
-            raise RuntimeError(f"OpenRouter request error: {exc}") from exc
+        models = [settings.openrouter_model] + settings.openrouter_fallback_models
 
-        if response.status_code >= 400:
-            raise RuntimeError(_format_openrouter_error(response))
+        last_response: httpx.Response | None = None
+        last_error: Exception | None = None
 
-        try:
-            data = response.json()
-            answer = data["choices"][0]["message"]["content"]
-            return {"answer": (answer or "").strip()}
-        except Exception as exc:
-            raise RuntimeError("OpenRouter returned an unexpected response.") from exc
+        with httpx.Client(timeout=20) as client:
+            for model in models:
+                payload = {**base_payload, "model": model}
+                response = _post_with_retries(
+                    client,
+                    url,
+                    headers,
+                    payload,
+                    max_retries=settings.openrouter_max_retries,
+                    backoff=settings.openrouter_retry_backoff,
+                )
+                last_response = response
+                if response.status_code >= 400:
+                    # Try next fallback model if available.
+                    if model != models[-1]:
+                        continue
+                    raise RuntimeError(_format_openrouter_error(response))
+
+                try:
+                    data = response.json()
+                    answer = data["choices"][0]["message"]["content"]
+                    return {"answer": (answer or "").strip()}
+                except Exception as exc:
+                    last_error = exc
+                    if model != models[-1]:
+                        continue
+                    raise RuntimeError("OpenRouter returned an unexpected response.") from exc
+
+        if last_response is not None:
+            raise RuntimeError(_format_openrouter_error(last_response))
+        if last_error is not None:
+            raise RuntimeError("OpenRouter request failed.") from last_error
+        raise RuntimeError("OpenRouter request failed.")
 
     graph.add_node("retrieve", retrieve)
     graph.add_node("generate", generate)
@@ -111,3 +134,31 @@ def _format_openrouter_error(response: httpx.Response) -> str:
     except Exception:
         message = response.text or "Unknown error"
     return f"OpenRouter error {response.status_code}: {message}"
+
+
+def _post_with_retries(
+    client: httpx.Client,
+    url: str,
+    headers: dict[str, str],
+    payload: dict,
+    *,
+    max_retries: int,
+    backoff: float,
+) -> httpx.Response:
+    attempt = 0
+    while True:
+        try:
+            response = client.post(url, headers=headers, json=payload)
+        except httpx.RequestError as exc:
+            if attempt >= max_retries:
+                raise RuntimeError(f"OpenRouter request error: {exc}") from exc
+            time.sleep(backoff * (2**attempt))
+            attempt += 1
+            continue
+
+        if response.status_code in {429, 500, 502, 503, 504} and attempt < max_retries:
+            time.sleep(backoff * (2**attempt))
+            attempt += 1
+            continue
+
+        return response

@@ -30,6 +30,9 @@ class Settings:
     openrouter_base_url: str
     openrouter_referer: str | None
     openrouter_title: str | None
+    openrouter_fallback_models: list[str]
+    openrouter_max_retries: int
+    openrouter_retry_backoff: float
 
     smtp_host: str | None
     smtp_port: int
@@ -83,6 +86,13 @@ def get_settings() -> Settings:
         openrouter_base_url=os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1"),
         openrouter_referer=os.getenv("OPENROUTER_REFERER"),
         openrouter_title=os.getenv("OPENROUTER_TITLE"),
+        openrouter_fallback_models=[
+            item.strip()
+            for item in os.getenv("OPENROUTER_FALLBACK_MODELS", "").split(",")
+            if item.strip()
+        ],
+        openrouter_max_retries=int(os.getenv("OPENROUTER_MAX_RETRIES", "2")),
+        openrouter_retry_backoff=float(os.getenv("OPENROUTER_RETRY_BACKOFF", "0.6")),
         smtp_host=os.getenv("SMTP_HOST"),
         smtp_port=smtp_port,
         smtp_username=os.getenv("SMTP_USERNAME"),
