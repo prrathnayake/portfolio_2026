@@ -425,6 +425,37 @@
   }
   loadProjects();
 
+  // Footer social links
+  const footerSocial = document.querySelector("[data-footer-social]");
+  async function loadFooterLinks() {
+    if (!footerSocial) return;
+    try {
+      const res = await fetch("/static/data/links.json", { cache: "no-store" });
+      if (!res.ok) return;
+      const data = await res.json();
+      const items = Array.isArray(data?.social) ? data.social : [];
+      footerSocial.innerHTML = "";
+      for (const item of items) {
+        const label = String(item?.label ?? "").trim();
+        const url = String(item?.url ?? "").trim();
+        if (!label || !url) continue;
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noreferrer";
+        a.className = "social-link";
+        a.innerHTML = `
+          <span class="social-link__icon" aria-hidden="true">${getSocialIcon(label)}</span>
+          <span class="sr-only">${label}</span>
+        `;
+        footerSocial.appendChild(a);
+      }
+    } catch {
+      // ignore
+    }
+  }
+  loadFooterLinks();
+
   // Resume link (optional)
   const resumeLink = document.querySelector("[data-resume-link]");
   async function checkResume() {
@@ -437,6 +468,23 @@
     }
   }
   checkResume();
+
+  function getSocialIcon(label) {
+    const key = label.toLowerCase();
+    if (key.includes("linkedin")) {
+      return "in";
+    }
+    if (key.includes("github")) {
+      return "GH";
+    }
+    if (key === "x" || key.includes("twitter")) {
+      return "X";
+    }
+    if (key.includes("portfolio") || key.includes("website")) {
+      return "◎";
+    }
+    return "•";
+  }
 
   // Smooth scroll fallback for older browsers; also respects reduced motion.
   if (!prefersReducedMotion) {

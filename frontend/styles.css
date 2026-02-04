@@ -518,6 +518,36 @@ textarea:focus-visible {
   flex-wrap: wrap;
 }
 
+.footer__social {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.4);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.social-link:hover {
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.social-link__icon {
+  font-size: 0.9rem;
+}
+
 /* Chat window */
 .chat-modal {
   position: fixed;
