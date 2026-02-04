@@ -27,7 +27,7 @@ Optional OpenRouter config (for higher‑quality answers):
 
 If no OpenRouter key is set, the API returns a helpful fallback message plus relevant context snippets.
 
-**Note:** LangGraph requires Python 3.10+.
+**Note:** LangGraph 0.6.x supports Python 3.9. If you upgrade to Python 3.10+, you can pin a newer LangGraph version.
 
 ## Tests
 
