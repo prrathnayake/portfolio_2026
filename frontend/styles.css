@@ -630,6 +630,14 @@ textarea:focus-visible {
   margin: 4px 0;
 }
 
+.chat-heading {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: 0.2px;
+}
+
 .chat-bubble--user {
   align-self: flex-end;
   background: #ffffff;

@@ -260,6 +260,7 @@
     const lines = text.split(/\r?\n/);
     let paragraphParts = [];
     let listEl = null;
+    let headingEl = null;
 
     function flushParagraph() {
       if (paragraphParts.length === 0) return;
@@ -275,11 +276,31 @@
       listEl = null;
     }
 
+    function flushHeading() {
+      if (!headingEl) return;
+      fragment.appendChild(headingEl);
+      headingEl = null;
+    }
+
     for (const line of lines) {
       const trimmed = line.trim();
       if (!trimmed) {
         flushParagraph();
         flushList();
+        flushHeading();
+        continue;
+      }
+
+      if (trimmed.startsWith("#")) {
+        flushParagraph();
+        flushList();
+        flushHeading();
+        const level = Math.min(3, trimmed.match(/^#+/)?.[0].length || 1);
+        const headingText = trimmed.replace(/^#+\s*/, "").trim();
+        const heading = document.createElement(level === 1 ? "h3" : "h4");
+        heading.className = "chat-heading";
+        appendBoldText(heading, headingText);
+        headingEl = heading;
         continue;
       }
 
