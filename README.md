@@ -20,12 +20,14 @@ Then open `http://127.0.0.1:8000`.
 
 ## AI Agent (RAG)
 
-On startup, the app reads all files in the `knowledge/` folder, builds a vector embedding store, and uses it to answer questions in the “Ask AI about me” chat window.
+On startup, the app reads all files in the `knowledge/` folder, builds a vector embedding store, and uses a LangGraph-based agent to answer questions in the “Ask AI about me” chat window.
 
 Optional OpenRouter config (for higher‑quality answers):
 - Add `OPENROUTER_API_KEY` and optionally `OPENROUTER_MODEL` in `.env`.
 
 If no OpenRouter key is set, the API returns a helpful fallback message plus relevant context snippets.
+
+**Note:** LangGraph requires Python 3.10+.
 
 ## Tests
 

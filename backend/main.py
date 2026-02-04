@@ -6,8 +6,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from .chat import answer_question
 from .emailer import send_contact_email
+from .langgraph_agent import build_chat_graph
 from .rag import build_rag_store
 from .schemas import ChatRequest, ContactRequest
 from .settings import get_settings
@@ -29,6 +29,9 @@ def load_rag_index() -> None:
         chunk_size=settings.rag_chunk_size,
         chunk_overlap=settings.rag_chunk_overlap,
     )
+    app.state.chat_graph = None
+    if app.state.rag_store is not None:
+        app.state.chat_graph = build_chat_graph(app.state.rag_store, settings)
 
 
 @app.get("/", include_in_schema=False)
@@ -57,9 +60,9 @@ def contact(payload: ContactRequest) -> dict:
 
 @app.post("/api/chat")
 def chat(payload: ChatRequest) -> dict:
-    rag_store = getattr(app.state, "rag_store", None)
-    if rag_store is None:
+    chat_graph = getattr(app.state, "chat_graph", None)
+    if chat_graph is None:
         raise HTTPException(status_code=503, detail="Knowledge base is not available.")
 
-    settings = get_settings()
-    return answer_question(payload.message, rag_store, settings)
+    state = chat_graph.invoke({"question": payload.message})
+    return {"answer": state.get("answer", ""), "sources": state.get("sources", [])}
