@@ -389,6 +389,8 @@ p {
 
 .chip {
   display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 7px 10px;
   border-radius: 999px;
   border: 1px solid var(--border);
@@ -396,6 +398,13 @@ p {
   font-weight: 700;
   color: rgba(230, 237, 243, 0.86);
   font-size: 0.92rem;
+}
+
+.chip__icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  display: inline-block;
 }
 
 .list {

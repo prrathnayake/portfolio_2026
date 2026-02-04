@@ -104,6 +104,69 @@
     revealItems.forEach((el) => el.classList.add("is-visible"));
   }
 
+  // Chip icons
+  const iconMap = {
+    "Backend Systems": "generic",
+    "Event-Driven Architecture": "generic",
+    "Automation Workflows": "generic",
+    "Secure Coding": "shield",
+    "Prompt Engineering": "generic",
+    "Local LLM Tooling": "generic",
+    Python: "python",
+    "C++": "cplusplus",
+    JavaScript: "javascript",
+    Dart: "dart",
+    SQL: "database",
+    Kafka: "kafka",
+    Docker: "docker",
+    Git: "git",
+    "GitHub Actions": "githubactions",
+    "AWS (fundamentals)": "amazonaws",
+    LangChain: "langchain",
+    LangGraph: "langgraph",
+    "OpenAI API": "openai",
+    n8n: "n8n",
+    "Node.js": "nodedotjs",
+    React: "react",
+    Flutter: "flutter",
+    REST: "generic",
+    MongoDB: "mongodb",
+    MySQL: "mysql",
+    Firebase: "firebase",
+    "Threat-aware Design": "shield",
+    "Agile / SDLC": "generic",
+    "CI/CD": "generic",
+    Postman: "postman",
+    Wireshark: "wireshark",
+    Metasploit: "metasploit",
+    "Kali Linux": "kalilinux",
+    "VS Code": "visualstudiocode",
+    Linux: "linux",
+    WSL: "windows",
+    "Docker Desktop": "docker",
+    "Claude Code": "anthropic",
+    Codex: "openai",
+  };
+
+  function applyChipIcons(root = document) {
+    root.querySelectorAll(".chip").forEach((chip) => {
+      if (chip.querySelector(".chip__icon")) return;
+      const label = chip.textContent.trim();
+      const slug = iconMap[label];
+      if (!slug) return;
+      const img = document.createElement("img");
+      img.className = "chip__icon";
+      img.src = `/static/assets/icons/${slug}.svg`;
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.setAttribute("aria-hidden", "true");
+      chip.prepend(img);
+    });
+  }
+
+  applyChipIcons();
+
   // Contact form
   const form = document.querySelector("[data-contact-form]");
   const statusEl = document.querySelector("[data-contact-status]");
@@ -198,6 +261,7 @@
         card.querySelector("p").textContent = description;
         projectsEl.appendChild(card);
       }
+      applyChipIcons(projectsEl);
     } catch {
       // ignore
     }
