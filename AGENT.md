@@ -6,3 +6,4 @@
 - Keep `AGENT.md` and `AGENTS.md` in sync.
 - Commit changes at the end of each task when a Git repo is available; if not, ask to initialize Git.
 - `frontend/data/projects.json` supports a `github` link used to render repo icons.
+- `prompts/guardrails.md` exists and is mirrored into `prompts/system.md`.
