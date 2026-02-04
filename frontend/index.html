@@ -124,7 +124,7 @@
             </p>
 
             <div class="hero__cta">
-              <a class="btn btn--primary" href="#contact">Contact</a>
+              <button class="btn btn--primary" type="button" data-chat-open>Ask AI about me</button>
               <a class="btn btn--ghost" data-resume-link href="/static/assets/resume.pdf">Resume</a>
             </div>
 
@@ -398,6 +398,37 @@
         </div>
       </section>
     </main>
+
+    <div class="chat-modal" data-chat-modal aria-hidden="true">
+      <div class="chat-modal__backdrop" data-chat-close aria-hidden="true"></div>
+      <div class="chat-window" role="dialog" aria-modal="true" aria-labelledby="chat-title">
+        <header class="chat-window__header">
+          <h2 id="chat-title">Ask AI about me</h2>
+          <button class="chat-window__close" type="button" data-chat-close aria-label="Close chat">
+            ✕
+          </button>
+        </header>
+
+        <div class="chat-window__body" data-chat-messages>
+          <div class="chat-bubble chat-bubble--ai">
+            Ask me about projects, skills, or experience. Answers are based on my knowledge base.
+          </div>
+        </div>
+
+        <form class="chat-window__form" data-chat-form>
+          <textarea
+            class="chat-window__input"
+            name="message"
+            rows="3"
+            placeholder="Ask a question about my work…"
+            required
+            data-chat-input
+          ></textarea>
+          <button class="btn btn--primary chat-window__send" type="submit">Send</button>
+        </form>
+        <div class="chat-window__status" role="status" aria-live="polite" data-chat-status></div>
+      </div>
+    </div>
 
     <footer class="footer">
       <div class="container footer__inner">

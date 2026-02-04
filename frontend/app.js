@@ -222,6 +222,74 @@
 
   form?.addEventListener("submit", submitContactForm);
 
+  // Chat modal
+  const chatModal = document.querySelector("[data-chat-modal]");
+  const chatOpen = document.querySelector("[data-chat-open]");
+  const chatCloseButtons = document.querySelectorAll("[data-chat-close]");
+  const chatForm = document.querySelector("[data-chat-form]");
+  const chatInput = document.querySelector("[data-chat-input]");
+  const chatMessages = document.querySelector("[data-chat-messages]");
+  const chatStatus = document.querySelector("[data-chat-status]");
+
+  function setChatOpen(isOpen) {
+    if (!chatModal) return;
+    chatModal.dataset.open = String(isOpen);
+    chatModal.setAttribute("aria-hidden", String(!isOpen));
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    if (isOpen) {
+      setTimeout(() => chatInput?.focus(), 50);
+    }
+  }
+
+  function addChatBubble(role, text) {
+    if (!chatMessages) return;
+    const bubble = document.createElement("div");
+    bubble.className = `chat-bubble ${role === "user" ? "chat-bubble--user" : "chat-bubble--ai"}`;
+    bubble.textContent = text;
+    chatMessages.appendChild(bubble);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function setChatStatus(message) {
+    if (!chatStatus) return;
+    chatStatus.textContent = message;
+  }
+
+  chatOpen?.addEventListener("click", () => setChatOpen(true));
+  chatCloseButtons.forEach((btn) => btn.addEventListener("click", () => setChatOpen(false)));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && chatModal?.dataset.open === "true") setChatOpen(false);
+  });
+
+  chatForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!(chatInput instanceof HTMLTextAreaElement)) return;
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    addChatBubble("user", message);
+    chatInput.value = "";
+    setChatStatus("Thinking…");
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.detail || "Chat is unavailable right now.");
+      }
+      const data = await res.json();
+      const answer = String(data?.answer || "").trim() || "No response.";
+      addChatBubble("ai", answer);
+      setChatStatus("");
+    } catch (err) {
+      setChatStatus(err instanceof Error ? err.message : "Failed to reach the AI agent.");
+    }
+  });
+
   // Projects (optional JSON file)
   const projectsEl = document.querySelector("[data-projects]");
   async function loadProjects() {

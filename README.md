@@ -18,6 +18,15 @@ Single-page developer portfolio (dark theme) with a FastAPI backend and an SMTP-
 
 Then open `http://127.0.0.1:8000`.
 
+## AI Agent (RAG)
+
+On startup, the app reads all files in the `knowledge/` folder, builds a vector embedding store, and uses it to answer questions in the “Ask AI about me” chat window.
+
+Optional OpenAI config (for higher‑quality answers):
+- Add `OPENAI_API_KEY` and optionally `OPENAI_MODEL` in `.env`.
+
+If no OpenAI key is set, the API returns a helpful fallback message plus relevant context snippets.
+
 ## Tests
 
 - `python -m pytest -q`
@@ -31,6 +40,8 @@ Replace it with your latest PDF (or delete the link in `frontend/index.html`).
 
 All secrets/config live in `.env` (never commit it).
 
+- `RAG_KNOWLEDGE_DIR`, `RAG_CHUNK_SIZE`, `RAG_CHUNK_OVERLAP`, `RAG_TOP_K`
+- `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_BASE_URL`
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`
 - `SMTP_FROM`, `SMTP_TO`
 - `SMTP_USE_TLS` (STARTTLS) or `SMTP_USE_SSL` (SMTPS)

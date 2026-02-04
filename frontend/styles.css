@@ -518,6 +518,134 @@ textarea:focus-visible {
   flex-wrap: wrap;
 }
 
+/* Chat window */
+.chat-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 80;
+}
+
+.chat-modal[data-open="true"] {
+  display: flex;
+}
+
+.chat-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(2px);
+}
+
+.chat-window {
+  position: relative;
+  width: min(460px, 92vw);
+  height: min(640px, 85vh);
+  background: #0a0a0a;
+  border: 2px solid #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-image: url("/static/assets/noise.svg");
+  background-size: 200px 200px;
+}
+
+.chat-window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/static/assets/scribble-2.svg");
+  background-repeat: no-repeat;
+  background-position: 90% 12%;
+  background-size: 180px auto;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.chat-window__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10, 10, 10, 0.9);
+}
+
+.chat-window__header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.chat-window__close {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.chat-window__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-bubble {
+  max-width: 90%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.chat-bubble--user {
+  align-self: flex-end;
+  background: #ffffff;
+  color: #060606;
+  border-color: #ffffff;
+}
+
+.chat-window__form {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  background: rgba(10, 10, 10, 0.95);
+}
+
+.chat-window__input {
+  flex: 1;
+  resize: none;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.4);
+  color: var(--text);
+  padding: 10px 12px;
+  font: inherit;
+}
+
+.chat-window__send {
+  align-self: flex-end;
+}
+
+.chat-window__status {
+  min-height: 1.2em;
+  padding: 0 14px 12px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 /* Scroll reveal */
 .js .reveal {
   opacity: 0;
