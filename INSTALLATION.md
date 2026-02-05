@@ -56,3 +56,7 @@ On pushes to `main`, GitHub Actions builds and publishes a Docker image to Docke
 Required GitHub secrets:
 - `DOCKERHUB_USERNAME`
 - `DOCKERHUB_TOKEN` (access token)
+
+## CI Docker Build Test
+
+Pull requests to `main` run a Docker build to validate the image can be built.
