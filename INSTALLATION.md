@@ -45,7 +45,7 @@ Then open `http://127.0.0.1:8000`.
    - `docker build -t pasan-portfolio .`
 
 2. Run the container:
-   - `docker run --rm -p 8000:8000 --env-file .env pasan-portfolio`
+   - `docker run --rm -p 80:80 --env-file .env pasan-portfolio`
 
 Then open `http://127.0.0.1:8000`.
 
