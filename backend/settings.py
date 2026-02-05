@@ -11,7 +11,14 @@ from dotenv import load_dotenv
 def _clean_env(value: str | None) -> str | None:
     if value is None:
         return None
-    return value.strip().strip('"').strip("'").strip()
+    cleaned = value.strip()
+    if cleaned.startswith('\\"') and cleaned.endswith('\\"') and len(cleaned) >= 4:
+        cleaned = cleaned[2:-2]
+    elif cleaned.startswith('"') and cleaned.endswith('"') and len(cleaned) >= 2:
+        cleaned = cleaned[1:-1]
+    elif cleaned.startswith("'") and cleaned.endswith("'") and len(cleaned) >= 2:
+        cleaned = cleaned[1:-1]
+    return cleaned.strip()
 
 
 def _parse_bool(value: str | None, *, default: bool = False) -> bool:
