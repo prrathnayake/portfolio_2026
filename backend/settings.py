@@ -11,7 +11,28 @@ from dotenv import load_dotenv
 def _parse_bool(value: str | None, *, default: bool = False) -> bool:
     if value is None:
         return default
-    return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+    cleaned = value.strip().strip('"').strip("'").strip()
+    return cleaned.lower() in {"1", "true", "yes", "y", "on"}
+
+
+def _parse_int(value: str | None, *, default: int) -> int:
+    if value is None:
+        return default
+    cleaned = value.strip().strip('"').strip("'").strip()
+    try:
+        return int(cleaned)
+    except ValueError:
+        return default
+
+
+def _parse_float(value: str | None, *, default: float) -> float:
+    if value is None:
+        return default
+    cleaned = value.strip().strip('"').strip("'").strip()
+    try:
+        return float(cleaned)
+    except ValueError:
+        return default
 
 
 @dataclass(frozen=True)
@@ -72,11 +93,7 @@ def get_settings() -> Settings:
     if not knowledge_dir.is_absolute():
         knowledge_dir = root_dir / knowledge_dir
 
-    smtp_port_raw = os.getenv("SMTP_PORT", "587").strip()
-    try:
-        smtp_port = int(smtp_port_raw)
-    except ValueError:
-        smtp_port = 587
+    smtp_port = _parse_int(os.getenv("SMTP_PORT"), default=587)
 
     smtp_use_ssl = _parse_bool(os.getenv("SMTP_USE_SSL"), default=False)
     smtp_use_tls = _parse_bool(os.getenv("SMTP_USE_TLS"), default=not smtp_use_ssl)
@@ -88,14 +105,14 @@ def get_settings() -> Settings:
         app_name=os.getenv("APP_NAME", "Pasan Portfolio").strip(),
         app_env=app_env,
         rag_knowledge_dir=knowledge_dir,
-        rag_chunk_size=int(os.getenv("RAG_CHUNK_SIZE", "800")),
-        rag_chunk_overlap=int(os.getenv("RAG_CHUNK_OVERLAP", "160")),
-        rag_top_k=int(os.getenv("RAG_TOP_K", "4")),
+        rag_chunk_size=_parse_int(os.getenv("RAG_CHUNK_SIZE"), default=800),
+        rag_chunk_overlap=_parse_int(os.getenv("RAG_CHUNK_OVERLAP"), default=160),
+        rag_top_k=_parse_int(os.getenv("RAG_TOP_K"), default=4),
         prompts_dir=root_dir / "prompts",
         api_access_token=os.getenv("API_ACCESS_TOKEN"),
-        rate_limit_window_seconds=int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60")),
-        rate_limit_contact_max=int(os.getenv("RATE_LIMIT_CONTACT_MAX", "5")),
-        rate_limit_chat_max=int(os.getenv("RATE_LIMIT_CHAT_MAX", "10")),
+        rate_limit_window_seconds=_parse_int(os.getenv("RATE_LIMIT_WINDOW_SECONDS"), default=60),
+        rate_limit_contact_max=_parse_int(os.getenv("RATE_LIMIT_CONTACT_MAX"), default=5),
+        rate_limit_chat_max=_parse_int(os.getenv("RATE_LIMIT_CHAT_MAX"), default=10),
         llm_log_enabled=_parse_bool(os.getenv("LLM_LOG_ENABLED"), default=True),
         llm_log_redact=_parse_bool(os.getenv("LLM_LOG_REDACT"), default=llm_log_redact_default),
         openrouter_api_key=os.getenv("OPENROUTER_API_KEY"),
@@ -108,8 +125,8 @@ def get_settings() -> Settings:
             for item in os.getenv("OPENROUTER_FALLBACK_MODELS", "").split(",")
             if item.strip()
         ],
-        openrouter_max_retries=int(os.getenv("OPENROUTER_MAX_RETRIES", "2")),
-        openrouter_retry_backoff=float(os.getenv("OPENROUTER_RETRY_BACKOFF", "0.6")),
+        openrouter_max_retries=_parse_int(os.getenv("OPENROUTER_MAX_RETRIES"), default=2),
+        openrouter_retry_backoff=_parse_float(os.getenv("OPENROUTER_RETRY_BACKOFF"), default=0.6),
         smtp_host=os.getenv("SMTP_HOST"),
         smtp_port=smtp_port,
         smtp_username=os.getenv("SMTP_USERNAME"),
