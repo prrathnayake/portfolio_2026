@@ -48,3 +48,11 @@ Then open `http://127.0.0.1:8000`.
    - `docker run --rm -p 8000:8000 --env-file .env pasan-portfolio`
 
 Then open `http://127.0.0.1:8000`.
+
+## CI Docker Publish
+
+On pushes to `main`, GitHub Actions builds and publishes a Docker image to Docker Hub.
+
+Required GitHub secrets:
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN` (access token)

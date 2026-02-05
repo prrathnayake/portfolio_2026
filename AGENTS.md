@@ -13,6 +13,7 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - `tests/`: Pytest suite (API validation and contact form behavior).
 - `knowledge/`: Source/reference materials not served by the app.
 - `INSTALLATION.md`: Setup/run/test instructions (README should not duplicate install steps).
+- `.github/workflows/`: CI workflows (including Docker image publishing).
 
 ## Build, Test, and Development Commands
 - Create env + install deps:
