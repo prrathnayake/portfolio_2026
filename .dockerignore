@@ -1,0 +1,10 @@
+.DS_Store
+.git
+.venv
+.pytest_cache
+__pycache__
+*.pyc
+.codex-memory
+logs
+tests
+.env

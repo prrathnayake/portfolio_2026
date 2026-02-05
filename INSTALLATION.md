@@ -38,3 +38,13 @@ Then open `http://127.0.0.1:8000`.
 ## Tests
 
 - `python -m pytest -q`
+
+## Docker
+
+1. Build the image:
+   - `docker build -t pasan-portfolio .`
+
+2. Run the container:
+   - `docker run --rm -p 8000:8000 --env-file .env pasan-portfolio`
+
+Then open `http://127.0.0.1:8000`.
