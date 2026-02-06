@@ -38,13 +38,25 @@ def send_contact_email(payload: ContactRequest, settings: Settings) -> None:
     context = ssl.create_default_context()
 
     if settings.smtp_use_ssl:
-        with smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, context=context) as server:
+        with smtplib.SMTP_SSL(
+            settings.smtp_host,
+            settings.smtp_port,
+            context=context,
+            timeout=settings.smtp_timeout_seconds,
+        ) as server:
+            server.ehlo()
             server.login(settings.smtp_username, settings.smtp_password)
             server.send_message(msg)
         return
 
-    with smtplib.SMTP(settings.smtp_host, settings.smtp_port) as server:
+    with smtplib.SMTP(
+        settings.smtp_host,
+        settings.smtp_port,
+        timeout=settings.smtp_timeout_seconds,
+    ) as server:
+        server.ehlo()
         if settings.smtp_use_tls:
             server.starttls(context=context)
+            server.ehlo()
         server.login(settings.smtp_username, settings.smtp_password)
         server.send_message(msg)

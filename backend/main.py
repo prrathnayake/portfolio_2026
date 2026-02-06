@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 import time
+import logging
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
@@ -18,6 +19,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"
 
 app = FastAPI(title="Pasan Portfolio")
+logger = logging.getLogger(__name__)
 
 app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
@@ -100,6 +102,12 @@ def contact(payload: ContactRequest, request: Request) -> dict:
     try:
         send_contact_email(payload, settings)
     except Exception as exc:
+        logger.exception("Contact email send failed")
+        if settings.app_env.lower() == "development":
+            raise HTTPException(
+                status_code=502,
+                detail=f"Failed to send email: {exc}",
+            ) from exc
         raise HTTPException(status_code=502, detail="Failed to send email.") from exc
 
     return {"ok": True}

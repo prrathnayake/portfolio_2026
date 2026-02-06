@@ -19,6 +19,8 @@ def _configure_smtp_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SMTP_TO", "me@example.com")
     monkeypatch.setenv("SMTP_USE_TLS", "true")
     monkeypatch.setenv("SMTP_USE_SSL", "false")
+    monkeypatch.setenv("API_ACCESS_TOKEN", "")
+    monkeypatch.setenv("APP_ENV", "development")
 
 
 def test_contact_requires_config(client, monkeypatch: pytest.MonkeyPatch):
@@ -81,3 +83,25 @@ def test_contact_validation(client):
         json={"name": "", "email": "not-an-email", "subject": "", "message": ""},
     )
     assert res.status_code == 422
+
+
+def test_contact_returns_debug_detail_in_development(client, monkeypatch: pytest.MonkeyPatch):
+    _configure_smtp_env(monkeypatch)
+    settings_module.get_settings.cache_clear()
+
+    def _fake_send(*args, **kwargs):
+        raise RuntimeError("SMTP AUTH failed")
+
+    monkeypatch.setattr("backend.main.send_contact_email", _fake_send)
+
+    res = client.post(
+        "/api/contact",
+        json={
+            "name": "Test User",
+            "email": "test@example.com",
+            "subject": "Hello",
+            "message": "Message body",
+        },
+    )
+    assert res.status_code == 502
+    assert "SMTP AUTH failed" in res.json()["detail"]

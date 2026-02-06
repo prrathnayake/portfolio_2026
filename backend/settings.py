@@ -4,6 +4,7 @@ import os
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
+import re
 
 from dotenv import load_dotenv
 
@@ -12,6 +13,7 @@ def _clean_env(value: str | None) -> str | None:
     if value is None:
         return None
     cleaned = value.strip()
+    cleaned = _strip_inline_comment(cleaned)
     if cleaned.startswith('\\"') and cleaned.endswith('\\"') and len(cleaned) >= 4:
         cleaned = cleaned[2:-2]
     elif cleaned.startswith('"') and cleaned.endswith('"') and len(cleaned) >= 2:
@@ -19,6 +21,11 @@ def _clean_env(value: str | None) -> str | None:
     elif cleaned.startswith("'") and cleaned.endswith("'") and len(cleaned) >= 2:
         cleaned = cleaned[1:-1]
     return cleaned.strip()
+
+
+def _strip_inline_comment(value: str) -> str:
+    # Docker env files may keep trailing inline comments as part of the value.
+    return re.split(r"\s+#", value, maxsplit=1)[0].strip()
 
 
 def _parse_bool(value: str | None, *, default: bool = False) -> bool:
@@ -84,6 +91,7 @@ class Settings:
     smtp_to: str | None
     smtp_use_tls: bool
     smtp_use_ssl: bool
+    smtp_timeout_seconds: int
 
     @property
     def smtp_configured(self) -> bool:
@@ -150,4 +158,5 @@ def get_settings() -> Settings:
         smtp_to=_clean_env(os.getenv("SMTP_TO")),
         smtp_use_tls=smtp_use_tls,
         smtp_use_ssl=smtp_use_ssl,
+        smtp_timeout_seconds=_parse_int(os.getenv("SMTP_TIMEOUT_SECONDS"), default=20),
     )

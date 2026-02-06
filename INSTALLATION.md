@@ -17,6 +17,7 @@
 3. Configure environment variables:
    - `cp .env.example .env`
    - Edit `.env` and set SMTP + OpenRouter values as needed.
+   - Keep one `KEY=VALUE` per line (avoid inline comments after values when using Docker `--env-file`).
 
 4. Run the app:
    - `python -m uvicorn backend.main:app --reload`
@@ -34,6 +35,12 @@ Then open `http://127.0.0.1:8000`.
 - Protect endpoints with `API_ACCESS_TOKEN`.
 - Tune rate limits with `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_CHAT_MAX`, and `RATE_LIMIT_CONTACT_MAX`.
 - Control LLM logging with `LLM_LOG_ENABLED` and `LLM_LOG_REDACT`.
+
+## SMTP Notes
+
+- Use `SMTP_USE_TLS=true` for port `587` providers.
+- Use `SMTP_USE_SSL=true` for port `465` providers.
+- Adjust SMTP connection timeout with `SMTP_TIMEOUT_SECONDS` (default `20`).
 
 ## Tests
 
