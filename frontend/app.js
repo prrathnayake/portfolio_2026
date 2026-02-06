@@ -107,10 +107,14 @@
   // Chip icons
   const iconMap = {
     "Backend Systems": "generic",
+    "Web Development": "generic",
+    "Distributed & Event-Driven Architecture": "generic",
     "Event-Driven Architecture": "generic",
     "Automation Workflows": "generic",
     "Secure Coding": "shield",
+    "Threat-aware system design": "shield",
     "Prompt Engineering": "generic",
+    "Local LLM tooling": "generic",
     "Local LLM Tooling": "generic",
     Python: "python",
     "C++": "cplusplus",
