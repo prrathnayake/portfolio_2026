@@ -55,3 +55,4 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - Commit changes at the end of each task when a Git repo is available; if not, ask to initialize Git.
 - Chat modal includes suggestion buttons in `frontend/index.html` (`data-chat-suggestions`) that prefill the input.
 - `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.
+- About section includes a right-to-left animated technical strengths snapshot ticker.

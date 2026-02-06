@@ -16,3 +16,4 @@
 - Docker image publish workflow lives in `.github/workflows/docker-publish.yml`.
 - Docker build test workflow lives in `.github/workflows/docker-build-test.yml`.
 - SMTP supports `SMTP_TIMEOUT_SECONDS`; avoid inline comments in Docker env files.
+- About section includes a right-to-left animated technical strengths snapshot ticker.
