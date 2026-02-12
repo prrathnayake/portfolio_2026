@@ -1,93 +1,56 @@
 from __future__ import annotations
 
-from textwrap import dedent
+from functools import lru_cache
+from pathlib import Path
 
 
-_BASE_PROFILE = dedent(
-    """
-    Pasan Rathnayake is a Graduate Software Engineer focused on AI systems, backend engineering,
-    event-driven architecture, and automation workflows. Pasan works with Python, C++, JavaScript,
-    SQL, Docker, Kafka, and modern API stacks. Pasan is based in Victoria, Australia and is available
-    for graduate software engineering opportunities.
-    """
-).strip()
+_SYSTEM_PROMPT_FILE = "bored_killer_system.md"
+_USER_PROMPT_TEMPLATE_FILE = "bored_killer_user.md"
+_BASE_PROFILE_FILE = "bored_killer_profile_base.md"
 
-
-_CATEGORY_PROFILE_PROMPTS = {
-    "Backend engineering": dedent(
-        """
-        Pasan builds backend APIs using Python and FastAPI, and has strong foundations in C++ systems
-        development. Pasan has worked on distributed and event-driven workflows using Kafka, REST APIs,
-        and service-oriented designs. Pasan also works with data stores like MySQL and MongoDB and
-        emphasizes throughput, reliability, and clean service contracts.
-        """
-    ).strip(),
-    "AI and automation": dedent(
-        """
-        Pasan builds AI-assisted workflows with LangChain, LangGraph, and modern LLM APIs including OpenAI.
-        Pasan has experience creating practical automations and assistant features that combine prompting,
-        orchestration, and backend integration. Pasan uses prompt engineering and local tooling to make
-        AI outputs structured, useful, and production-ready.
-        """
-    ).strip(),
-    "Cybersecurity": dedent(
-        """
-        Pasan has a Master of Information Technology focused on Cyber Security and applies secure coding
-        and threat-aware thinking in software design. Pasan has practical familiarity with tools and
-        concepts across vulnerability awareness, network analysis, and defensive engineering practices.
-        Pasan integrates security habits into day-to-day engineering decisions.
-        """
-    ).strip(),
-    "Developer productivity": dedent(
-        """
-        Pasan uses developer productivity tooling across Docker, Git workflows, GitHub Actions, logging,
-        and API testing utilities to speed up delivery while maintaining quality. Pasan builds automation
-        workflows and repeatable development practices that reduce manual work and improve iteration speed.
-        Pasan values maintainable systems, clear structure, and efficient engineering handoffs.
-        """
-    ).strip(),
+_CATEGORY_PROFILE_FILES = {
+    "Backend engineering": "bored_killer_profile_backend_engineering.md",
+    "AI and automation": "bored_killer_profile_ai_and_automation.md",
+    "Cybersecurity": "bored_killer_profile_cybersecurity.md",
+    "Developer productivity": "bored_killer_profile_developer_productivity.md",
 }
 
 
-def build_bored_fact_messages(*, category: str) -> list[dict[str, str]]:
-    category_profile = _CATEGORY_PROFILE_PROMPTS.get(category, _CATEGORY_PROFILE_PROMPTS["Backend engineering"])
+@lru_cache(maxsize=32)
+def _read_prompt_file(path_str: str) -> str:
+    path = Path(path_str)
+    try:
+        content = path.read_text(encoding="utf-8").strip()
+    except FileNotFoundError as exc:
+        raise RuntimeError(f"Bored Killer prompt file not found: {path}") from exc
+    except OSError as exc:
+        raise RuntimeError(f"Could not read Bored Killer prompt file: {path}") from exc
 
-    system_prompt = dedent(
-        """
-        You are "Bored Killer", a micro-assistant in Pasan Rathnayake's portfolio.
-        Objective:
-        - Generate one funny fun fact about Pasan, strictly grounded in the profile provided.
+    if not content:
+        raise RuntimeError(f"Bored Killer prompt file is empty: {path}")
+    return content
 
-        Hard rules:
-        - Start the first sentence with "Pasan".
-        - Use third person only.
-        - No markdown, no bullet points, no headings, no quotation marks.
-        - Never invent companies, years, roles, awards, or credentials not in the profile.
-        - Mention at least one concrete technical detail (tool, stack, system pattern, or domain) relevant to the selected category.
-        - Include a clear humorous hook or witty twist in the wording.
 
-        Length policy:
-        - Adapt naturally by content richness: 1 to 3 short sentences.
-        - Keep total output between roughly 16 and 55 words.
+def _load_prompt(prompts_dir: Path, filename: str) -> str:
+    prompt_path = (prompts_dir / filename).resolve()
+    return _read_prompt_file(str(prompt_path))
 
-        Voice:
-        - Funny-first, playful, but still professional for a developer audience.
-        - Crisp, specific, and resume-aligned.
-        """
-    ).strip()
 
-    user_prompt = dedent(
-        f"""
-        Selected category from UI:
-        - {category}
+def build_bored_fact_messages(*, category: str, prompts_dir: Path) -> list[dict[str, str]]:
+    category_file = _CATEGORY_PROFILE_FILES.get(
+        category, _CATEGORY_PROFILE_FILES["Backend engineering"]
+    )
+    system_prompt = _load_prompt(prompts_dir, _SYSTEM_PROMPT_FILE)
+    user_template = _load_prompt(prompts_dir, _USER_PROMPT_TEMPLATE_FILE)
+    base_profile = _load_prompt(prompts_dir, _BASE_PROFILE_FILE)
+    category_profile = _load_prompt(prompts_dir, category_file)
 
-        Pasan full profile summary:
-        {_BASE_PROFILE}
-
-        Category-specific profile summary:
-        {category_profile}
-        """
-    ).strip()
+    user_prompt = (
+        user_template.replace("{{category}}", category)
+        .replace("{{base_profile}}", base_profile)
+        .replace("{{category_profile}}", category_profile)
+        .strip()
+    )
 
     return [
         {"role": "system", "content": system_prompt},

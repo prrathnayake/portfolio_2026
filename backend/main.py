@@ -152,6 +152,7 @@ def bored_fact(payload: BoredFactRequest, request: Request) -> dict:
     try:
         messages = build_bored_fact_messages(
             category=payload.category,
+            prompts_dir=settings.prompts_dir,
         )
         answer = openrouter_chat_completion(
             settings,
