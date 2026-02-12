@@ -104,13 +104,13 @@
     revealItems.forEach((el) => el.classList.add("is-visible"));
   }
 
-  // Technical strengths diffusion animation
-  const strengthsDiffusion = document.querySelector("[data-strengths-diffusion]");
+  // Home diffusion animation
+  const strengthsDiffusion = document.querySelector("[data-home-diffusion]");
   if (strengthsDiffusion instanceof HTMLElement) {
-    const strengthsOutput = strengthsDiffusion.querySelector("[data-strengths-output]");
-    const strengthsSeed = strengthsDiffusion.querySelector("[data-strengths-seed]");
-    const strengthsLayer = strengthsDiffusion.querySelector("[data-strengths-layer]");
-    const rawStrengths = strengthsDiffusion.getAttribute("data-strengths-phrases") || "";
+    const strengthsOutput = strengthsDiffusion.querySelector("[data-home-diffusion-output]");
+    const strengthsSeed = strengthsDiffusion.querySelector("[data-home-diffusion-seed]");
+    const strengthsLayer = strengthsDiffusion.querySelector("[data-home-diffusion-layer]");
+    const rawStrengths = strengthsDiffusion.getAttribute("data-home-diffusion-phrases") || "";
     const strengthPhrases = rawStrengths
       .split("|")
       .map((phrase) => phrase.trim())
