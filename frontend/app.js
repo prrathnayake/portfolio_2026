@@ -418,6 +418,10 @@
   const boredWidget = document.querySelector("[data-bored-killer]");
   if (boredWidget instanceof HTMLElement) {
     const boredTrigger = boredWidget.querySelector("[data-bored-trigger]");
+    const agentPlayground = boredWidget.querySelector("[data-agent-playground]");
+    const agentPlaygroundTrigger = boredWidget.querySelector("[data-agent-playground-trigger]");
+    const agentPlaygroundMenu = boredWidget.querySelector("[data-agent-playground-menu]");
+    const agentActionButtons = Array.from(boredWidget.querySelectorAll("[data-agent-action]"));
     const boredPanel = boredWidget.querySelector("#bored-killer-panel");
     const boredClose = boredWidget.querySelector("[data-bored-close]");
     const boredSteps = Array.from(boredWidget.querySelectorAll("[data-bored-step]"));
@@ -517,6 +521,17 @@
         }
       });
       resizeBoredPanel({ immediate: true });
+    }
+
+    function setAgentPlaygroundOpen(isOpen) {
+      if (!(agentPlayground instanceof HTMLElement)) return;
+      agentPlayground.dataset.open = String(isOpen);
+      if (agentPlaygroundTrigger instanceof HTMLButtonElement) {
+        agentPlaygroundTrigger.setAttribute("aria-expanded", String(isOpen));
+      }
+      if (agentPlaygroundMenu instanceof HTMLElement) {
+        agentPlaygroundMenu.setAttribute("aria-hidden", String(!isOpen));
+      }
     }
 
     function setOptionSelection(buttons, selectedButton) {
@@ -695,6 +710,7 @@
       const wasOpen = boredWidget.dataset.open === "true";
       if (wasOpen === isOpen) return;
 
+      setAgentPlaygroundOpen(false);
       boredWidget.dataset.open = String(isOpen);
       if (boredTrigger instanceof HTMLButtonElement) {
         boredTrigger.setAttribute("aria-expanded", String(isOpen));
@@ -779,6 +795,29 @@
     boredTrigger?.addEventListener("click", () => {
       setBoredOpen(true);
     });
+
+    agentPlaygroundTrigger?.addEventListener("click", () => {
+      const isOpen = agentPlayground instanceof HTMLElement && agentPlayground.dataset.open === "true";
+      setAgentPlaygroundOpen(!isOpen);
+    });
+
+    agentActionButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (!(button instanceof HTMLElement)) return;
+        const action = button.getAttribute("data-agent-action");
+        setAgentPlaygroundOpen(false);
+        if (action === "chat") {
+          setBoredOpen(false);
+          setChatOpen(true);
+          return;
+        }
+        if (action === "bored") {
+          setChatOpen(false);
+          setBoredOpen(true);
+        }
+      });
+    });
+
     boredClose?.addEventListener("click", () => setBoredOpen(false));
 
     boredAnswerButtons.forEach((button) => {
@@ -820,11 +859,24 @@
     });
 
     document.addEventListener("click", (event) => {
+      if (agentPlayground instanceof HTMLElement && agentPlayground.dataset.open === "true") {
+        const target = event.target;
+        if (target instanceof Node && !agentPlayground.contains(target)) {
+          setAgentPlaygroundOpen(false);
+        }
+      }
+
       if (boredWidget.dataset.open !== "true") return;
       const target = event.target;
       if (!(target instanceof Node)) return;
       if (boredWidget.contains(target)) return;
       setBoredOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && agentPlayground instanceof HTMLElement && agentPlayground.dataset.open === "true") {
+        setAgentPlaygroundOpen(false);
+      }
     });
 
     document.addEventListener("keydown", (event) => {

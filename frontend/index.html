@@ -484,17 +484,75 @@
     </div>
 
     <div class="bored-killer" data-bored-killer data-open="false" data-step="prompt">
-      <div class="bored-killer__hint" data-bored-hint>bored killer</div>
-      <button
-        class="bored-killer__trigger"
-        type="button"
-        data-bored-trigger
-        aria-expanded="false"
-        aria-controls="bored-killer-panel"
-      >
-        <span class="bored-killer__trigger-core" aria-hidden="true">BK</span>
-        <span class="sr-only">Open Bored Killer fun fact widget</span>
-      </button>
+      <div class="agent-playground" data-agent-playground data-open="false">
+        <div class="agent-playground__hint" data-agent-playground-hint>
+          <span class="agent-playground__hint-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+              <rect x="5" y="6" width="14" height="12" rx="4" fill="currentColor" />
+              <circle cx="9.5" cy="11.3" r="1.1" fill="#050505" />
+              <circle cx="14.5" cy="11.3" r="1.1" fill="#050505" />
+              <path d="M8.8 14.4c.9.8 1.9 1.2 3.2 1.2 1.2 0 2.3-.4 3.1-1.2" fill="none" stroke="#050505" stroke-width="1.2" stroke-linecap="round" />
+              <path d="M12 6V3.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+              <circle cx="12" cy="2.6" r=".9" fill="currentColor" />
+            </svg>
+          </span>
+          <span>play with agents</span>
+        </div>
+
+        <button
+          class="agent-playground__trigger"
+          type="button"
+          data-agent-playground-trigger
+          aria-expanded="false"
+          aria-controls="agent-playground-menu"
+        >
+          <span class="agent-playground__trigger-icon agent-playground__trigger-icon--openai" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+              <path d="M10.2 3.2c1-.6 2.5-.6 3.6 0l1 .6c.9.5 1.5 1.4 1.6 2.4l.1 1.1 1 .6c.9.5 1.5 1.4 1.6 2.4l.1 1.1c.1 1.1-.4 2.2-1.3 2.8l-.9.7-.1 1.1c-.1 1-.7 1.9-1.6 2.4l-1 .6c-1 .6-2.5.6-3.6 0l-1-.6c-.9-.5-1.5-1.4-1.6-2.4l-.1-1.1-.9-.7c-.9-.7-1.4-1.7-1.3-2.8l.1-1.1c.1-1 .7-1.9 1.6-2.4l1-.6.1-1.1c.1-1 .7-1.9 1.6-2.4z" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linejoin="round" />
+              <circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="1.35" />
+            </svg>
+          </span>
+          <span class="agent-playground__trigger-icon agent-playground__trigger-icon--back" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+              <path d="m15.8 5.1-7 6.9 7 6.9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="sr-only">Toggle agent playground</span>
+        </button>
+
+        <div class="agent-playground__menu" id="agent-playground-menu" data-agent-playground-menu aria-hidden="true">
+          <button class="agent-playground__item" type="button" data-agent-action="chat">
+            <span class="agent-playground__item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+                <rect x="4.5" y="4.5" width="15" height="12.5" rx="4" fill="none" stroke="currentColor" stroke-width="1.7" />
+                <circle cx="9.4" cy="10.4" r="1.05" fill="currentColor" />
+                <circle cx="14.6" cy="10.4" r="1.05" fill="currentColor" />
+                <path d="M9.1 13.7c.8.7 1.7 1.1 2.9 1.1 1.1 0 2-.4 2.8-1.1" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                <path d="m9.8 17 2.2 2.5 2.2-2.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span class="agent-playground__item-copy">
+              <span class="agent-playground__item-title">Portfolio AI</span>
+              <span class="agent-playground__item-subtitle">Ask AI about Pasan</span>
+            </span>
+          </button>
+
+          <button class="agent-playground__item" type="button" data-agent-action="bored">
+            <span class="agent-playground__item-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+                <path d="M12 2.8 14.4 8l5.7.7-4.3 3.8 1.2 5.5L12 15.2 7 18l1.2-5.5L3.9 8.7 9.6 8 12 2.8Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                <path d="M9.4 12.4h5.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                <circle cx="9.6" cy="10" r=".85" fill="currentColor" />
+                <circle cx="14.4" cy="10" r=".85" fill="currentColor" />
+              </svg>
+            </span>
+            <span class="agent-playground__item-copy">
+              <span class="agent-playground__item-title">Bored Killer</span>
+              <span class="agent-playground__item-subtitle">Get a quick fun fact</span>
+            </span>
+          </button>
+        </div>
+      </div>
 
       <section
         class="bored-killer__panel"

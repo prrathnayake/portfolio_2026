@@ -865,6 +865,229 @@ textarea:focus-visible {
   gap: 14px;
 }
 
+.agent-playground {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.bored-killer[data-open="true"] .agent-playground {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.agent-playground__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 220px;
+  padding: 8px 11px;
+  border-radius: 12px;
+  border: 1px dashed var(--border);
+  background: rgba(0, 0, 0, 0.68);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+  animation: bored-hint-float 1.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.agent-playground__hint-icon {
+  width: 17px;
+  height: 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.agent-playground__hint-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.agent-playground[data-open="true"] .agent-playground__hint,
+.bored-killer[data-open="true"] .agent-playground__hint {
+  opacity: 0;
+  transform: translateY(6px);
+  visibility: hidden;
+  animation: none;
+}
+
+.agent-playground__trigger {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.92));
+  color: rgba(255, 255, 255, 0.98);
+  display: grid;
+  place-items: center;
+  position: relative;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.agent-playground__trigger:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 17px 30px rgba(0, 0, 0, 0.6);
+}
+
+.agent-playground__trigger:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.agent-playground__trigger::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  animation: bored-trigger-pulse 1.6s ease-out infinite;
+}
+
+.agent-playground[data-open="true"] .agent-playground__trigger::before {
+  animation: none;
+  opacity: 0;
+}
+
+.agent-playground__trigger-icon {
+  width: 31px;
+  height: 31px;
+  position: absolute;
+  display: grid;
+  place-items: center;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.agent-playground__trigger-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.agent-playground__trigger-icon--openai {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.agent-playground__trigger-icon--back {
+  opacity: 0;
+  transform: scale(0.72) rotate(-24deg);
+}
+
+.agent-playground[data-open="true"] .agent-playground__trigger-icon--openai {
+  opacity: 0;
+  transform: scale(0.72) rotate(24deg);
+}
+
+.agent-playground[data-open="true"] .agent-playground__trigger-icon--back {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+.agent-playground__menu {
+  position: absolute;
+  right: 0;
+  bottom: 80px;
+  width: min(252px, calc(100vw - 34px));
+  display: grid;
+  gap: 9px;
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity 190ms ease, transform 190ms ease, visibility 190ms ease;
+  visibility: hidden;
+}
+
+.agent-playground[data-open="true"] .agent-playground__menu {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.agent-playground__item {
+  appearance: none;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 14px;
+  background: rgba(6, 6, 6, 0.95);
+  color: var(--text);
+  padding: 9px 11px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+  transform: translateX(0);
+  transition: transform 170ms ease, border-color 170ms ease, background 170ms ease;
+}
+
+.agent-playground[data-open="true"] .agent-playground__item {
+  animation: agent-item-enter 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.agent-playground[data-open="true"] .agent-playground__item:nth-child(2) {
+  animation-delay: 65ms;
+}
+
+.agent-playground__item:hover,
+.agent-playground__item:focus-visible {
+  transform: translateX(-4px);
+  border-color: rgba(255, 255, 255, 0.65);
+  background: rgba(10, 10, 10, 0.98);
+  outline: none;
+}
+
+.agent-playground__item-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.43);
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: #ffffff;
+}
+
+.agent-playground__item-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.agent-playground__item-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.agent-playground__item-title {
+  font-size: 0.89rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.agent-playground__item-subtitle {
+  font-size: 0.69rem;
+  color: rgba(228, 228, 228, 0.74);
+  letter-spacing: 0.03em;
+}
+
 .bored-killer__hint {
   max-width: 180px;
   padding: 8px 11px;
@@ -1321,6 +1544,17 @@ textarea:focus-visible {
   }
 }
 
+@keyframes agent-item-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) translateX(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+}
+
 /* Scroll reveal */
 .js .reveal {
   opacity: 0;
@@ -1352,6 +1586,9 @@ textarea:focus-visible {
     width: auto;
   }
 
+  .agent-playground__hint,
+  .agent-playground__trigger::before,
+  .agent-playground[data-open="true"] .agent-playground__item,
   .bored-killer__hint,
   .bored-killer__trigger::before,
   .bored-killer__loading-face span,
@@ -1421,6 +1658,27 @@ textarea:focus-visible {
   .bored-killer {
     right: 12px;
     bottom: 12px;
+  }
+
+  .agent-playground__hint {
+    font-size: 0.71rem;
+    letter-spacing: 0.045em;
+  }
+
+  .agent-playground__menu {
+    width: min(224px, calc(100vw - 26px));
+  }
+
+  .agent-playground__item {
+    padding: 8px 10px;
+  }
+
+  .agent-playground__item-title {
+    font-size: 0.84rem;
+  }
+
+  .agent-playground__item-subtitle {
+    font-size: 0.65rem;
   }
 
   .bored-killer__panel {
