@@ -23,5 +23,3 @@ class BoredFactRequest(BaseModel):
         "Cybersecurity",
         "Developer productivity",
     ]
-    tone: Literal["witty", "surprising", "practical"]
-    detail: Literal["quick", "deep"]

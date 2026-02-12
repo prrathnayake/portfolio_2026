@@ -424,11 +424,7 @@
     const boredStepLabel = boredWidget.querySelector("[data-bored-step-label]");
     const boredAnswerButtons = Array.from(boredWidget.querySelectorAll("[data-bored-answer]"));
     const boredCategoryButtons = Array.from(boredWidget.querySelectorAll("[data-bored-category]"));
-    const boredToneButtons = Array.from(boredWidget.querySelectorAll("[data-bored-tone]"));
-    const boredDetailButtons = Array.from(boredWidget.querySelectorAll("[data-bored-detail]"));
-    const boredNext = boredWidget.querySelector("[data-bored-next]");
     const boredCategoriesBack = boredWidget.querySelector("[data-bored-categories-back]");
-    const boredPreferencesBack = boredWidget.querySelector("[data-bored-preferences-back]");
     const boredGenerate = boredWidget.querySelector("[data-bored-generate]");
     const boredLoading = boredWidget.querySelector("[data-bored-loading]");
     const boredResult = boredWidget.querySelector("[data-bored-result]");
@@ -436,16 +432,13 @@
     const boredBack = boredWidget.querySelector("[data-bored-back]");
     const boredStatus = boredWidget.querySelector("[data-bored-status]");
     const boredStepTitles = {
-      prompt: "Question 1 of 3",
-      categories: "Question 2 of 3",
-      preferences: "Question 3 of 3",
+      prompt: "Question 1 of 2",
+      categories: "Question 2 of 2",
     };
 
     let selectedBoredCategory =
       boredCategoryButtons[0]?.getAttribute("data-category") || "Backend engineering";
-    let selectedBoredTone = boredToneButtons[0]?.getAttribute("data-tone") || "witty";
-    let selectedBoredDetail = boredDetailButtons[0]?.getAttribute("data-detail") || "quick";
-    let boredBackStep = "preferences";
+    let boredBackStep = "categories";
     let boredRequestToken = 0;
 
     function setBoredStatus(message) {
@@ -454,13 +447,17 @@
     }
 
     function setBoredLoading(isLoading) {
+      boredWidget.classList.toggle("is-generating", isLoading);
       if (boredLoading instanceof HTMLElement) {
         boredLoading.hidden = !isLoading;
       }
       if (boredGenerate instanceof HTMLButtonElement) {
         boredGenerate.disabled = isLoading;
       }
-      [...boredCategoryButtons, ...boredToneButtons, ...boredDetailButtons].forEach((button) => {
+      if (boredCategoriesBack instanceof HTMLButtonElement) {
+        boredCategoriesBack.disabled = isLoading;
+      }
+      boredCategoryButtons.forEach((button) => {
         if (button instanceof HTMLButtonElement) {
           button.disabled = isLoading;
         }
@@ -483,20 +480,21 @@
       setOptionSelection(boredCategoryButtons, selectedButton);
     }
 
-    function setBoredTone(selectedButton) {
-      if (!(selectedButton instanceof HTMLButtonElement)) return;
-      const tone = selectedButton.getAttribute("data-tone");
-      if (!tone) return;
-      selectedBoredTone = tone;
-      setOptionSelection(boredToneButtons, selectedButton);
-    }
-
-    function setBoredDetail(selectedButton) {
-      if (!(selectedButton instanceof HTMLButtonElement)) return;
-      const detail = selectedButton.getAttribute("data-detail");
-      if (!detail) return;
-      selectedBoredDetail = detail;
-      setOptionSelection(boredDetailButtons, selectedButton);
+    function applyBoredResultSize(text) {
+      if (!(boredResult instanceof HTMLElement)) return;
+      boredResult.classList.remove("is-medium", "is-long", "is-xlong");
+      const length = text.trim().length;
+      if (length > 320) {
+        boredResult.classList.add("is-xlong");
+        return;
+      }
+      if (length > 220) {
+        boredResult.classList.add("is-long");
+        return;
+      }
+      if (length > 120) {
+        boredResult.classList.add("is-medium");
+      }
     }
 
     function showBoredStep(stepName, { animate = true } = {}) {
@@ -542,16 +540,11 @@
       if (boredResult instanceof HTMLElement) {
         boredResult.textContent = "";
       }
+      applyBoredResultSize("");
       if (boredCategoryButtons[0] instanceof HTMLButtonElement) {
         setBoredCategory(boredCategoryButtons[0]);
       }
-      if (boredToneButtons[0] instanceof HTMLButtonElement) {
-        setBoredTone(boredToneButtons[0]);
-      }
-      if (boredDetailButtons[0] instanceof HTMLButtonElement) {
-        setBoredDetail(boredDetailButtons[0]);
-      }
-      boredBackStep = "preferences";
+      boredBackStep = "categories";
       showBoredStep("prompt", { animate });
     }
 
@@ -589,13 +582,12 @@
       const requestToken = ++boredRequestToken;
 
       try {
+        showBoredStep("categories", { animate: false });
         const res = await fetch("/api/bored-fact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             category: selectedBoredCategory,
-            tone: selectedBoredTone,
-            detail: selectedBoredDetail,
           }),
         });
         if (!res.ok) {
@@ -608,8 +600,9 @@
         const answer = String(data?.answer || "").trim();
         if (boredResult instanceof HTMLElement) {
           boredResult.textContent = answer || "Pasan keeps building cool things across backend and AI.";
+          applyBoredResultSize(boredResult.textContent);
         }
-        boredBackStep = "preferences";
+        boredBackStep = "categories";
         showBoredStep("result", { animate: true });
       } catch (err) {
         if (requestToken !== boredRequestToken) return;
@@ -640,6 +633,7 @@
         }
         if (boredResult instanceof HTMLElement) {
           boredResult.textContent = 'No problem. Click "Another fact" whenever boredom wins.';
+          applyBoredResultSize(boredResult.textContent);
         }
         boredBackStep = "prompt";
         showBoredStep("result", { animate: true });
@@ -652,28 +646,8 @@
       });
     });
 
-    boredToneButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        setBoredTone(button);
-      });
-    });
-
-    boredDetailButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        setBoredDetail(button);
-      });
-    });
-
-    boredNext?.addEventListener("click", () => {
-      showBoredStep("preferences", { animate: true });
-      setBoredStatus("");
-    });
     boredCategoriesBack?.addEventListener("click", () => {
       showBoredStep("prompt", { animate: true });
-      setBoredStatus("");
-    });
-    boredPreferencesBack?.addEventListener("click", () => {
-      showBoredStep("categories", { animate: true });
       setBoredStatus("");
     });
 

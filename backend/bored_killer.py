@@ -49,53 +49,42 @@ _CATEGORY_PROFILE_PROMPTS = {
 }
 
 
-_TONE_PROMPTS = {
-    "witty": "Use light and clean humor, but keep it professional and not sarcastic.",
-    "surprising": "Highlight an unexpected or impressive angle from Pasan's background.",
-    "practical": "Keep it grounded and useful, focusing on applied engineering value.",
-}
-
-
-_DETAIL_PROMPTS = {
-    "quick": "Return exactly 1 sentence.",
-    "deep": "Return exactly 2 short sentences.",
-}
-
-
-def build_bored_fact_messages(*, category: str, tone: str, detail: str) -> list[dict[str, str]]:
+def build_bored_fact_messages(*, category: str) -> list[dict[str, str]]:
     category_profile = _CATEGORY_PROFILE_PROMPTS.get(category, _CATEGORY_PROFILE_PROMPTS["Backend engineering"])
-    tone_prompt = _TONE_PROMPTS.get(tone, _TONE_PROMPTS["surprising"])
-    detail_prompt = _DETAIL_PROMPTS.get(detail, _DETAIL_PROMPTS["quick"])
 
     system_prompt = dedent(
         """
-        You are "Bored Killer", a tiny portfolio micro-assistant for Pasan Rathnayake.
-        Task:
-        - Generate a single fun fact about Pasan based only on the provided profile information.
-        - Start the response with "Pasan".
-        - Keep the output concise, clear, and in third person.
-        - Do not use markdown, bullet points, headings, or prefacing text.
-        - Do not invent employers, awards, years, or credentials not provided in the profile.
+        You are "Bored Killer", a micro-assistant in Pasan Rathnayake's portfolio.
+        Objective:
+        - Generate one engaging fun fact about Pasan, strictly grounded in the profile provided.
+
+        Hard rules:
+        - Start the first sentence with "Pasan".
+        - Use third person only.
+        - No markdown, no bullet points, no headings, no quotation marks.
+        - Never invent companies, years, roles, awards, or credentials not in the profile.
+        - Mention at least one concrete technical detail (tool, stack, system pattern, or domain) relevant to the selected category.
+
+        Length policy:
+        - Adapt naturally by content richness: 1 to 3 short sentences.
+        - Keep total output between roughly 16 and 55 words.
+
+        Voice:
+        - Playful but professional for a developer audience.
+        - Crisp, specific, and resume-aligned.
         """
     ).strip()
 
     user_prompt = dedent(
         f"""
-        User preferences from UI:
-        - Selected category: {category}
-        - Preferred tone: {tone}
-        - Preferred detail level: {detail}
+        Selected category from UI:
+        - {category}
 
         Pasan full profile summary:
         {_BASE_PROFILE}
 
         Category-specific profile summary:
         {category_profile}
-
-        Style constraints:
-        - {tone_prompt}
-        - {detail_prompt}
-        - Make it feel playful for developers.
         """
     ).strip()
 

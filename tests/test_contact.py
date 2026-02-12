@@ -120,15 +120,13 @@ def test_bored_fact_requires_openrouter_key(client, monkeypatch: pytest.MonkeyPa
         "/api/bored-fact",
         json={
             "category": "Backend engineering",
-            "tone": "surprising",
-            "detail": "quick",
         },
     )
     assert res.status_code == 503
     assert "OpenRouter API key is not configured" in res.json()["detail"]
 
 
-def test_bored_fact_uses_preference_payload(client, monkeypatch: pytest.MonkeyPatch):
+def test_bored_fact_uses_category_profile_prompt(client, monkeypatch: pytest.MonkeyPatch):
     _configure_openrouter_env(monkeypatch, key="fake-key")
     settings_module.get_settings.cache_clear()
 
@@ -145,8 +143,6 @@ def test_bored_fact_uses_preference_payload(client, monkeypatch: pytest.MonkeyPa
         "/api/bored-fact",
         json={
             "category": "AI and automation",
-            "tone": "witty",
-            "detail": "deep",
         },
     )
 
