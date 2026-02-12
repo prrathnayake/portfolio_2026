@@ -1111,6 +1111,12 @@ textarea:focus-visible {
   padding: 2px 0;
 }
 
+.bored-killer__word-cloud--actions {
+  grid-template-columns: repeat(2, max-content);
+  justify-content: start;
+  align-items: center;
+}
+
 .bored-killer__word {
   appearance: none;
   border: 0;
@@ -1178,7 +1184,6 @@ textarea:focus-visible {
 
 .bored-killer__generate {
   color: #9ff66e;
-  grid-column: 1 / -1;
   justify-self: start;
 }
 
@@ -1435,6 +1440,11 @@ textarea:focus-visible {
   .bored-killer__categories {
     grid-template-columns: 1fr;
     gap: 12px;
+  }
+
+  .bored-killer__word-cloud--actions {
+    grid-template-columns: repeat(2, max-content);
+    justify-content: start;
   }
 
   .bored-killer__word {
