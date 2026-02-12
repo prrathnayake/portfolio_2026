@@ -1182,16 +1182,6 @@ textarea:focus-visible {
   font-size: clamp(0.96rem, 1.2vw, 1.1rem);
 }
 
-.bored-killer__generate {
-  color: #9ff66e;
-  justify-self: start;
-}
-
-.bored-killer__generate:hover,
-.bored-killer__generate:focus-visible {
-  color: #b7ff8a;
-}
-
 .bored-killer__loading {
   display: flex;
   align-items: center;
@@ -1449,9 +1439,5 @@ textarea:focus-visible {
 
   .bored-killer__word {
     font-size: 1rem;
-  }
-
-  .bored-killer__generate {
-    grid-column: auto;
   }
 }

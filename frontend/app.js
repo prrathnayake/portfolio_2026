@@ -425,7 +425,6 @@
     const boredAnswerButtons = Array.from(boredWidget.querySelectorAll("[data-bored-answer]"));
     const boredCategoryButtons = Array.from(boredWidget.querySelectorAll("[data-bored-category]"));
     const boredCategoriesBack = boredWidget.querySelector("[data-bored-categories-back]");
-    const boredGenerate = boredWidget.querySelector("[data-bored-generate]");
     const boredLoading = boredWidget.querySelector("[data-bored-loading]");
     const boredResult = boredWidget.querySelector("[data-bored-result]");
     const boredRestart = boredWidget.querySelector("[data-bored-restart]");
@@ -508,9 +507,6 @@
       boredWidget.classList.toggle("is-generating", isLoading);
       if (boredLoading instanceof HTMLElement) {
         boredLoading.hidden = !isLoading;
-      }
-      if (boredGenerate instanceof HTMLButtonElement) {
-        boredGenerate.disabled = isLoading;
       }
       if (boredCategoriesBack instanceof HTMLButtonElement) {
         boredCategoriesBack.disabled = isLoading;
@@ -801,6 +797,7 @@
     boredCategoryButtons.forEach((button) => {
       button.addEventListener("click", () => {
         setBoredCategory(button);
+        generateBoredFact();
       });
     });
 
@@ -809,7 +806,6 @@
       setBoredStatus("");
     });
 
-    boredGenerate?.addEventListener("click", generateBoredFact);
     boredRestart?.addEventListener("click", () => {
       showBoredStep("categories", { animate: true });
       setBoredStatus("");
