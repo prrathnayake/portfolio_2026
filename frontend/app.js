@@ -414,6 +414,180 @@
     }
   });
 
+  // Bored Killer mini widget
+  const boredWidget = document.querySelector("[data-bored-killer]");
+  const boredTrigger = document.querySelector("[data-bored-trigger]");
+  const boredPanel = document.querySelector("#bored-killer-panel");
+  const boredClose = document.querySelector("[data-bored-close]");
+  const boredSteps = Array.from(document.querySelectorAll("[data-bored-step]"));
+  const boredAnswerButtons = Array.from(document.querySelectorAll("[data-bored-answer]"));
+  const boredCategoryButtons = Array.from(document.querySelectorAll("[data-bored-category]"));
+  const boredGenerate = document.querySelector("[data-bored-generate]");
+  const boredLoading = document.querySelector("[data-bored-loading]");
+  const boredResult = document.querySelector("[data-bored-result]");
+  const boredRestart = document.querySelector("[data-bored-restart]");
+  const boredBack = document.querySelector("[data-bored-back]");
+  const boredStatus = document.querySelector("[data-bored-status]");
+
+  let selectedBoredCategory =
+    boredCategoryButtons[0]?.getAttribute("data-category") || "Backend engineering";
+
+  function setBoredOpen(isOpen) {
+    if (!boredWidget) return;
+    boredWidget.dataset.open = String(isOpen);
+    if (boredTrigger instanceof HTMLButtonElement) {
+      boredTrigger.setAttribute("aria-expanded", String(isOpen));
+    }
+    if (boredPanel instanceof HTMLElement) {
+      boredPanel.setAttribute("aria-hidden", String(!isOpen));
+    }
+    if (isOpen) {
+      const focusTarget = boredSteps.find((step) => !step.hasAttribute("hidden"))?.querySelector("button");
+      setTimeout(() => {
+        if (focusTarget instanceof HTMLElement) focusTarget.focus();
+      }, 50);
+    }
+  }
+
+  function showBoredStep(stepName) {
+    boredSteps.forEach((step) => {
+      step.hidden = step.getAttribute("data-bored-step") !== stepName;
+    });
+    if (boredWidget instanceof HTMLElement) {
+      boredWidget.dataset.step = stepName;
+    }
+  }
+
+  function setBoredStatus(message) {
+    if (!(boredStatus instanceof HTMLElement)) return;
+    boredStatus.textContent = message;
+  }
+
+  function setBoredLoading(isLoading) {
+    if (boredLoading instanceof HTMLElement) {
+      boredLoading.hidden = !isLoading;
+    }
+    if (boredGenerate instanceof HTMLButtonElement) {
+      boredGenerate.disabled = isLoading;
+    }
+    boredCategoryButtons.forEach((button) => {
+      if (button instanceof HTMLButtonElement) {
+        button.disabled = isLoading;
+      }
+    });
+  }
+
+  function setBoredCategory(selectedButton) {
+    const category = selectedButton.getAttribute("data-category");
+    if (!category) return;
+    selectedBoredCategory = category;
+    boredCategoryButtons.forEach((button) => {
+      const isSelected = button === selectedButton;
+      button.classList.toggle("is-selected", isSelected);
+      button.setAttribute("aria-checked", String(isSelected));
+    });
+  }
+
+  function buildBoredPrompt(category) {
+    return [
+      `Create one short, surprising fun fact in the category "${category}" for a developer audience.`,
+      "Ground the fact in Pasan Rathnayake's real background, projects, education, or skills.",
+      'Write in third person and start with "Pasan".',
+      "Keep the answer to 2 short sentences max.",
+      "No markdown, no bullet points, and no heading.",
+    ].join(" ");
+  }
+
+  async function generateBoredFact() {
+    if (!selectedBoredCategory) return;
+    setBoredStatus("");
+    setBoredLoading(true);
+    try {
+      const message = buildBoredPrompt(selectedBoredCategory);
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.detail || "Fun facts are unavailable right now.");
+      }
+      const data = await res.json();
+      const answer = String(data?.answer || "").trim();
+      if (boredResult instanceof HTMLElement) {
+        boredResult.textContent = answer || "Pasan keeps building cool things across backend and AI.";
+      }
+      showBoredStep("result");
+    } catch (err) {
+      setBoredStatus(
+        err instanceof Error ? err.message : "Could not generate a fun fact right now."
+      );
+    } finally {
+      setBoredLoading(false);
+    }
+  }
+
+  if (boredCategoryButtons[0] instanceof HTMLButtonElement) {
+    setBoredCategory(boredCategoryButtons[0]);
+  }
+  if (boredWidget) {
+    showBoredStep("prompt");
+  }
+
+  boredTrigger?.addEventListener("click", () => {
+    setBoredOpen(true);
+    setBoredStatus("");
+  });
+  boredClose?.addEventListener("click", () => setBoredOpen(false));
+
+  boredAnswerButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const answer = button.getAttribute("data-bored-answer");
+      setBoredStatus("");
+      if (answer === "yes") {
+        showBoredStep("categories");
+        return;
+      }
+      if (boredResult instanceof HTMLElement) {
+        boredResult.textContent = 'No problem. Click "Another fact" whenever boredom wins.';
+      }
+      showBoredStep("result");
+    });
+  });
+
+  boredCategoryButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button instanceof HTMLButtonElement) {
+        setBoredCategory(button);
+      }
+    });
+  });
+
+  boredGenerate?.addEventListener("click", generateBoredFact);
+  boredRestart?.addEventListener("click", () => {
+    showBoredStep("categories");
+    setBoredStatus("");
+  });
+  boredBack?.addEventListener("click", () => {
+    showBoredStep("prompt");
+    setBoredStatus("");
+  });
+
+  document.addEventListener("click", (event) => {
+    if (boredWidget?.dataset.open !== "true") return;
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    if (boredWidget.contains(target)) return;
+    setBoredOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && boredWidget?.dataset.open === "true") {
+      setBoredOpen(false);
+    }
+  });
+
   // Projects (optional JSON file)
   const projectsEl = document.querySelector("[data-projects]");
   async function loadProjects() {

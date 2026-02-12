@@ -483,6 +483,118 @@
       </div>
     </div>
 
+    <div class="bored-killer" data-bored-killer data-open="false" data-step="prompt">
+      <div class="bored-killer__hint" data-bored-hint>bored killer</div>
+      <button
+        class="bored-killer__trigger"
+        type="button"
+        data-bored-trigger
+        aria-expanded="false"
+        aria-controls="bored-killer-panel"
+      >
+        <span class="bored-killer__trigger-core" aria-hidden="true">BK</span>
+        <span class="sr-only">Open Bored Killer fun fact widget</span>
+      </button>
+
+      <section
+        class="bored-killer__panel"
+        id="bored-killer-panel"
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby="bored-killer-title"
+        aria-hidden="true"
+      >
+        <header class="bored-killer__header">
+          <h2 id="bored-killer-title">Bored Killer</h2>
+          <button class="bored-killer__close" type="button" data-bored-close aria-label="Close Bored Killer">
+            ✕
+          </button>
+        </header>
+
+        <div class="bored-killer__content">
+          <div class="bored-killer__step" data-bored-step="prompt">
+            <p class="bored-killer__message">Want to know a fun fact?</p>
+            <div class="bored-killer__actions">
+              <button class="btn btn--primary bored-killer__btn" type="button" data-bored-answer="yes">Yes</button>
+              <button class="btn btn--ghost bored-killer__btn" type="button" data-bored-answer="no">No</button>
+            </div>
+          </div>
+
+          <div class="bored-killer__step" data-bored-step="categories" hidden>
+            <p class="bored-killer__message">Pick a category:</p>
+            <div class="bored-killer__categories" data-bored-categories role="radiogroup" aria-label="Fun fact categories">
+              <button
+                class="bored-killer__category is-selected"
+                type="button"
+                role="radio"
+                aria-checked="true"
+                data-bored-category
+                data-category="Backend engineering"
+              >
+                Backend engineering
+              </button>
+              <button
+                class="bored-killer__category"
+                type="button"
+                role="radio"
+                aria-checked="false"
+                data-bored-category
+                data-category="AI and automation"
+              >
+                AI and automation
+              </button>
+              <button
+                class="bored-killer__category"
+                type="button"
+                role="radio"
+                aria-checked="false"
+                data-bored-category
+                data-category="Cybersecurity"
+              >
+                Cybersecurity
+              </button>
+              <button
+                class="bored-killer__category"
+                type="button"
+                role="radio"
+                aria-checked="false"
+                data-bored-category
+                data-category="Developer productivity"
+              >
+                Developer productivity
+              </button>
+            </div>
+            <button class="btn btn--primary bored-killer__generate" type="button" data-bored-generate>
+              Generate fun fact
+            </button>
+          </div>
+
+          <div class="bored-killer__step" data-bored-step="result" hidden>
+            <p class="bored-killer__message bored-killer__message--result" data-bored-result></p>
+            <div class="bored-killer__actions">
+              <button class="btn btn--primary bored-killer__btn" type="button" data-bored-restart>
+                Another fact
+              </button>
+              <button class="btn btn--ghost bored-killer__btn" type="button" data-bored-back>
+                Back
+              </button>
+            </div>
+          </div>
+
+          <div class="bored-killer__loading" data-bored-loading hidden aria-live="polite">
+            <div class="bored-killer__loading-face" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p>Bored Killer is digging up a fun fact…</p>
+          </div>
+
+          <div class="bored-killer__status" role="status" aria-live="polite" data-bored-status></div>
+        </div>
+      </section>
+    </div>
+
     <footer class="footer">
       <div class="container footer__inner">
         <div>
