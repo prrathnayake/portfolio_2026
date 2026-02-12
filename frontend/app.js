@@ -501,6 +501,7 @@
     function setBoredStatus(message) {
       if (!(boredStatus instanceof HTMLElement)) return;
       boredStatus.textContent = message;
+      resizeBoredPanel({ immediate: true });
     }
 
     function setBoredLoading(isLoading) {
@@ -519,6 +520,7 @@
           button.disabled = isLoading;
         }
       });
+      resizeBoredPanel({ immediate: true });
     }
 
     function setOptionSelection(buttons, selectedButton) {
@@ -608,6 +610,30 @@
       if (length > 120) {
         boredResult.classList.add("is-medium");
       }
+      resizeBoredPanel({ immediate: true });
+    }
+
+    function resizeBoredPanel({ immediate = false } = {}) {
+      if (!(boredPanel instanceof HTMLElement)) return;
+      if (boredWidget.dataset.open !== "true") {
+        boredPanel.style.height = "";
+        return;
+      }
+
+      const update = () => {
+        boredPanel.style.height = "auto";
+        const naturalHeight = boredPanel.scrollHeight;
+        const maxHeight = Math.max(320, window.innerHeight - 28);
+        const minHeight = Math.min(maxHeight, 320);
+        const targetHeight = Math.min(maxHeight, Math.max(minHeight, naturalHeight));
+        boredPanel.style.height = `${Math.round(targetHeight)}px`;
+      };
+
+      if (immediate || prefersReducedMotion) {
+        update();
+      } else {
+        requestAnimationFrame(update);
+      }
     }
 
     function showBoredStep(stepName, { animate = true } = {}) {
@@ -647,6 +673,7 @@
       }
 
       setBoredInitialMenuSelection({ focus: false });
+      resizeBoredPanel({ immediate: true });
     }
 
     function resetBoredFlow({ animate = false } = {}) {
@@ -680,6 +707,7 @@
         resetBoredFlow({ animate: true });
         setTimeout(() => {
           setBoredInitialMenuSelection({ focus: true });
+          resizeBoredPanel({ immediate: true });
         }, 50);
         return;
       }
@@ -689,6 +717,7 @@
       setBoredLoading(false);
       setBoredStatus("");
       setBoredMenuSelection(-1);
+      boredPanel.style.height = "";
     }
 
     async function generateBoredFact() {
@@ -825,6 +854,12 @@
         if (!(word instanceof HTMLButtonElement)) return;
         event.preventDefault();
         word.click();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (boredWidget.dataset.open === "true") {
+        resizeBoredPanel({ immediate: true });
       }
     });
   }

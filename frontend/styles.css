@@ -941,8 +941,10 @@ textarea:focus-visible {
 
 .bored-killer__panel {
   display: none;
-  width: min(620px, calc(100vw - 28px));
-  height: min(730px, 88vh);
+  width: min(760px, calc(100vw - 36px));
+  min-height: 320px;
+  max-height: calc(100vh - 28px);
+  height: auto;
   border-radius: 20px;
   border: 2px solid #ffffff;
   background: #0a0a0a;
@@ -952,8 +954,12 @@ textarea:focus-visible {
   background-size: 210px 210px;
   box-shadow: 0 20px 52px rgba(0, 0, 0, 0.64);
   overflow: hidden;
-  position: relative;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   flex-direction: column;
+  transition: height 220ms ease;
 }
 
 .bored-killer__panel::before {
@@ -1044,12 +1050,12 @@ textarea:focus-visible {
 .bored-killer__step {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 22px;
   border: 1px dashed var(--border);
   border-radius: 18px;
-  padding: 24px 22px;
-  min-height: 285px;
+  padding: 20px 20px 18px;
+  min-height: 0;
   background: rgba(0, 0, 0, 0.44);
 }
 
@@ -1102,6 +1108,7 @@ textarea:focus-visible {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 28px;
   align-items: start;
+  padding: 2px 0;
 }
 
 .bored-killer__word {
@@ -1109,14 +1116,14 @@ textarea:focus-visible {
   border: 0;
   background: transparent;
   color: rgba(242, 242, 242, 0.96);
-  padding: 0;
+  padding: 6px 10px 6px 14px;
   margin: 0;
   cursor: pointer;
-  font-family: "Trebuchet MS", "Arial Black", "Segoe UI", sans-serif;
-  font-size: clamp(1.02rem, 1.42vw, 1.26rem);
-  font-weight: 900;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+  font-family: inherit;
+  font-size: clamp(1rem, 1.32vw, 1.16rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: none;
   line-height: 1.15;
   position: relative;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.7);
@@ -1128,9 +1135,9 @@ textarea:focus-visible {
 .bored-killer__word::before {
   content: ">";
   position: absolute;
-  left: -16px;
+  left: 2px;
   top: 50%;
-  transform: translateY(-50%) translateX(-4px);
+  transform: translateY(-50%) translateX(-3px);
   opacity: 0;
   color: #ffdb5a;
   transition: opacity 120ms ease, transform 120ms ease;
@@ -1151,7 +1158,7 @@ textarea:focus-visible {
 .bored-killer__word.is-selected::before,
 .bored-killer__word:focus-visible::before {
   opacity: 1;
-  transform: translateY(-50%) translateX(0);
+  transform: translateY(-50%) translateX(-1px);
 }
 
 .bored-killer__word[disabled] {
@@ -1411,8 +1418,8 @@ textarea:focus-visible {
   }
 
   .bored-killer__panel {
-    width: min(95vw, calc(100vw - 12px));
-    height: min(84vh, 700px);
+    width: min(96vw, calc(100vw - 12px));
+    max-height: calc(100vh - 16px);
   }
 
   .bored-killer__content {
@@ -1421,7 +1428,6 @@ textarea:focus-visible {
 
   .bored-killer__step {
     padding: 18px 14px;
-    min-height: 245px;
     gap: 16px;
   }
 
