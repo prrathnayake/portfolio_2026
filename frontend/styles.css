@@ -862,7 +862,7 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: 14px;
 }
 
 .bored-killer__hint {
@@ -941,19 +941,43 @@ textarea:focus-visible {
 
 .bored-killer__panel {
   display: none;
-  width: min(360px, calc(100vw - 30px));
-  max-height: min(470px, 78vh);
-  border-radius: 18px;
+  width: min(620px, calc(100vw - 28px));
+  height: min(730px, 88vh);
+  border-radius: 20px;
   border: 2px solid #ffffff;
   background: #0a0a0a;
-  background-image: url("/static/assets/noise.svg");
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    url("/static/assets/noise.svg");
   background-size: 210px 210px;
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.62);
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.64);
   overflow: hidden;
+  position: relative;
+  flex-direction: column;
+}
+
+.bored-killer__panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/static/assets/scribble-2.svg");
+  background-repeat: no-repeat;
+  background-size: 240px auto;
+  background-position: 92% 9%;
+  opacity: 0.11;
+  pointer-events: none;
+}
+
+.bored-killer__panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 10% 92%, rgba(255, 255, 255, 0.07), transparent 46%);
+  pointer-events: none;
 }
 
 .bored-killer[data-open="true"] .bored-killer__panel {
-  display: block;
+  display: flex;
 }
 
 .bored-killer__header {
@@ -961,14 +985,18 @@ textarea:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  padding: 12px 14px;
+  padding: 16px 20px;
   border-bottom: 1px solid var(--border);
-  background: rgba(10, 10, 10, 0.92);
+  background: rgba(10, 10, 10, 0.94);
+  position: relative;
+  z-index: 1;
 }
 
 .bored-killer__header h2 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.22rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .bored-killer__close {
@@ -986,35 +1014,43 @@ textarea:focus-visible {
 }
 
 .bored-killer__content {
-  padding: 14px;
-  display: grid;
-  gap: 12px;
+  flex: 1;
+  padding: 18px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .bored-killer__step-label {
   margin: 0;
-  font-size: 0.73rem;
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.11em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: rgba(247, 247, 247, 0.74);
 }
 
 .bored-killer__menu-hint {
-  margin: -4px 0 0;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  margin: -1px 0 4px;
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: rgba(219, 219, 219, 0.58);
+  color: rgba(219, 219, 219, 0.62);
 }
 
 .bored-killer__step {
-  display: grid;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.36);
+  border-radius: 18px;
+  padding: 24px 22px;
+  min-height: 285px;
+  background: rgba(0, 0, 0, 0.44);
 }
 
 .bored-killer__step[hidden] {
@@ -1028,25 +1064,27 @@ textarea:focus-visible {
 .bored-killer__message {
   margin: 0;
   font-weight: 700;
+  font-size: clamp(1.08rem, 1.8vw, 1.32rem);
+  line-height: 1.32;
 }
 
 .bored-killer__message--result {
   font-weight: 600;
   line-height: 1.5;
-  min-height: 3.1em;
-  font-size: clamp(0.94rem, 1.2vw, 1.05rem);
+  min-height: 4.3em;
+  font-size: clamp(1.02rem, 1.45vw, 1.18rem);
 }
 
 .bored-killer__message--result.is-medium {
-  font-size: clamp(0.9rem, 1.08vw, 0.98rem);
+  font-size: clamp(0.95rem, 1.25vw, 1.04rem);
 }
 
 .bored-killer__message--result.is-long {
-  font-size: clamp(0.84rem, 1vw, 0.93rem);
+  font-size: clamp(0.88rem, 1.1vw, 0.97rem);
 }
 
 .bored-killer__message--result.is-xlong {
-  font-size: clamp(0.79rem, 0.92vw, 0.88rem);
+  font-size: clamp(0.82rem, 1.01vw, 0.91rem);
 }
 
 .bored-killer__actions {
@@ -1060,10 +1098,10 @@ textarea:focus-visible {
 }
 
 .bored-killer__word-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 18px;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 28px;
+  align-items: start;
 }
 
 .bored-killer__word {
@@ -1075,9 +1113,9 @@ textarea:focus-visible {
   margin: 0;
   cursor: pointer;
   font-family: "Trebuchet MS", "Arial Black", "Segoe UI", sans-serif;
-  font-size: 0.98rem;
+  font-size: clamp(1.02rem, 1.42vw, 1.26rem);
   font-weight: 900;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   line-height: 1.15;
   position: relative;
@@ -1090,7 +1128,7 @@ textarea:focus-visible {
 .bored-killer__word::before {
   content: ">";
   position: absolute;
-  left: -12px;
+  left: -16px;
   top: 50%;
   transform: translateY(-50%) translateX(-4px);
   opacity: 0;
@@ -1122,17 +1160,19 @@ textarea:focus-visible {
 }
 
 .bored-killer__categories {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 26px;
 }
 
 .bored-killer__category {
-  font-size: 0.9rem;
+  font-size: clamp(0.96rem, 1.2vw, 1.1rem);
 }
 
 .bored-killer__generate {
   color: #9ff66e;
+  grid-column: 1 / -1;
+  justify-self: start;
 }
 
 .bored-killer__generate:hover,
@@ -1145,9 +1185,10 @@ textarea:focus-visible {
   align-items: center;
   gap: 10px;
   border: 1px dashed var(--border);
-  border-radius: 12px;
-  padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  margin-top: auto;
 }
 
 .bored-killer.is-generating .bored-killer__loading {
@@ -1191,8 +1232,8 @@ textarea:focus-visible {
 
 .bored-killer__status {
   min-height: 1.2em;
-  margin-top: -2px;
-  font-size: 0.82rem;
+  margin-top: -1px;
+  font-size: 0.84rem;
   color: rgba(255, 153, 153, 0.95);
 }
 
@@ -1370,10 +1411,31 @@ textarea:focus-visible {
   }
 
   .bored-killer__panel {
-    width: min(350px, calc(100vw - 24px));
+    width: min(95vw, calc(100vw - 12px));
+    height: min(84vh, 700px);
   }
 
+  .bored-killer__content {
+    padding: 15px 15px 13px;
+  }
+
+  .bored-killer__step {
+    padding: 18px 14px;
+    min-height: 245px;
+    gap: 16px;
+  }
+
+  .bored-killer__word-cloud,
   .bored-killer__categories {
-    gap: 10px 14px;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .bored-killer__word {
+    font-size: 1rem;
+  }
+
+  .bored-killer__generate {
+    grid-column: auto;
   }
 }
