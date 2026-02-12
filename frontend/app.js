@@ -104,6 +104,95 @@
     revealItems.forEach((el) => el.classList.add("is-visible"));
   }
 
+  // Technical strengths diffusion animation
+  const strengthsDiffusion = document.querySelector("[data-strengths-diffusion]");
+  if (strengthsDiffusion instanceof HTMLElement) {
+    const strengthsOutput = strengthsDiffusion.querySelector("[data-strengths-output]");
+    const strengthsSeed = strengthsDiffusion.querySelector("[data-strengths-seed]");
+    const strengthsLayer = strengthsDiffusion.querySelector("[data-strengths-layer]");
+    const rawStrengths = strengthsDiffusion.getAttribute("data-strengths-phrases") || "";
+    const strengthPhrases = rawStrengths
+      .split("|")
+      .map((phrase) => phrase.trim())
+      .filter(Boolean);
+    const noiseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+=";
+    const denoiseLayers = prefersReducedMotion ? [1] : [0.08, 0.16, 0.3, 0.46, 0.64, 0.82, 1];
+    let activePhraseIndex = 0;
+    let layerTimer = 0;
+    let holdTimer = 0;
+
+    function buildNoisyText(target, revealRatio) {
+      return target
+        .split("")
+        .map((char) => {
+          if (char === " ") return " ";
+          if (Math.random() < revealRatio) return char;
+          return noiseAlphabet[Math.floor(Math.random() * noiseAlphabet.length)];
+        })
+        .join("");
+    }
+
+    function clearDiffusionTimers() {
+      if (layerTimer) {
+        window.clearTimeout(layerTimer);
+        layerTimer = 0;
+      }
+      if (holdTimer) {
+        window.clearTimeout(holdTimer);
+        holdTimer = 0;
+      }
+    }
+
+    function runDiffusionPhrase() {
+      if (!(strengthsOutput instanceof HTMLElement) || strengthPhrases.length === 0) return;
+
+      const phrase = strengthPhrases[activePhraseIndex];
+      let layerIndex = 0;
+
+      const renderLayer = () => {
+        const revealRatio = denoiseLayers[Math.min(layerIndex, denoiseLayers.length - 1)];
+        strengthsDiffusion.style.setProperty("--clarity", String(revealRatio));
+        strengthsOutput.textContent = buildNoisyText(phrase, revealRatio);
+
+        if (strengthsSeed instanceof HTMLElement) {
+          const seedReveal = Math.max(0, revealRatio - 0.52);
+          strengthsSeed.textContent = buildNoisyText(phrase, seedReveal);
+        }
+
+        if (strengthsLayer instanceof HTMLElement) {
+          if (prefersReducedMotion) {
+            strengthsLayer.textContent = "Generated snapshot";
+          } else {
+            strengthsLayer.textContent = `Denoising layer ${Math.min(layerIndex + 1, denoiseLayers.length)}/${denoiseLayers.length}`;
+          }
+        }
+
+        if (layerIndex < denoiseLayers.length - 1) {
+          layerIndex += 1;
+          layerTimer = window.setTimeout(renderLayer, prefersReducedMotion ? 40 : 110);
+          return;
+        }
+
+        strengthsDiffusion.style.setProperty("--clarity", "1");
+        strengthsOutput.textContent = phrase;
+        if (strengthsSeed instanceof HTMLElement) strengthsSeed.textContent = "";
+        if (strengthsLayer instanceof HTMLElement) {
+          strengthsLayer.textContent = "Generated via diffusion-style denoising";
+        }
+
+        holdTimer = window.setTimeout(() => {
+          activePhraseIndex = (activePhraseIndex + 1) % strengthPhrases.length;
+          runDiffusionPhrase();
+        }, prefersReducedMotion ? 2800 : 1700);
+      };
+
+      renderLayer();
+    }
+
+    clearDiffusionTimers();
+    runDiffusionPhrase();
+  }
+
   // Chip icons
   const iconMap = {
     "Backend Systems": "generic",
