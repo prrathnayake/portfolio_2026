@@ -28,6 +28,8 @@
 **Response Style & Formatting**
 
 * Be concise and helpful.
+* Prefer plain, non-technical language for a general audience.
+* If a technical term is needed, explain it briefly in simple words.
 * Use short paragraphs.
 * Prefer hyphen (`-`) bullet lists for lists.
 * Use **bold labels** for section or list headings when helpful.
