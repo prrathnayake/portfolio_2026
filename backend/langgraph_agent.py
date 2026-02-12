@@ -4,11 +4,9 @@ from functools import lru_cache
 from pathlib import Path
 from typing import TypedDict
 
-import httpx
 from langgraph.graph import END, START, StateGraph
-import time
 
-from .logging_utils import log_llm_error, log_llm_request, log_llm_response
+from .openrouter_client import openrouter_chat_completion
 from .rag import RagStore
 from .settings import Settings
 
@@ -47,9 +45,6 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
     def generate(state: ChatState) -> dict:
         context = state.get("context", "").strip()
 
-        if not settings.openrouter_api_key:
-            raise RuntimeError("OpenRouter API key is not configured.")
-
         system_prompt = _load_system_prompt(settings.prompts_dir / "system.md")
 
         user_prompt = (
@@ -58,68 +53,16 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
             f"Question: {state['question']}\n\n"
             "Answer in a concise, professional tone."
         )
-        headers: dict[str, str] = {
-            "Authorization": f"Bearer {settings.openrouter_api_key}",
-        }
-        if settings.openrouter_referer:
-            headers["HTTP-Referer"] = settings.openrouter_referer
-        if settings.openrouter_title:
-            headers["X-Title"] = settings.openrouter_title
 
-        base_payload = {
-            "messages": [
+        answer = openrouter_chat_completion(
+            settings,
+            messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            "temperature": 0.2,
-        }
-
-        url = settings.openrouter_base_url.rstrip("/") + "/chat/completions"
-        models = [settings.openrouter_model] + settings.openrouter_fallback_models
-
-        last_response: httpx.Response | None = None
-        last_error: Exception | None = None
-
-        with httpx.Client(timeout=20) as client:
-            for model in models:
-                payload = {**base_payload, "model": model}
-                log_llm_request(model=model, url=url, messages=payload["messages"])
-                response = _post_with_retries(
-                    client,
-                    url,
-                    headers,
-                    payload,
-                    max_retries=settings.openrouter_max_retries,
-                    backoff=settings.openrouter_retry_backoff,
-                )
-                last_response = response
-                if response.status_code >= 400:
-                    log_llm_error(
-                        model=model,
-                        status_code=response.status_code,
-                        message=_extract_response_text(response),
-                    )
-                    # Try next fallback model if available.
-                    if model != models[-1]:
-                        continue
-                    raise RuntimeError(_format_openrouter_error(response))
-
-                try:
-                    data = response.json()
-                    answer = data["choices"][0]["message"]["content"]
-                    log_llm_response(model=model, status_code=response.status_code, content=answer or "")
-                    return {"answer": (answer or "").strip()}
-                except Exception as exc:
-                    last_error = exc
-                    if model != models[-1]:
-                        continue
-                    raise RuntimeError("OpenRouter returned an unexpected response.") from exc
-
-        if last_response is not None:
-            raise RuntimeError(_format_openrouter_error(last_response))
-        if last_error is not None:
-            raise RuntimeError("OpenRouter request failed.") from last_error
-        raise RuntimeError("OpenRouter request failed.")
+            temperature=0.2,
+        )
+        return {"answer": answer}
 
     graph.add_node("retrieve", retrieve)
     graph.add_node("generate", generate)
@@ -128,52 +71,3 @@ def build_chat_graph(rag_store: RagStore, settings: Settings):
     graph.add_edge("generate", END)
 
     return graph.compile()
-
-
-def _format_openrouter_error(response: httpx.Response) -> str:
-    try:
-        data = response.json()
-        error = data.get("error") if isinstance(data, dict) else None
-        if isinstance(error, dict):
-            message = error.get("message") or error.get("code") or str(error)
-        else:
-            message = data.get("message") if isinstance(data, dict) else None
-        message = message or response.text or "Unknown error"
-    except Exception:
-        message = response.text or "Unknown error"
-    return f"OpenRouter error {response.status_code}: {message}"
-
-
-def _extract_response_text(response: httpx.Response) -> str:
-    try:
-        return response.text
-    except Exception:
-        return "Unable to read response text"
-
-
-def _post_with_retries(
-    client: httpx.Client,
-    url: str,
-    headers: dict[str, str],
-    payload: dict,
-    *,
-    max_retries: int,
-    backoff: float,
-) -> httpx.Response:
-    attempt = 0
-    while True:
-        try:
-            response = client.post(url, headers=headers, json=payload)
-        except httpx.RequestError as exc:
-            if attempt >= max_retries:
-                raise RuntimeError(f"OpenRouter request error: {exc}") from exc
-            time.sleep(backoff * (2**attempt))
-            attempt += 1
-            continue
-
-        if response.status_code in {429, 500, 502, 503, 504} and attempt < max_retries:
-            time.sleep(backoff * (2**attempt))
-            attempt += 1
-            continue
-
-        return response

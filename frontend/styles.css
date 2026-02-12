@@ -1044,7 +1044,8 @@ textarea:focus-visible {
   gap: 8px;
 }
 
-.bored-killer__category {
+.bored-killer__category,
+.bored-killer__preference {
   border: 1px dashed var(--border);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.04);
@@ -1059,23 +1060,49 @@ textarea:focus-visible {
   transition: background 140ms ease, color 140ms ease;
 }
 
-.bored-killer__category:hover {
+.bored-killer__category:hover,
+.bored-killer__preference:hover {
   background: rgba(255, 255, 255, 0.14);
 }
 
-.bored-killer__category.is-selected {
+.bored-killer__category.is-selected,
+.bored-killer__preference.is-selected {
   background: #ffffff;
   color: #060606;
   border-style: solid;
 }
 
-.bored-killer__category:focus-visible {
+.bored-killer__category:focus-visible,
+.bored-killer__preference:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.45);
   outline-offset: 2px;
 }
 
+.bored-killer__preference-group {
+  display: grid;
+  gap: 8px;
+}
+
+.bored-killer__preference-title {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.bored-killer__preference-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bored-killer__preference {
+  text-align: center;
+  min-width: 92px;
+}
+
 .bored-killer__generate {
-  width: 100%;
+  min-width: 160px;
 }
 
 .bored-killer__loading {

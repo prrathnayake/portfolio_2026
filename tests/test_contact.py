@@ -23,6 +23,11 @@ def _configure_smtp_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("APP_ENV", "development")
 
 
+def _configure_openrouter_env(monkeypatch: pytest.MonkeyPatch, key: str = "test-openrouter-key") -> None:
+    monkeypatch.setenv("OPENROUTER_API_KEY", key)
+    monkeypatch.setenv("API_ACCESS_TOKEN", "")
+
+
 def test_contact_requires_config(client, monkeypatch: pytest.MonkeyPatch):
     # Ensure SMTP env vars are effectively "unset" even if a local .env exists.
     for k in [
@@ -105,3 +110,48 @@ def test_contact_returns_debug_detail_in_development(client, monkeypatch: pytest
     )
     assert res.status_code == 502
     assert "SMTP AUTH failed" in res.json()["detail"]
+
+
+def test_bored_fact_requires_openrouter_key(client, monkeypatch: pytest.MonkeyPatch):
+    _configure_openrouter_env(monkeypatch, key="")
+    settings_module.get_settings.cache_clear()
+
+    res = client.post(
+        "/api/bored-fact",
+        json={
+            "category": "Backend engineering",
+            "tone": "surprising",
+            "detail": "quick",
+        },
+    )
+    assert res.status_code == 503
+    assert "OpenRouter API key is not configured" in res.json()["detail"]
+
+
+def test_bored_fact_uses_preference_payload(client, monkeypatch: pytest.MonkeyPatch):
+    _configure_openrouter_env(monkeypatch, key="fake-key")
+    settings_module.get_settings.cache_clear()
+
+    captured: dict = {}
+
+    def _fake_openrouter(*args, **kwargs):
+        captured["messages"] = kwargs.get("messages")
+        captured["temperature"] = kwargs.get("temperature")
+        return "Pasan pairs backend design with AI automation to ship features quickly."
+
+    monkeypatch.setattr("backend.main.openrouter_chat_completion", _fake_openrouter)
+
+    res = client.post(
+        "/api/bored-fact",
+        json={
+            "category": "AI and automation",
+            "tone": "witty",
+            "detail": "deep",
+        },
+    )
+
+    assert res.status_code == 200
+    assert res.json()["answer"].startswith("Pasan")
+    assert captured["temperature"] == 0.5
+    assert isinstance(captured["messages"], list)
+    assert "AI and automation" in str(captured["messages"])

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Literal
+
 from pydantic import BaseModel, EmailStr, Field
 
 
@@ -12,3 +14,14 @@ class ContactRequest(BaseModel):
 
 class ChatRequest(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
+
+
+class BoredFactRequest(BaseModel):
+    category: Literal[
+        "Backend engineering",
+        "AI and automation",
+        "Cybersecurity",
+        "Developer productivity",
+    ]
+    tone: Literal["witty", "surprising", "practical"]
+    detail: Literal["quick", "deep"]

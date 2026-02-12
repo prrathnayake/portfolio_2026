@@ -424,6 +424,11 @@
     const boredStepLabel = boredWidget.querySelector("[data-bored-step-label]");
     const boredAnswerButtons = Array.from(boredWidget.querySelectorAll("[data-bored-answer]"));
     const boredCategoryButtons = Array.from(boredWidget.querySelectorAll("[data-bored-category]"));
+    const boredToneButtons = Array.from(boredWidget.querySelectorAll("[data-bored-tone]"));
+    const boredDetailButtons = Array.from(boredWidget.querySelectorAll("[data-bored-detail]"));
+    const boredNext = boredWidget.querySelector("[data-bored-next]");
+    const boredCategoriesBack = boredWidget.querySelector("[data-bored-categories-back]");
+    const boredPreferencesBack = boredWidget.querySelector("[data-bored-preferences-back]");
     const boredGenerate = boredWidget.querySelector("[data-bored-generate]");
     const boredLoading = boredWidget.querySelector("[data-bored-loading]");
     const boredResult = boredWidget.querySelector("[data-bored-result]");
@@ -431,12 +436,16 @@
     const boredBack = boredWidget.querySelector("[data-bored-back]");
     const boredStatus = boredWidget.querySelector("[data-bored-status]");
     const boredStepTitles = {
-      prompt: "Question 1 of 2",
-      categories: "Question 2 of 2",
+      prompt: "Question 1 of 3",
+      categories: "Question 2 of 3",
+      preferences: "Question 3 of 3",
     };
 
     let selectedBoredCategory =
       boredCategoryButtons[0]?.getAttribute("data-category") || "Backend engineering";
+    let selectedBoredTone = boredToneButtons[0]?.getAttribute("data-tone") || "witty";
+    let selectedBoredDetail = boredDetailButtons[0]?.getAttribute("data-detail") || "quick";
+    let boredBackStep = "preferences";
     let boredRequestToken = 0;
 
     function setBoredStatus(message) {
@@ -451,10 +460,18 @@
       if (boredGenerate instanceof HTMLButtonElement) {
         boredGenerate.disabled = isLoading;
       }
-      boredCategoryButtons.forEach((button) => {
+      [...boredCategoryButtons, ...boredToneButtons, ...boredDetailButtons].forEach((button) => {
         if (button instanceof HTMLButtonElement) {
           button.disabled = isLoading;
         }
+      });
+    }
+
+    function setOptionSelection(buttons, selectedButton) {
+      buttons.forEach((button) => {
+        const isSelected = button === selectedButton;
+        button.classList.toggle("is-selected", isSelected);
+        button.setAttribute("aria-checked", String(isSelected));
       });
     }
 
@@ -463,11 +480,23 @@
       const category = selectedButton.getAttribute("data-category");
       if (!category) return;
       selectedBoredCategory = category;
-      boredCategoryButtons.forEach((button) => {
-        const isSelected = button === selectedButton;
-        button.classList.toggle("is-selected", isSelected);
-        button.setAttribute("aria-checked", String(isSelected));
-      });
+      setOptionSelection(boredCategoryButtons, selectedButton);
+    }
+
+    function setBoredTone(selectedButton) {
+      if (!(selectedButton instanceof HTMLButtonElement)) return;
+      const tone = selectedButton.getAttribute("data-tone");
+      if (!tone) return;
+      selectedBoredTone = tone;
+      setOptionSelection(boredToneButtons, selectedButton);
+    }
+
+    function setBoredDetail(selectedButton) {
+      if (!(selectedButton instanceof HTMLButtonElement)) return;
+      const detail = selectedButton.getAttribute("data-detail");
+      if (!detail) return;
+      selectedBoredDetail = detail;
+      setOptionSelection(boredDetailButtons, selectedButton);
     }
 
     function showBoredStep(stepName, { animate = true } = {}) {
@@ -516,6 +545,13 @@
       if (boredCategoryButtons[0] instanceof HTMLButtonElement) {
         setBoredCategory(boredCategoryButtons[0]);
       }
+      if (boredToneButtons[0] instanceof HTMLButtonElement) {
+        setBoredTone(boredToneButtons[0]);
+      }
+      if (boredDetailButtons[0] instanceof HTMLButtonElement) {
+        setBoredDetail(boredDetailButtons[0]);
+      }
+      boredBackStep = "preferences";
       showBoredStep("prompt", { animate });
     }
 
@@ -546,16 +582,6 @@
       setBoredStatus("");
     }
 
-    function buildBoredPrompt(category) {
-      return [
-        `Create one short, surprising fun fact in the category "${category}" for a developer audience.`,
-        "Ground the fact in Pasan Rathnayake's real background, projects, education, or skills.",
-        'Write in third person and start with "Pasan".',
-        "Keep the answer to 2 short sentences max.",
-        "No markdown, no bullet points, and no heading.",
-      ].join(" ");
-    }
-
     async function generateBoredFact() {
       if (!selectedBoredCategory) return;
       setBoredStatus("");
@@ -563,11 +589,14 @@
       const requestToken = ++boredRequestToken;
 
       try {
-        const message = buildBoredPrompt(selectedBoredCategory);
-        const res = await fetch("/api/chat", {
+        const res = await fetch("/api/bored-fact", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message }),
+          body: JSON.stringify({
+            category: selectedBoredCategory,
+            tone: selectedBoredTone,
+            detail: selectedBoredDetail,
+          }),
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -580,6 +609,7 @@
         if (boredResult instanceof HTMLElement) {
           boredResult.textContent = answer || "Pasan keeps building cool things across backend and AI.";
         }
+        boredBackStep = "preferences";
         showBoredStep("result", { animate: true });
       } catch (err) {
         if (requestToken !== boredRequestToken) return;
@@ -611,6 +641,7 @@
         if (boredResult instanceof HTMLElement) {
           boredResult.textContent = 'No problem. Click "Another fact" whenever boredom wins.';
         }
+        boredBackStep = "prompt";
         showBoredStep("result", { animate: true });
       });
     });
@@ -621,13 +652,38 @@
       });
     });
 
+    boredToneButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setBoredTone(button);
+      });
+    });
+
+    boredDetailButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setBoredDetail(button);
+      });
+    });
+
+    boredNext?.addEventListener("click", () => {
+      showBoredStep("preferences", { animate: true });
+      setBoredStatus("");
+    });
+    boredCategoriesBack?.addEventListener("click", () => {
+      showBoredStep("prompt", { animate: true });
+      setBoredStatus("");
+    });
+    boredPreferencesBack?.addEventListener("click", () => {
+      showBoredStep("categories", { animate: true });
+      setBoredStatus("");
+    });
+
     boredGenerate?.addEventListener("click", generateBoredFact);
     boredRestart?.addEventListener("click", () => {
       showBoredStep("categories", { animate: true });
       setBoredStatus("");
     });
     boredBack?.addEventListener("click", () => {
-      showBoredStep("prompt", { animate: true });
+      showBoredStep(boredBackStep, { animate: true });
       setBoredStatus("");
     });
 

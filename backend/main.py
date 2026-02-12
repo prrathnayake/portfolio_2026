@@ -8,10 +8,12 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .bored_killer import build_bored_fact_messages
 from .emailer import send_contact_email
 from .langgraph_agent import build_chat_graph
+from .openrouter_client import openrouter_chat_completion
 from .rag import build_rag_store
-from .schemas import ChatRequest, ContactRequest
+from .schemas import BoredFactRequest, ChatRequest, ContactRequest
 from .settings import get_settings
 
 
@@ -130,6 +132,35 @@ def chat(payload: ChatRequest, request: Request) -> dict:
     try:
         state = chat_graph.invoke({"question": payload.message})
         return {"answer": state.get("answer", ""), "sources": state.get("sources", [])}
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail="AI request failed.") from exc
+
+
+@app.post("/api/bored-fact")
+def bored_fact(payload: BoredFactRequest, request: Request) -> dict:
+    settings = get_settings()
+    _require_api_key(request, settings)
+    _enforce_rate_limit(
+        request,
+        bucket="chat",
+        limit=settings.rate_limit_chat_max,
+        window_seconds=settings.rate_limit_window_seconds,
+    )
+
+    try:
+        messages = build_bored_fact_messages(
+            category=payload.category,
+            tone=payload.tone,
+            detail=payload.detail,
+        )
+        answer = openrouter_chat_completion(
+            settings,
+            messages=messages,
+            temperature=0.5,
+        )
+        return {"answer": answer}
     except RuntimeError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except Exception as exc:
