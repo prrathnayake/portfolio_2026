@@ -441,6 +441,7 @@
       boredCategoryButtons[0]?.getAttribute("data-category") || "Backend engineering";
     let boredBackStep = "categories";
     let boredRequestToken = 0;
+    let boredMenuIndex = -1;
     let boredAudioContext = null;
     let lastHoverSoundAt = 0;
 
@@ -528,6 +529,62 @@
       });
     }
 
+    function getActiveBoredWords() {
+      const activeStep = boredSteps.find((step) => !step.hidden);
+      if (!(activeStep instanceof HTMLElement)) return [];
+      return Array.from(activeStep.querySelectorAll("[data-bored-word]")).filter(
+        (el) => el instanceof HTMLButtonElement && !el.disabled
+      );
+    }
+
+    function setBoredMenuSelection(index, { focus = false, playSound = false } = {}) {
+      const activeWords = getActiveBoredWords();
+      if (index < 0 || activeWords.length === 0) {
+        boredWordButtons.forEach((word) => {
+          word.classList.remove("is-menu-selected");
+          word.setAttribute("tabindex", "-1");
+        });
+        boredMenuIndex = -1;
+        return;
+      }
+
+      const normalizedIndex = ((index % activeWords.length) + activeWords.length) % activeWords.length;
+      boredWordButtons.forEach((word) => {
+        word.classList.remove("is-menu-selected");
+        word.setAttribute("tabindex", "-1");
+      });
+      const selectedWord = activeWords[normalizedIndex];
+      selectedWord.classList.add("is-menu-selected");
+      selectedWord.setAttribute("tabindex", "0");
+      boredMenuIndex = normalizedIndex;
+
+      if (focus) {
+        selectedWord.focus({ preventScroll: true });
+      }
+      if (playSound) {
+        playBoredMenuSound("hover");
+      }
+    }
+
+    function syncBoredMenuSelectionFromWord(word, { playSound = false } = {}) {
+      if (!(word instanceof HTMLButtonElement)) return;
+      const activeWords = getActiveBoredWords();
+      const index = activeWords.indexOf(word);
+      if (index < 0) return;
+      setBoredMenuSelection(index, { focus: false, playSound });
+    }
+
+    function setBoredInitialMenuSelection({ focus = false } = {}) {
+      const activeWords = getActiveBoredWords();
+      if (activeWords.length === 0) {
+        setBoredMenuSelection(-1);
+        return;
+      }
+      const selectedIndex = activeWords.findIndex((word) => word.classList.contains("is-selected"));
+      const preferredIndex = selectedIndex >= 0 ? selectedIndex : 0;
+      setBoredMenuSelection(preferredIndex, { focus, playSound: false });
+    }
+
     function setBoredCategory(selectedButton) {
       if (!(selectedButton instanceof HTMLButtonElement)) return;
       const category = selectedButton.getAttribute("data-category");
@@ -588,6 +645,8 @@
           { once: true }
         );
       }
+
+      setBoredInitialMenuSelection({ focus: false });
     }
 
     function resetBoredFlow({ animate = false } = {}) {
@@ -602,6 +661,7 @@
       }
       boredBackStep = "categories";
       showBoredStep("prompt", { animate });
+      setBoredInitialMenuSelection({ focus: false });
     }
 
     function setBoredOpen(isOpen) {
@@ -618,9 +678,8 @@
 
       if (isOpen) {
         resetBoredFlow({ animate: true });
-        const focusTarget = boredSteps.find((step) => !step.hidden)?.querySelector("button");
         setTimeout(() => {
-          if (focusTarget instanceof HTMLElement) focusTarget.focus();
+          setBoredInitialMenuSelection({ focus: true });
         }, 50);
         return;
       }
@@ -629,6 +688,7 @@
       boredRequestToken += 1;
       setBoredLoading(false);
       setBoredStatus("");
+      setBoredMenuSelection(-1);
     }
 
     async function generateBoredFact() {
@@ -677,8 +737,13 @@
     boredWordButtons.forEach((word, index) => {
       if (!(word instanceof HTMLElement)) return;
       word.style.setProperty("--float-delay", `${(index % 7) * 120}ms`);
-      word.addEventListener("pointerenter", () => playBoredMenuSound("hover"));
-      word.addEventListener("focus", () => playBoredMenuSound("hover"));
+      word.setAttribute("tabindex", "-1");
+      word.addEventListener("pointerenter", () => {
+        syncBoredMenuSelectionFromWord(word, { playSound: true });
+      });
+      word.addEventListener("focus", () => {
+        syncBoredMenuSelectionFromWord(word, { playSound: true });
+      });
       word.addEventListener("click", () => playBoredMenuSound("select"));
     });
 
@@ -734,8 +799,32 @@
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape" && boredWidget.dataset.open === "true") {
+      if (boredWidget.dataset.open !== "true") return;
+
+      if (event.key === "Escape") {
         setBoredOpen(false);
+        return;
+      }
+
+      if (
+        event.key === "ArrowUp" ||
+        event.key === "ArrowDown" ||
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowRight"
+      ) {
+        event.preventDefault();
+        const delta = event.key === "ArrowUp" || event.key === "ArrowLeft" ? -1 : 1;
+        setBoredMenuSelection(boredMenuIndex + delta, { focus: true, playSound: true });
+        return;
+      }
+
+      if ((event.key === "Enter" || event.key === " ") && !event.repeat) {
+        const activeWords = getActiveBoredWords();
+        if (activeWords.length === 0) return;
+        const word = activeWords[Math.max(0, boredMenuIndex)];
+        if (!(word instanceof HTMLButtonElement)) return;
+        event.preventDefault();
+        word.click();
       }
     });
   }

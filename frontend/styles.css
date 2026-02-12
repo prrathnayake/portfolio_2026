@@ -1000,6 +1000,14 @@ textarea:focus-visible {
   color: rgba(247, 247, 247, 0.74);
 }
 
+.bored-killer__menu-hint {
+  margin: -4px 0 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(219, 219, 219, 0.58);
+}
+
 .bored-killer__step {
   display: grid;
   gap: 12px;
@@ -1091,6 +1099,7 @@ textarea:focus-visible {
 }
 
 .bored-killer__word:hover,
+.bored-killer__word.is-menu-selected,
 .bored-killer__word.is-selected,
 .bored-killer__word:focus-visible {
   color: #ffdb5a;
@@ -1100,6 +1109,7 @@ textarea:focus-visible {
 }
 
 .bored-killer__word:hover::before,
+.bored-killer__word.is-menu-selected::before,
 .bored-killer__word.is-selected::before,
 .bored-killer__word:focus-visible::before {
   opacity: 1;
