@@ -516,9 +516,9 @@
 
           <div class="bored-killer__step" data-bored-step="prompt">
             <p class="bored-killer__message">Want to know a fun fact?</p>
-            <div class="bored-killer__actions">
-              <button class="btn btn--primary bored-killer__btn" type="button" data-bored-answer="yes">Yes</button>
-              <button class="btn btn--ghost bored-killer__btn" type="button" data-bored-answer="no">No</button>
+            <div class="bored-killer__word-cloud">
+              <button class="bored-killer__word" type="button" data-bored-word data-bored-answer="yes">Yes</button>
+              <button class="bored-killer__word" type="button" data-bored-word data-bored-answer="no">No</button>
             </div>
           </div>
 
@@ -526,51 +526,55 @@
             <p class="bored-killer__message">Pick a category:</p>
             <div class="bored-killer__categories" data-bored-categories role="radiogroup" aria-label="Fun fact categories">
               <button
-                class="bored-killer__category is-selected"
+                class="bored-killer__word bored-killer__category is-selected"
                 type="button"
                 role="radio"
                 aria-checked="true"
+                data-bored-word
                 data-bored-category
                 data-category="Backend engineering"
               >
                 Backend engineering
               </button>
               <button
-                class="bored-killer__category"
+                class="bored-killer__word bored-killer__category"
                 type="button"
                 role="radio"
                 aria-checked="false"
+                data-bored-word
                 data-bored-category
                 data-category="AI and automation"
               >
                 AI and automation
               </button>
               <button
-                class="bored-killer__category"
+                class="bored-killer__word bored-killer__category"
                 type="button"
                 role="radio"
                 aria-checked="false"
+                data-bored-word
                 data-bored-category
                 data-category="Cybersecurity"
               >
                 Cybersecurity
               </button>
               <button
-                class="bored-killer__category"
+                class="bored-killer__word bored-killer__category"
                 type="button"
                 role="radio"
                 aria-checked="false"
+                data-bored-word
                 data-bored-category
                 data-category="Developer productivity"
               >
                 Developer productivity
               </button>
             </div>
-            <div class="bored-killer__actions">
-              <button class="btn btn--primary bored-killer__generate" type="button" data-bored-generate>
+            <div class="bored-killer__word-cloud">
+              <button class="bored-killer__word bored-killer__generate" type="button" data-bored-word data-bored-generate>
                 Generate fun fact
               </button>
-              <button class="btn btn--ghost bored-killer__btn" type="button" data-bored-categories-back>
+              <button class="bored-killer__word" type="button" data-bored-word data-bored-categories-back>
                 Back
               </button>
             </div>
@@ -578,11 +582,11 @@
 
           <div class="bored-killer__step" data-bored-step="result" hidden>
             <p class="bored-killer__message bored-killer__message--result" data-bored-result></p>
-            <div class="bored-killer__actions">
-              <button class="btn btn--primary bored-killer__btn" type="button" data-bored-restart>
+            <div class="bored-killer__word-cloud">
+              <button class="bored-killer__word" type="button" data-bored-word data-bored-restart>
                 Another fact
               </button>
-              <button class="btn btn--ghost bored-killer__btn" type="button" data-bored-back>
+              <button class="bored-killer__word" type="button" data-bored-word data-bored-back>
                 Back
               </button>
             </div>

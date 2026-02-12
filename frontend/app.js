@@ -431,6 +431,7 @@
     const boredRestart = boredWidget.querySelector("[data-bored-restart]");
     const boredBack = boredWidget.querySelector("[data-bored-back]");
     const boredStatus = boredWidget.querySelector("[data-bored-status]");
+    const boredWordButtons = Array.from(boredWidget.querySelectorAll("[data-bored-word]"));
     const boredStepTitles = {
       prompt: "Question 1 of 2",
       categories: "Question 2 of 2",
@@ -440,6 +441,61 @@
       boredCategoryButtons[0]?.getAttribute("data-category") || "Backend engineering";
     let boredBackStep = "categories";
     let boredRequestToken = 0;
+    let boredAudioContext = null;
+    let lastHoverSoundAt = 0;
+
+    function getBoredAudioContext() {
+      if (boredAudioContext) return boredAudioContext;
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return null;
+      boredAudioContext = new AudioCtx();
+      return boredAudioContext;
+    }
+
+    function playBoredMenuSound(kind) {
+      const nowMs = performance.now();
+      if (kind === "hover" && nowMs - lastHoverSoundAt < 80) return;
+
+      const ctx = getBoredAudioContext();
+      if (!ctx) return;
+      if (ctx.state === "suspended") {
+        ctx.resume().catch(() => {});
+      }
+
+      try {
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const filter = ctx.createBiquadFilter();
+        const gain = ctx.createGain();
+
+        filter.type = "bandpass";
+        osc.type = kind === "hover" ? "triangle" : "square";
+        if (kind === "hover") {
+          filter.frequency.setValueAtTime(760, now);
+          osc.frequency.setValueAtTime(610, now);
+          osc.frequency.exponentialRampToValueAtTime(890, now + 0.05);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.014, now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.075);
+          lastHoverSoundAt = nowMs;
+        } else {
+          filter.frequency.setValueAtTime(560, now);
+          osc.frequency.setValueAtTime(250, now);
+          osc.frequency.exponentialRampToValueAtTime(430, now + 0.08);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.exponentialRampToValueAtTime(0.03, now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+        }
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + (kind === "hover" ? 0.08 : 0.13));
+      } catch {
+        // ignore audio errors
+      }
+    }
 
     function setBoredStatus(message) {
       if (!(boredStatus instanceof HTMLElement)) return;
@@ -617,6 +673,14 @@
     }
 
     resetBoredFlow({ animate: false });
+
+    boredWordButtons.forEach((word, index) => {
+      if (!(word instanceof HTMLElement)) return;
+      word.style.setProperty("--float-delay", `${(index % 7) * 120}ms`);
+      word.addEventListener("pointerenter", () => playBoredMenuSound("hover"));
+      word.addEventListener("focus", () => playBoredMenuSound("hover"));
+      word.addEventListener("click", () => playBoredMenuSound("select"));
+    });
 
     boredTrigger?.addEventListener("click", () => {
       setBoredOpen(true);
