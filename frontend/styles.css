@@ -1151,7 +1151,6 @@ textarea:focus-visible {
 
 .bored-killer__word:hover,
 .bored-killer__word.is-menu-selected,
-.bored-killer__word.is-selected,
 .bored-killer__word:focus-visible {
   color: #ffdb5a;
   transform: translateY(-2px) scale(1.02);
@@ -1161,7 +1160,6 @@ textarea:focus-visible {
 
 .bored-killer__word:hover::before,
 .bored-killer__word.is-menu-selected::before,
-.bored-killer__word.is-selected::before,
 .bored-killer__word:focus-visible::before {
   opacity: 1;
   transform: translateY(-50%) translateX(-1px);

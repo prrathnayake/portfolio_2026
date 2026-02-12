@@ -578,6 +578,10 @@
         setBoredMenuSelection(-1);
         return;
       }
+      if (!focus) {
+        setBoredMenuSelection(-1);
+        return;
+      }
       const selectedIndex = activeWords.findIndex((word) => word.classList.contains("is-selected"));
       const preferredIndex = selectedIndex >= 0 ? selectedIndex : 0;
       setBoredMenuSelection(preferredIndex, { focus, playSound: false });
