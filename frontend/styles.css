@@ -1113,7 +1113,7 @@ textarea:focus-visible {
 
 .bored-killer__word-cloud--actions {
   grid-template-columns: repeat(2, max-content);
-  justify-content: start;
+  justify-content: center;
   align-items: center;
 }
 
@@ -1444,7 +1444,7 @@ textarea:focus-visible {
 
   .bored-killer__word-cloud--actions {
     grid-template-columns: repeat(2, max-content);
-    justify-content: start;
+    justify-content: center;
   }
 
   .bored-killer__word {
