@@ -1237,6 +1237,19 @@ textarea:focus-visible {
   color: rgba(255, 153, 153, 0.95);
 }
 
+.bored-killer__ai-note {
+  margin: 0;
+  padding: 8px 18px 12px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  text-align: center;
+  font-size: 0.62rem;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  color: rgba(223, 223, 223, 0.68);
+  position: relative;
+  z-index: 1;
+}
+
 @keyframes bored-trigger-pulse {
   0% {
     transform: scale(0.92);
@@ -1417,6 +1430,11 @@ textarea:focus-visible {
 
   .bored-killer__content {
     padding: 15px 15px 13px;
+  }
+
+  .bored-killer__ai-note {
+    padding: 7px 12px 10px;
+    font-size: 0.58rem;
   }
 
   .bored-killer__step {
