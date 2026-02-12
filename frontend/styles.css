@@ -245,6 +245,10 @@ main,
   scroll-margin-top: 90px;
 }
 
+.section:not(#home) .container {
+  padding-inline: clamp(8px, 1.4vw, 18px);
+}
+
 .hero {
   min-height: calc(100vh - 70px);
   padding-top: 90px;
