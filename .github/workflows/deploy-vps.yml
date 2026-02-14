@@ -17,14 +17,39 @@ jobs:
   deploy:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    env:
+      VPS_PORT: ${{ secrets.VPS_SSH_PORT || '22' }}
     steps:
+      - name: Preflight SSH connectivity
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${VPS_HOST}" ]; then
+            echo "::error::VPS_HOST secret is empty."
+            exit 1
+          fi
+
+          if [[ "${VPS_HOST}" == *"://"* ]]; then
+            echo "::error::VPS_HOST must be a raw host/IP (no protocol prefix)."
+            exit 1
+          fi
+
+          echo "Checking TCP reachability to ${VPS_HOST}:${VPS_PORT}..."
+          if ! timeout 10 bash -c "cat < /dev/null > /dev/tcp/${VPS_HOST}/${VPS_PORT}" 2>/dev/null; then
+            echo "::error::Cannot reach ${VPS_HOST}:${VPS_PORT} from GitHub runner."
+            echo "::error::Verify VPS_HOST / VPS_SSH_PORT, VPS firewall/ufw, provider security groups, and fail2ban."
+            exit 1
+          fi
+
       - name: Deploy latest Docker image on VPS
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          port: ${{ secrets.VPS_SSH_PORT || '22' }}
+          port: ${{ env.VPS_PORT }}
           command_timeout: 30m
           script: |
             set -euo pipefail

@@ -92,3 +92,9 @@ Deploy flow on VPS:
 - If port `80` is still busy, stop configured system services
 - Pull latest image from Docker Hub
 - Run new container on port `80`
+
+If deployment fails with SSH timeout (`dial tcp ...:22: i/o timeout`):
+- Ensure `VPS_HOST` is a raw IP/domain (no `http://` or `https://`).
+- Verify `VPS_SSH_PORT` matches your actual SSH daemon port.
+- Open inbound SSH on the VPS firewall/security group (`ufw`, cloud firewall, provider rules).
+- Check fail2ban or SSH hardening rules are not blocking GitHub-hosted runners.

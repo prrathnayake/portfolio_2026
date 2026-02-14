@@ -62,6 +62,7 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - VPS auto-deploy workflow lives in `.github/workflows/deploy-vps.yml` and runs after Docker publish succeeds.
 - VPS deploy workflow removes any container currently bound to host port `80` before launching `portfolio`.
 - VPS deploy workflow can also stop system services (`nginx/apache2/httpd/caddy` by default) when port `80` is still busy; override with `VPS_STOP_SERVICES`.
+- VPS deploy workflow now performs a runner-side SSH TCP preflight check to fail fast on unreachable `VPS_HOST:VPS_SSH_PORT`.
 - SMTP supports `SMTP_TIMEOUT_SECONDS`; avoid inline comments in Docker env files.
 - About section includes a right-to-left animated technical strengths snapshot ticker.
 - Background includes animated floating technology/framework words in the current lo-fi style.
