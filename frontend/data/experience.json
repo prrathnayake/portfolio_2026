@@ -6,10 +6,10 @@
     "start": "2025-09",
     "end": "2025-12",
     "bullets": [
-      "Supported backend systems and technical operations for eCommerce platforms.",
-      "Developed and maintained custom features using WordPress and Shopify.",
-      "Delivered troubleshooting, enhancements, and backend improvements for stability.",
-      "Improved maintainability through structured enhancements and documentation."
+      "Managed backend operations supporting day-to-day reliability for eCommerce systems.",
+      "Delivered custom WordPress and Shopify updates aligned with business and catalog workflows.",
+      "Resolved production issues across integrations, plugin conflicts, and platform configurations.",
+      "Improved maintainability with structured documentation and repeatable technical procedures."
     ]
   },
   {
@@ -19,10 +19,10 @@
     "start": "2023-12",
     "end": "2025-08",
     "bullets": [
-      "Installed and configured IoT networks and automation systems.",
-      "Diagnosed and resolved hardware, software, and connectivity issues.",
-      "Collaborated with engineering teams to improve system reliability.",
-      "Documented internal processes to support onboarding and maintenance."
+      "Installed and configured IoT and automation systems across networked environments.",
+      "Diagnosed software, hardware, and connectivity faults using structured troubleshooting workflows.",
+      "Partnered with engineers to improve reliability, uptime, and support turnaround.",
+      "Created technical guides that improved onboarding speed and support consistency."
     ]
   },
   {
@@ -32,10 +32,10 @@
     "start": "2022-12",
     "end": "2023-06",
     "bullets": [
-      "Developed backend components using C++ and Python.",
-      "Built and supported Kafka-based stream processing systems.",
-      "Participated in Agile ceremonies and technical design reviews.",
-      "Contributed to performance and throughput improvements in distributed architectures."
+      "Built backend components in C++ and Python for data-intensive service workflows.",
+      "Implemented and supported Kafka stream-processing components in distributed pipelines.",
+      "Contributed to Agile planning, peer reviews, and architecture discussions with senior engineers.",
+      "Improved service throughput and runtime behavior through profiling and focused optimizations."
     ]
   }
 ]

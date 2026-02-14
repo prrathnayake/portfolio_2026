@@ -18,3 +18,4 @@
 - SMTP supports `SMTP_TIMEOUT_SECONDS`; avoid inline comments in Docker env files.
 - About section includes a right-to-left animated technical strengths snapshot ticker.
 - Background includes animated floating technology/framework words in the current lo-fi style.
+- Expanded point-form portfolio copy lives in `frontend/index.html`; keep key summaries aligned with `frontend/data/about.json`, `frontend/data/experience.json`, and `frontend/data/education.json`.

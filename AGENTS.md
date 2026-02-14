@@ -57,3 +57,4 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.
 - About section includes a right-to-left animated technical strengths snapshot ticker.
 - Background includes animated floating technology/framework words in the current lo-fi style.
+- Expanded point-form portfolio copy lives in `frontend/index.html`; keep key summaries aligned with `frontend/data/about.json`, `frontend/data/experience.json`, and `frontend/data/education.json`.

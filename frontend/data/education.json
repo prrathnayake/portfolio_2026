@@ -3,18 +3,30 @@
     "degree": "Master of Information Technology (Cyber Security)",
     "institution": "Deakin University",
     "location": "Australia",
-    "graduated": "2025-08"
+    "graduated": "2025-08",
+    "highlights": [
+      "Focused on cyber security engineering, threat modeling, and secure software practices.",
+      "Strengthened practical skills in risk-aware design and defensive development workflows."
+    ]
   },
   {
     "degree": "Bachelor of Computer Science (Software Engineering)",
     "institution": "Edith Cowan University",
     "location": "Australia",
-    "graduated": "2023-03"
+    "graduated": "2023-03",
+    "highlights": [
+      "Covered software architecture, databases, data structures, and application development.",
+      "Delivered full-stack and team-based engineering projects through the SDLC lifecycle."
+    ]
   },
   {
     "degree": "Certificate in Computer Applications",
     "institution": "University of Colombo (IHRA)",
     "location": "Sri Lanka",
-    "graduated": "2020-03"
+    "graduated": "2020-03",
+    "highlights": [
+      "Built foundation skills in computing concepts, application usage, and digital workflows.",
+      "Established early discipline in structured problem solving and technical learning."
+    ]
   }
 ]
