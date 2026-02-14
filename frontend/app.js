@@ -1071,7 +1071,7 @@
 
   projectsEl?.addEventListener("click", (event) => {
     const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
+    if (!(target instanceof Element)) return;
     const infoButton = target.closest("[data-project-info]");
     if (!(infoButton instanceof HTMLButtonElement)) return;
 
