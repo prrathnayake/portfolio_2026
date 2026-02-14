@@ -67,3 +67,25 @@ Required GitHub secrets:
 ## CI Docker Build Test
 
 Pull requests to `main` run a Docker build to validate the image can be built.
+
+## CI VPS Auto Deploy
+
+`deploy-vps.yml` deploys to your VPS after the `Publish Docker Image` workflow succeeds (or manually via workflow dispatch).
+
+Required GitHub secrets:
+- `VPS_HOST` (server IP/domain)
+- `VPS_USER` (SSH user)
+- `VPS_SSH_KEY` (private key)
+- `VPS_SSH_PORT` (SSH port, e.g. `22`)
+- `DOCKERHUB_USERNAME` (used to resolve `DOCKERHUB_USERNAME/portfolio_2026:latest`)
+
+Optional GitHub secrets:
+- `VPS_CONTAINER_NAME` (default: `portfolio`)
+- `VPS_ENV_FILE_PATH` (default: `/root/pasan/.env`)
+
+Deploy flow on VPS:
+- Stop running container
+- Remove container
+- Remove old image
+- Pull latest image from Docker Hub
+- Run new container on port `80`

@@ -55,6 +55,12 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - Commit changes at the end of each task when a Git repo is available; if not, ask to initialize Git.
 - Chat modal includes suggestion buttons in `frontend/index.html` (`data-chat-suggestions`) that prefill the input.
 - `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.
+- Optional security controls exist via `.env` (`API_ACCESS_TOKEN`, `RATE_LIMIT_*`, `LLM_LOG_*`).
+- Installation/setup instructions live in `INSTALLATION.md`.
+- Docker image publish workflow lives in `.github/workflows/docker-publish.yml`.
+- Docker build test workflow lives in `.github/workflows/docker-build-test.yml`.
+- VPS auto-deploy workflow lives in `.github/workflows/deploy-vps.yml` and runs after Docker publish succeeds.
+- SMTP supports `SMTP_TIMEOUT_SECONDS`; avoid inline comments in Docker env files.
 - About section includes a right-to-left animated technical strengths snapshot ticker.
 - Background includes animated floating technology/framework words in the current lo-fi style.
 - Expanded point-form portfolio copy lives in `frontend/index.html`; keep key summaries aligned with `frontend/data/about.json`, `frontend/data/experience.json`, and `frontend/data/education.json`.

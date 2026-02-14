@@ -1,0 +1,76 @@
+name: Deploy to VPS
+
+on:
+  workflow_run:
+    workflows: ["Publish Docker Image"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-vps-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy latest Docker image on VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT || '22' }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/portfolio_2026:latest"
+            CONTAINER_NAME="${{ secrets.VPS_CONTAINER_NAME }}"
+            ENV_FILE_PATH="${{ secrets.VPS_ENV_FILE_PATH }}"
+
+            if [ -z "${CONTAINER_NAME}" ]; then
+              CONTAINER_NAME="portfolio"
+            fi
+
+            if [ -z "${ENV_FILE_PATH}" ]; then
+              ENV_FILE_PATH="/root/pasan/.env"
+            fi
+
+            if [ ! -f "${ENV_FILE_PATH}" ]; then
+              echo "Env file not found: ${ENV_FILE_PATH}"
+              exit 1
+            fi
+
+            docker stop "${CONTAINER_NAME}" || true
+            docker rm "${CONTAINER_NAME}" || true
+            docker image rm -f "${IMAGE}" || true
+
+            docker pull "${IMAGE}"
+
+            docker run -d \
+              --name "${CONTAINER_NAME}" \
+              --restart unless-stopped \
+              --env-file "${ENV_FILE_PATH}" \
+              -p 80:80 \
+              "${IMAGE}"
+
+            for i in $(seq 1 20); do
+              STATUS="$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "${CONTAINER_NAME}")"
+              if [ "${STATUS}" = "healthy" ] || [ "${STATUS}" = "running" ]; then
+                break
+              fi
+              sleep 2
+            done
+
+            STATUS="$(docker inspect --format='{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' "${CONTAINER_NAME}")"
+            if [ "${STATUS}" != "healthy" ] && [ "${STATUS}" != "running" ]; then
+              docker logs --tail 80 "${CONTAINER_NAME}" || true
+              exit 1
+            fi
+
+            docker ps --filter "name=${CONTAINER_NAME}" --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
