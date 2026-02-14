@@ -1937,7 +1937,7 @@ textarea:focus-visible {
 .js .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 700ms ease, transform 700ms ease;
+  transition: opacity 360ms ease, transform 360ms ease;
   transition-delay: var(--delay, 0ms);
 }
 

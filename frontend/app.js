@@ -63,13 +63,13 @@
   const revealItems = Array.from(document.querySelectorAll("main .container"));
   revealItems.forEach((el, index) => {
     el.classList.add("reveal");
-    const delay = Math.min(index * 80, 320);
+    const delay = Math.min(index * 26, 104);
     el.style.setProperty("--delay", `${delay}ms`);
   });
 
   function elementInView(el) {
     const rect = el.getBoundingClientRect();
-    return rect.top < window.innerHeight * 0.85 && rect.bottom > 0;
+    return rect.top < window.innerHeight * 0.92 && rect.bottom > 0;
   }
 
   if (!prefersReducedMotion && "IntersectionObserver" in window) {
@@ -82,7 +82,7 @@
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.08, rootMargin: "0px 0px -8% 0px" }
     );
 
     revealItems.forEach((el) => {
