@@ -1,61 +1,61 @@
 [
   {
     "id": "failure-first-backend-design",
-    "title": "Why Pasan starts backend design from failure cases",
+    "title": "Why I start backend design from failure cases",
     "createdAt": "2026-02-12",
     "readTime": "3 min",
     "mood": "Build Log",
     "tags": ["Backend", "Architecture", "Reliability"],
-    "summary": "Pasan now starts most backend design sessions by mapping what can fail first, then shaping APIs and queues around those boundaries.",
+    "summary": "I start most backend design sessions by mapping what can fail first, then I shape APIs and queues around those boundaries.",
     "points": [
-      "Defines timeout, retry, and fallback behavior before adding business logic.",
-      "Separates synchronous API paths from asynchronous event processing early.",
-      "Adds structured logs up front so production debugging is faster later."
+      "I define timeout, retry, and fallback behavior before I add business logic.",
+      "I separate synchronous API paths from asynchronous event processing as early as possible.",
+      "I add structured logs up front because I think observability is a core feature, not an afterthought."
     ],
     "baseLikes": 19
   },
   {
     "id": "kafka-boundaries-vs-shared-state",
-    "title": "What Kafka taught Pasan about service boundaries",
+    "title": "What Kafka taught me about service boundaries",
     "createdAt": "2026-02-09",
     "readTime": "4 min",
     "mood": "Engineering Note",
     "tags": ["Distributed Systems", "Kafka", "Scalability"],
-    "summary": "Using event streams helped Pasan reduce tight coupling between services and make deployments less risky.",
+    "summary": "Using event streams helped me reduce tight coupling between services and make deployments less risky.",
     "points": [
-      "Uses events to communicate state changes instead of direct service-to-service dependency chains.",
-      "Keeps event contracts explicit with versioning to avoid downstream breakages.",
-      "Treats idempotency as a first-class requirement in consumers."
+      "I use events to communicate state changes instead of direct service-to-service dependency chains.",
+      "I keep event contracts explicit with versioning because I want to avoid downstream breakages.",
+      "I treat idempotency as a first-class requirement in consumers because duplicate events are unavoidable in real systems."
     ],
     "baseLikes": 23
   },
   {
     "id": "langgraph-control-for-ai-workflows",
-    "title": "How Pasan keeps AI workflows controllable with LangGraph",
+    "title": "How I keep AI workflows controllable with LangGraph",
     "createdAt": "2026-02-05",
     "readTime": "5 min",
     "mood": "AI Systems",
     "tags": ["AI", "LangGraph", "Automation"],
-    "summary": "Agentic systems become easier to trust when every step is explicit, reviewable, and resumable.",
+    "summary": "In my experience, agentic systems become easier to trust when every step is explicit, reviewable, and resumable.",
     "points": [
-      "Uses plan → approval → execution flow for sensitive tool actions.",
-      "Stores checkpoints so interrupted sessions can resume cleanly.",
-      "Adds structured JSON outputs and logs for easier post-run analysis."
+      "I use a plan → approval → execution flow for sensitive tool actions.",
+      "I store checkpoints so interrupted sessions can resume cleanly.",
+      "I add structured JSON outputs and logs because I care about clear post-run analysis."
     ],
     "baseLikes": 31
   },
   {
     "id": "prompt-guardrails-in-public-chat",
-    "title": "Guardrails Pasan applies to public AI chat features",
+    "title": "Guardrails I apply to public AI chat features",
     "createdAt": "2026-01-31",
     "readTime": "4 min",
     "mood": "Security",
     "tags": ["Security", "Prompt Engineering", "LLM"],
-    "summary": "Public assistants need strict scope control, rate limits, and safer defaults to stay useful in production.",
+    "summary": "I believe public assistants need strict scope control, rate limits, and safer defaults to stay useful in production.",
     "points": [
-      "Limits assistant scope to portfolio topics and ignores unrelated misuse attempts.",
-      "Applies rate limits and optional API token checks on expensive endpoints.",
-      "Uses redacted logging by default outside development environments."
+      "I limit assistant scope to portfolio topics and ignore unrelated misuse attempts.",
+      "I apply rate limits and optional API token checks on expensive endpoints.",
+      "I use redacted logging by default outside development environments because privacy matters."
     ],
     "baseLikes": 27
   },
@@ -66,11 +66,11 @@
     "readTime": "3 min",
     "mood": "Career",
     "tags": ["Career", "Backend", "Growth"],
-    "summary": "Pasan shifted from implementing assigned tasks to taking responsibility for reliability, traceability, and maintenance impact.",
+    "summary": "I shifted from implementing assigned tasks to taking responsibility for reliability, traceability, and long-term maintenance impact.",
     "points": [
-      "Balances delivery speed with long-term maintainability decisions.",
-      "Writes clearer docs to reduce support and onboarding friction.",
-      "Treats observability and error handling as part of core feature delivery."
+      "I balance delivery speed with long-term maintainability decisions.",
+      "I write clearer docs because I want to reduce support and onboarding friction.",
+      "I treat observability and error handling as part of core feature delivery."
     ],
     "baseLikes": 22
   },
@@ -81,11 +81,11 @@
     "readTime": "2 min",
     "mood": "Ops",
     "tags": ["DevOps", "Docker", "Deployment"],
-    "summary": "Small formatting issues in env files can silently break startup behavior in containers.",
+    "summary": "I learned that small formatting issues in env files can silently break startup behavior in containers.",
     "points": [
-      "Avoids inline comments on env value lines when using docker --env-file.",
-      "Keeps numeric values unquoted where possible to reduce parser surprises.",
-      "Verifies runtime env values inside containers before deeper debugging."
+      "I avoid inline comments on env value lines when using docker --env-file.",
+      "I keep numeric values unquoted where possible to reduce parser surprises.",
+      "I verify runtime env values inside containers before doing deeper debugging."
     ],
     "baseLikes": 17
   }
