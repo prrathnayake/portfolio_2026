@@ -26,15 +26,7 @@
   });
 
   // Active section highlight
-  const sectionIds = [
-    "home",
-    "about",
-    "skills",
-    "projects",
-    "experience",
-    "education",
-    "contact",
-  ];
+  const sectionIds = ["home", "contact"];
   const sectionEls = sectionIds
     .map((id) => document.getElementById(id))
     .filter(Boolean);
