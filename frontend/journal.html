@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#060606" />
+    <title>Journal | Pasan Rathnayake</title>
+    <meta
+      name="description"
+      content="Pasan Rathnayake's engineering journal: backend architecture notes, AI automation learnings, and practical development thoughts."
+    />
+    <meta name="author" content="Pasan Rathnayake" />
+    <meta
+      name="keywords"
+      content="Pasan Rathnayake journal, developer journal, backend engineering notes, AI automation thoughts, software architecture"
+    />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="Journal | Pasan Rathnayake" />
+    <meta
+      property="og:description"
+      content="Backend engineering notes, AI automation learnings, and practical build thoughts."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/static/assets/og.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Journal | Pasan Rathnayake" />
+    <meta
+      name="twitter:description"
+      content="Backend engineering notes, AI automation learnings, and practical build thoughts."
+    />
+    <meta name="twitter:image" content="/static/assets/og.png" />
+    <link rel="icon" href="/static/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+
+    <div class="floating-tech" aria-hidden="true">
+      <span class="floating-tech__word">Journal</span>
+      <span class="floating-tech__word">Backend</span>
+      <span class="floating-tech__word">FastAPI</span>
+      <span class="floating-tech__word">Python</span>
+      <span class="floating-tech__word">LangGraph</span>
+      <span class="floating-tech__word">Kafka</span>
+      <span class="floating-tech__word">Docker</span>
+      <span class="floating-tech__word">OpenRouter</span>
+      <span class="floating-tech__word">Security</span>
+      <span class="floating-tech__word">Architecture</span>
+      <span class="floating-tech__word">Automation</span>
+      <span class="floating-tech__word">DevOps</span>
+      <span class="floating-tech__word">gRPC</span>
+      <span class="floating-tech__word">C++</span>
+      <span class="floating-tech__word">APIs</span>
+      <span class="floating-tech__word">Distributed</span>
+    </div>
+
+    <header class="site-header" data-nav data-open="false">
+      <div class="container nav">
+        <a class="brand" href="/" aria-label="Go to home">
+          <span class="brand__mark" aria-hidden="true">PR</span>
+          <span class="brand__text">Pasan</span>
+        </a>
+
+        <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false">
+          <span class="nav__toggle-lines" aria-hidden="true"></span>
+          <span class="sr-only">Open navigation</span>
+        </button>
+
+        <nav class="nav__links" data-nav-links aria-label="Primary">
+          <a href="/">Home</a>
+          <a href="/journal" aria-current="page">Journal</a>
+          <a href="/#contact">Contact</a>
+        </nav>
+
+        <div class="nav__actions">
+          <a
+            class="nav__icon-link"
+            href="https://github.com/prrathnayake/portfolio_2026"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="View portfolio repository on GitHub"
+          >
+            <img class="nav__icon" src="/static/assets/icons/github.svg" alt="" aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <section class="section journal">
+        <div class="container">
+          <div class="journal__intro card">
+            <p class="eyebrow">Personal Feed</p>
+            <h1 class="journal__title">Pasan’s Journal</h1>
+            <p class="journal__subtitle">
+              Practical build notes, architecture decisions, and lessons learned while shipping backend systems and
+              AI automation workflows.
+            </p>
+            <div class="chips">
+              <span class="chip">Public updates</span>
+              <span class="chip">Engineering thoughts</span>
+              <span class="chip">Like + save locally</span>
+            </div>
+          </div>
+
+          <div class="journal__controls card">
+            <div class="journal__search-wrap">
+              <label class="sr-only" for="journal-search">Search thoughts</label>
+              <input
+                id="journal-search"
+                type="search"
+                placeholder="Search thoughts by keyword..."
+                data-journal-search
+              />
+            </div>
+            <div class="journal__tags" data-journal-tags aria-label="Filter by topic"></div>
+          </div>
+
+          <p class="journal__status muted" data-journal-status aria-live="polite"></p>
+          <div class="journal__feed stack" data-journal-feed></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__inner">
+        <div>
+          <strong>Pasan Rathnayake</strong>
+          <div class="muted">Graduate Software Engineer — AI Systems &amp; Automation</div>
+        </div>
+        <div class="footer__social" data-footer-social></div>
+        <div class="muted">© <span id="y"></span> Pasan Rathnayake. All rights reserved.</div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("y").textContent = new Date().getFullYear();
+    </script>
+    <script src="/static/app.js" defer></script>
+    <script src="/static/journal.js" defer></script>
+  </body>
+</html>

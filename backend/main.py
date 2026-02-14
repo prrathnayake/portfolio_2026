@@ -83,6 +83,12 @@ def index() -> FileResponse:
     return FileResponse(FRONTEND_DIR / "index.html")
 
 
+@app.get("/journal", include_in_schema=False)
+@app.get("/journal/", include_in_schema=False)
+def journal() -> FileResponse:
+    return FileResponse(FRONTEND_DIR / "journal.html")
+
+
 @app.get("/api/health")
 def health() -> dict:
     return {"ok": True}

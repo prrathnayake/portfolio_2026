@@ -19,3 +19,4 @@
 - About section includes a right-to-left animated technical strengths snapshot ticker.
 - Background includes animated floating technology/framework words in the current lo-fi style.
 - Expanded point-form portfolio copy lives in `frontend/index.html`; keep key summaries aligned with `frontend/data/about.json`, `frontend/data/experience.json`, and `frontend/data/education.json`.
+- Journal page lives at `frontend/journal.html` with feed data in `frontend/data/journal_posts.json` and client interactions in `frontend/journal.js`.
