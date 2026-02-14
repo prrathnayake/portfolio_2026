@@ -66,7 +66,7 @@ body::after {
 .floating-tech {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
   pointer-events: none;
 }
@@ -74,12 +74,12 @@ body::after {
 .floating-tech__word {
   position: absolute;
   white-space: nowrap;
-  color: rgba(247, 247, 247, 0.12);
+  color: rgba(247, 247, 247, 0.34);
   font-size: clamp(0.78rem, 1.15vw, 1.14rem);
   font-weight: 800;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-  text-shadow: 0 0 16px rgba(255, 255, 255, 0.07);
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.22);
   animation: tech-word-float 30s linear infinite;
   will-change: transform, opacity;
 }
@@ -202,10 +202,10 @@ body::after {
     opacity: 0;
   }
   18% {
-    opacity: 0.2;
+    opacity: 0.72;
   }
   60% {
-    opacity: 0.16;
+    opacity: 0.58;
   }
   100% {
     transform: translate3d(-20vw, -10vh, 0) rotate(1deg);
@@ -233,7 +233,7 @@ a:hover {
 main,
 .footer {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .sr-only {
@@ -1948,8 +1948,9 @@ textarea:focus-visible {
     transition: none;
   }
 
-  .floating-tech {
-    display: none;
+  .floating-tech__word {
+    animation: none;
+    opacity: 0.34;
   }
 
   .strengths-snapshot__viewport {
