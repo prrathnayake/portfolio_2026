@@ -502,6 +502,8 @@
   const projectTitleEl = document.querySelector("[data-project-title]");
   const projectSummaryEl = document.querySelector("[data-project-summary]");
   const projectDetailsEl = document.querySelector("[data-project-details]");
+  const projectLearningWrapEl = document.querySelector("[data-project-learning-wrap]");
+  const projectLearningsEl = document.querySelector("[data-project-learnings]");
 
   function setProjectModalOpen(isOpen) {
     if (!(projectModal instanceof HTMLElement)) return;
@@ -509,27 +511,45 @@
     projectModal.setAttribute("aria-hidden", String(!isOpen));
   }
 
-  function openProjectModal({ title, summary, details }) {
+  function normalizeProjectList(items) {
+    if (!Array.isArray(items)) return [];
+    return items
+      .map((item) => String(item ?? "").trim())
+      .filter(Boolean);
+  }
+
+  function fillProjectList(listEl, items) {
+    if (!(listEl instanceof HTMLElement)) return;
+    listEl.innerHTML = "";
+    items.forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      listEl.appendChild(li);
+    });
+  }
+
+  function openProjectModal({ title, summary, details, learnings }) {
     if (!(projectTitleEl instanceof HTMLElement)) return;
     if (!(projectSummaryEl instanceof HTMLElement)) return;
     if (!(projectDetailsEl instanceof HTMLElement)) return;
 
-    const detailItems = Array.isArray(details)
-      ? details
-          .map((item) => String(item ?? "").trim())
-          .filter(Boolean)
-      : [];
+    const detailItems = normalizeProjectList(details);
+    const learningItems = normalizeProjectList(learnings);
 
     projectTitleEl.textContent = title || "Project details";
     projectSummaryEl.textContent = summary || "Extra project details are loading.";
-    projectDetailsEl.innerHTML = "";
 
     const normalizedDetails = detailItems.length > 0 ? detailItems : [summary || "More details coming soon."];
-    normalizedDetails.forEach((detail) => {
-      const li = document.createElement("li");
-      li.textContent = detail;
-      projectDetailsEl.appendChild(li);
-    });
+    fillProjectList(projectDetailsEl, normalizedDetails);
+
+    if (projectLearningWrapEl instanceof HTMLElement && projectLearningsEl instanceof HTMLElement) {
+      const normalizedLearnings =
+        learningItems.length > 0
+          ? learningItems
+          : ["Learned to turn project goals into clear, testable implementation steps."];
+      fillProjectList(projectLearningsEl, normalizedLearnings);
+      projectLearningWrapEl.hidden = false;
+    }
 
     setProjectModalOpen(true);
   }
@@ -1058,7 +1078,9 @@
     const title = String(infoButton.dataset.projectTitle ?? "").trim();
     const summary = String(infoButton.dataset.projectSummary ?? "").trim();
     let details = [];
+    let learnings = [];
     const rawDetails = infoButton.dataset.projectDetails;
+    const rawLearnings = infoButton.dataset.projectLearnings;
     if (rawDetails) {
       try {
         const parsed = JSON.parse(rawDetails);
@@ -1067,8 +1089,16 @@
         details = [];
       }
     }
+    if (rawLearnings) {
+      try {
+        const parsed = JSON.parse(rawLearnings);
+        if (Array.isArray(parsed)) learnings = parsed;
+      } catch {
+        learnings = [];
+      }
+    }
 
-    openProjectModal({ title, summary, details });
+    openProjectModal({ title, summary, details, learnings });
   });
 
   async function loadProjects() {
@@ -1088,6 +1118,11 @@
         const github = String(project?.github ?? "").trim();
         const details = Array.isArray(project?.details)
           ? project.details
+              .map((item) => String(item ?? "").trim())
+              .filter(Boolean)
+          : [];
+        const learnings = Array.isArray(project?.learnings)
+          ? project.learnings
               .map((item) => String(item ?? "").trim())
               .filter(Boolean)
           : [];
@@ -1144,6 +1179,7 @@
           infoButton.dataset.projectTitle = title;
           infoButton.dataset.projectSummary = description;
           infoButton.dataset.projectDetails = JSON.stringify(details);
+          infoButton.dataset.projectLearnings = JSON.stringify(learnings);
         }
         projectsEl.appendChild(card);
       }

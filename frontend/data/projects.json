@@ -8,6 +8,11 @@
       "Added Kafka and RabbitMQ integrations to model event-driven workflows for ride state updates and async processing.",
       "Implemented a shared Singleton logger with file and console outputs for better debugging and observability during development."
     ],
+    "learnings": [
+      "Learned how to split a complex backend into smaller services with clear ownership.",
+      "Learned practical tradeoffs between synchronous APIs and asynchronous event-driven communication.",
+      "Learned that good logging design saves major debugging time in distributed systems."
+    ],
     "stack": ["C++", "Conan", "appWrite", "HTTP", "gRPC", "Kafka", "RabbitMQ", "H3", "Database", "Protobuf"],
     "github": "https://github.com/prrathnayake/uber_backend"
   },
@@ -19,6 +24,11 @@
       "Integrated secure JWT authentication so user sessions are validated against backend APIs.",
       "Connected real-time ride status updates to keep the UI synchronized with backend trip events.",
       "Added map-based pickup and route views to improve rider visibility and booking accuracy."
+    ],
+    "learnings": [
+      "Learned how to design mobile screens that stay responsive while backend data updates in real time.",
+      "Learned to connect authentication, API calls, and state management into one stable user flow.",
+      "Learned how location features improve product usability when paired with clear UI feedback."
     ],
     "stack": ["Flutter", "Dart", "REST API", "JWT", "State Management", "Google Maps", "HTTP Client"],
     "github": "https://github.com/prrathnayake/uber_frontend_rider"
@@ -32,6 +42,11 @@
       "Added logging, config helpers, and common utilities so new services can start quickly with less boilerplate.",
       "Packaged dependencies through Conan to keep builds reproducible across development environments."
     ],
+    "learnings": [
+      "Learned how to build reusable internal tooling instead of repeating setup in every project.",
+      "Learned that dependency management and build consistency are critical for long-term maintainability.",
+      "Learned to design framework pieces that are flexible without becoming over-engineered."
+    ],
     "stack": ["C++", "Conan", "Kafka", "RabbitMQ", "H3", "Database", "Protobuf"],
     "github": "https://github.com/prrathnayake/cpp-base"
   },
@@ -42,6 +57,11 @@
       "Recreated key WhatsApp screens including chat list, chat room, and status-like layouts.",
       "Built reusable React Native components to keep styling and behavior consistent across screens.",
       "Focused on spacing, typography, and interaction details to match familiar messaging-app UX patterns."
+    ],
+    "learnings": [
+      "Learned to break UI into reusable components that are easier to test and maintain.",
+      "Learned how small spacing and typography decisions strongly affect perceived product quality.",
+      "Learned to replicate complex app layouts while keeping code structure clean."
     ],
     "stack": ["React Native"],
     "github": "https://github.com/prrathnayake/React-Native-WhatsAppUI"
@@ -55,6 +75,11 @@
       "Used Redux for predictable state management across authentication, feed, and profile features.",
       "Connected Node.js and MongoDB backend services to support persistent social interactions."
     ],
+    "learnings": [
+      "Learned to connect frontend interactions to backend persistence with clean API boundaries.",
+      "Learned how centralized state management helps keep larger mobile apps predictable.",
+      "Learned practical handling of media workflows in social-style applications."
+    ],
     "stack": ["React Native", "Node.js", "MongoDB", "Redux"],
     "github": "https://github.com/prrathnayake/Insta-ui-clone"
   },
@@ -66,6 +91,11 @@
       "Added interrupt/resume support with checkpoints so long-running sessions keep context across turns.",
       "Implemented structured JSON plans and logging to make each decision traceable during debugging.",
       "Integrated conditional web-search execution so the agent only calls search tools when needed."
+    ],
+    "learnings": [
+      "Learned how to design AI-agent flows that stay controllable with explicit approval checkpoints.",
+      "Learned to treat observability as a core feature for debugging agent decisions.",
+      "Learned practical patterns for resumable workflows and memory handling in multi-step AI systems."
     ],
     "stack": ["Python", "LangGraph", "LangChain", "OpenAI API", "Firecrawl", "dotenv", "Logging"],
     "github": "https://github.com/prrathnayake/agents_learning"
@@ -79,6 +109,11 @@
       "Integrated Dockerized services and shared APIs to support consistent deployments across environments.",
       "Applied SDLC documentation and unit testing practices as part of the final-year engineering process."
     ],
+    "learnings": [
+      "Learned to coordinate full-stack delivery across multiple clients and user roles.",
+      "Learned how SDLC planning and testing improve team alignment and system reliability.",
+      "Learned to manage project scope while still delivering both web and mobile features."
+    ],
     "stack": ["ReactJS", "NodeJS", "Flutter", "Docker", "MySQL", "Python", "Firebase"],
     "github": "https://github.com/prrathnayake/myHealthSystem"
   },
@@ -90,6 +125,11 @@
       "Implemented a centralized management UI so administrators can update records from one place.",
       "Added automation support for distributing payslip information with fewer manual steps."
     ],
+    "learnings": [
+      "Learned how to model business workflows where data accuracy and consistency are essential.",
+      "Learned team collaboration skills while building shared features in a group project setup.",
+      "Learned to turn repetitive manual operations into simple automation paths."
+    ],
     "stack": ["JavaScript", "Database"],
     "github": "https://github.com/prrathnayake/SIT725_Group_Project"
   },
@@ -100,6 +140,11 @@
       "Implemented full Create, Read, Update, and Delete operations through a simple frontend dashboard.",
       "Connected React frontend forms and tables to Node.js API routes for live data updates.",
       "Used MySQL for persistent storage and query-based record management."
+    ],
+    "learnings": [
+      "Learned end-to-end CRUD fundamentals from database schema to frontend interactions.",
+      "Learned to validate inputs and handle API errors so data operations stay safe and clear.",
+      "Learned to structure simple applications in a way that can scale into larger systems later."
     ],
     "stack": ["ReactJS", "NodeJS", "MySQL"],
     "github": "https://github.com/prrathnayake/CRUDwebApp"

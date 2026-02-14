@@ -1001,6 +1001,10 @@ textarea:focus-visible {
   color: rgba(230, 237, 243, 0.9);
 }
 
+.project-window__learning {
+  margin-top: 14px;
+}
+
 /* Bored Killer widget */
 .bored-killer {
   position: fixed;
