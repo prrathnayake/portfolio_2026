@@ -82,11 +82,13 @@ Required GitHub secrets:
 Optional GitHub secrets:
 - `VPS_CONTAINER_NAME` (default: `portfolio`)
 - `VPS_ENV_FILE_PATH` (default: `/root/pasan/.env`)
+- `VPS_STOP_SERVICES` (space-separated services to stop if port `80` is busy; default: `nginx apache2 httpd caddy`)
 
 Deploy flow on VPS:
 - Stop running container
 - Remove container
 - Remove old image
 - Stop/remove any other container using host port `80`
+- If port `80` is still busy, stop configured system services
 - Pull latest image from Docker Hub
 - Run new container on port `80`

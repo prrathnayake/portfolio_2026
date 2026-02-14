@@ -32,6 +32,7 @@ jobs:
             IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/portfolio_2026:latest"
             CONTAINER_NAME="${{ secrets.VPS_CONTAINER_NAME }}"
             ENV_FILE_PATH="${{ secrets.VPS_ENV_FILE_PATH }}"
+            SERVICES_TO_STOP="${{ secrets.VPS_STOP_SERVICES }}"
 
             if [ -z "${CONTAINER_NAME}" ]; then
               CONTAINER_NAME="portfolio"
@@ -41,10 +42,46 @@ jobs:
               ENV_FILE_PATH="/root/pasan/.env"
             fi
 
+            if [ -z "${SERVICES_TO_STOP}" ]; then
+              SERVICES_TO_STOP="nginx apache2 httpd caddy"
+            fi
+
             if [ ! -f "${ENV_FILE_PATH}" ]; then
               echo "Env file not found: ${ENV_FILE_PATH}"
               exit 1
             fi
+
+            port_80_in_use() {
+              if command -v ss >/dev/null 2>&1; then
+                ss -ltnH '( sport = :80 )' | grep -q .
+                return
+              fi
+              if command -v lsof >/dev/null 2>&1; then
+                lsof -iTCP:80 -sTCP:LISTEN -t >/dev/null
+                return
+              fi
+              if command -v netstat >/dev/null 2>&1; then
+                netstat -ltn 2>/dev/null | awk '$4 ~ /:80$/ {found=1} END{exit found ? 0 : 1}'
+                return
+              fi
+              return 1
+            }
+
+            print_port_80_listeners() {
+              if command -v ss >/dev/null 2>&1; then
+                ss -ltnp '( sport = :80 )' || true
+                return
+              fi
+              if command -v lsof >/dev/null 2>&1; then
+                lsof -nP -iTCP:80 -sTCP:LISTEN || true
+                return
+              fi
+              if command -v netstat >/dev/null 2>&1; then
+                netstat -ltnp 2>/dev/null | awk '$4 ~ /:80$/' || true
+                return
+              fi
+              echo "No listener inspection tool available (ss/lsof/netstat)."
+            }
 
             docker stop "${CONTAINER_NAME}" || true
             docker rm "${CONTAINER_NAME}" || true
@@ -60,6 +97,29 @@ jobs:
                 docker stop "${CID}" || true
                 docker rm "${CID}" || true
               done
+            fi
+
+            if port_80_in_use; then
+              echo "Port 80 is still in use. Attempting to stop system services: ${SERVICES_TO_STOP}"
+              for service_name in ${SERVICES_TO_STOP}; do
+                if command -v systemctl >/dev/null 2>&1 && systemctl list-unit-files | grep -q "^${service_name}"; then
+                  if systemctl is-active --quiet "${service_name}"; then
+                    echo "Stopping ${service_name}..."
+                    systemctl stop "${service_name}" || true
+                  fi
+                elif command -v service >/dev/null 2>&1; then
+                  service "${service_name}" stop || true
+                fi
+              done
+            fi
+
+            if port_80_in_use; then
+              echo "Port 80 is still busy after container/service cleanup."
+              echo "Listeners on 80:"
+              print_port_80_listeners
+              echo "Running containers:"
+              docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Ports}}'
+              exit 1
             fi
 
             docker pull "${IMAGE}"
