@@ -487,6 +487,23 @@
       </div>
     </div>
 
+    <div class="project-modal" data-project-modal data-open="false" aria-hidden="true">
+      <div class="project-modal__backdrop" data-project-close aria-hidden="true"></div>
+      <section class="project-window" role="dialog" aria-modal="true" aria-labelledby="project-detail-title">
+        <header class="project-window__header">
+          <h2 id="project-detail-title" data-project-title>Project details</h2>
+          <button class="project-window__close" type="button" data-project-close aria-label="Close project details">
+            ✕
+          </button>
+        </header>
+        <div class="project-window__body">
+          <p class="project-window__summary" data-project-summary></p>
+          <h3 class="project-window__subheading">What this project includes</h3>
+          <ul class="project-window__details" data-project-details></ul>
+        </div>
+      </section>
+    </div>
+
     <div class="bored-killer" data-bored-killer data-open="false" data-step="prompt">
       <div class="agent-playground" data-agent-playground data-open="false">
         <div class="agent-playground__hint" data-agent-playground-hint>

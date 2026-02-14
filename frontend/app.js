@@ -496,6 +496,54 @@
     }
   });
 
+  // Project details modal
+  const projectModal = document.querySelector("[data-project-modal]");
+  const projectCloseButtons = document.querySelectorAll("[data-project-close]");
+  const projectTitleEl = document.querySelector("[data-project-title]");
+  const projectSummaryEl = document.querySelector("[data-project-summary]");
+  const projectDetailsEl = document.querySelector("[data-project-details]");
+
+  function setProjectModalOpen(isOpen) {
+    if (!(projectModal instanceof HTMLElement)) return;
+    projectModal.dataset.open = String(isOpen);
+    projectModal.setAttribute("aria-hidden", String(!isOpen));
+  }
+
+  function openProjectModal({ title, summary, details }) {
+    if (!(projectTitleEl instanceof HTMLElement)) return;
+    if (!(projectSummaryEl instanceof HTMLElement)) return;
+    if (!(projectDetailsEl instanceof HTMLElement)) return;
+
+    const detailItems = Array.isArray(details)
+      ? details
+          .map((item) => String(item ?? "").trim())
+          .filter(Boolean)
+      : [];
+
+    projectTitleEl.textContent = title || "Project details";
+    projectSummaryEl.textContent = summary || "Extra project details are loading.";
+    projectDetailsEl.innerHTML = "";
+
+    const normalizedDetails = detailItems.length > 0 ? detailItems : [summary || "More details coming soon."];
+    normalizedDetails.forEach((detail) => {
+      const li = document.createElement("li");
+      li.textContent = detail;
+      projectDetailsEl.appendChild(li);
+    });
+
+    setProjectModalOpen(true);
+  }
+
+  projectCloseButtons.forEach((button) =>
+    button.addEventListener("click", () => setProjectModalOpen(false))
+  );
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && projectModal?.dataset.open === "true") {
+      setProjectModalOpen(false);
+    }
+  });
+
   // Bored Killer mini widget
   const boredWidget = document.querySelector("[data-bored-killer]");
   if (boredWidget instanceof HTMLElement) {
@@ -1000,6 +1048,29 @@
 
   // Projects (optional JSON file)
   const projectsEl = document.querySelector("[data-projects]");
+
+  projectsEl?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+    const infoButton = target.closest("[data-project-info]");
+    if (!(infoButton instanceof HTMLButtonElement)) return;
+
+    const title = String(infoButton.dataset.projectTitle ?? "").trim();
+    const summary = String(infoButton.dataset.projectSummary ?? "").trim();
+    let details = [];
+    const rawDetails = infoButton.dataset.projectDetails;
+    if (rawDetails) {
+      try {
+        const parsed = JSON.parse(rawDetails);
+        if (Array.isArray(parsed)) details = parsed;
+      } catch {
+        details = [];
+      }
+    }
+
+    openProjectModal({ title, summary, details });
+  });
+
   async function loadProjects() {
     if (!projectsEl) return;
     try {
@@ -1015,6 +1086,11 @@
         const stack = Array.isArray(project?.stack) ? project.stack : [];
         const link = String(project?.link ?? "").trim();
         const github = String(project?.github ?? "").trim();
+        const details = Array.isArray(project?.details)
+          ? project.details
+              .map((item) => String(item ?? "").trim())
+              .filter(Boolean)
+          : [];
 
         if (!title || !description) continue;
 
@@ -1036,13 +1112,13 @@
           : "";
 
         const card = document.createElement("article");
-        card.className = "card";
+        card.className = "card card--project";
         card.innerHTML = `
           <div class="card__top">
             <h3 class="card__title"></h3>
             ${linkMarkup}
           </div>
-          <p class="muted"></p>
+          <p class="muted card__description"></p>
           ${
             stack.length
               ? `<div class="chips">${stack
@@ -1050,9 +1126,25 @@
                   .join("")}</div>`
               : ""
           }
+          <div class="card__footer">
+            <button class="card__icon-link card__info-link" type="button" data-project-info>
+              <svg class="card__icon" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="8.7" fill="none" stroke="currentColor" stroke-width="1.7"></circle>
+                <circle cx="12" cy="8.2" r="1.1" fill="currentColor"></circle>
+                <path d="M12 11.1v5.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+              </svg>
+            </button>
+          </div>
         `;
         card.querySelector(".card__title").textContent = title;
-        card.querySelector("p").textContent = description;
+        card.querySelector(".card__description").textContent = description;
+        const infoButton = card.querySelector("[data-project-info]");
+        if (infoButton instanceof HTMLButtonElement) {
+          infoButton.setAttribute("aria-label", `More details about ${title}`);
+          infoButton.dataset.projectTitle = title;
+          infoButton.dataset.projectSummary = description;
+          infoButton.dataset.projectDetails = JSON.stringify(details);
+        }
         projectsEl.appendChild(card);
       }
       applyChipIcons(projectsEl);

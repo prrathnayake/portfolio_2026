@@ -433,6 +433,12 @@ p {
   padding: 16px 16px;
 }
 
+.card--project {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 .card__top {
   display: flex;
   align-items: baseline;
@@ -482,6 +488,25 @@ p {
 
 .card__title {
   margin: 0;
+}
+
+.card__description {
+  margin-bottom: 0;
+}
+
+.card__footer {
+  margin-top: auto;
+  padding-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card__info-link {
+  color: rgba(247, 247, 247, 0.94);
+}
+
+.card__info-link:hover {
+  color: #ffffff;
 }
 
 .tag {
@@ -867,6 +892,113 @@ textarea:focus-visible {
   padding: 0 14px 12px;
   color: var(--muted);
   font-size: 0.85rem;
+}
+
+/* Project details modal */
+.project-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 81;
+}
+
+.project-modal[data-open="true"] {
+  display: flex;
+}
+
+.project-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.66);
+  backdrop-filter: blur(2px);
+}
+
+.project-window {
+  position: relative;
+  width: min(640px, 93vw);
+  max-height: min(680px, 86vh);
+  background: #0a0a0a;
+  border: 2px solid #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.62);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-image: url("/static/assets/noise.svg");
+  background-size: 200px 200px;
+}
+
+.project-window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/static/assets/scribble-1.svg");
+  background-repeat: no-repeat;
+  background-position: 95% 10%;
+  background-size: 170px auto;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.project-window__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10, 10, 10, 0.92);
+  position: relative;
+  z-index: 1;
+}
+
+.project-window__header h2 {
+  margin: 0;
+  font-size: 1.06rem;
+}
+
+.project-window__close {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.project-window__close:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.project-window__body {
+  position: relative;
+  z-index: 1;
+  padding: 15px 16px 16px;
+  overflow-y: auto;
+}
+
+.project-window__summary {
+  margin: 0 0 12px;
+  color: rgba(247, 247, 247, 0.92);
+}
+
+.project-window__subheading {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  color: rgba(247, 247, 247, 0.92);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.project-window__details {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: rgba(230, 237, 243, 0.9);
 }
 
 /* Bored Killer widget */
@@ -1669,6 +1801,15 @@ textarea:focus-visible {
 
   .section {
     padding: 72px 0;
+  }
+
+  .project-window {
+    width: min(96vw, calc(100vw - 12px));
+    max-height: calc(100vh - 16px);
+  }
+
+  .project-window__body {
+    padding: 14px 14px 15px;
   }
 
   .bored-killer {
