@@ -63,6 +63,156 @@ body::after {
   opacity: 0.22;
 }
 
+.floating-tech {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.floating-tech__word {
+  position: absolute;
+  white-space: nowrap;
+  color: rgba(247, 247, 247, 0.12);
+  font-size: clamp(0.78rem, 1.15vw, 1.14rem);
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.07);
+  animation: tech-word-float 30s linear infinite;
+  will-change: transform, opacity;
+}
+
+.floating-tech__word:nth-child(1) {
+  top: 8%;
+  left: 84%;
+  animation-duration: 34s;
+  animation-delay: -3s;
+}
+
+.floating-tech__word:nth-child(2) {
+  top: 16%;
+  left: 68%;
+  animation-duration: 30s;
+  animation-delay: -12s;
+}
+
+.floating-tech__word:nth-child(3) {
+  top: 22%;
+  left: 90%;
+  animation-duration: 33s;
+  animation-delay: -8s;
+}
+
+.floating-tech__word:nth-child(4) {
+  top: 30%;
+  left: 74%;
+  animation-duration: 28s;
+  animation-delay: -15s;
+}
+
+.floating-tech__word:nth-child(5) {
+  top: 38%;
+  left: 87%;
+  animation-duration: 31s;
+  animation-delay: -7s;
+}
+
+.floating-tech__word:nth-child(6) {
+  top: 44%;
+  left: 56%;
+  animation-duration: 27s;
+  animation-delay: -18s;
+}
+
+.floating-tech__word:nth-child(7) {
+  top: 52%;
+  left: 81%;
+  animation-duration: 35s;
+  animation-delay: -11s;
+}
+
+.floating-tech__word:nth-child(8) {
+  top: 58%;
+  left: 65%;
+  animation-duration: 29s;
+  animation-delay: -20s;
+}
+
+.floating-tech__word:nth-child(9) {
+  top: 66%;
+  left: 88%;
+  animation-duration: 32s;
+  animation-delay: -5s;
+}
+
+.floating-tech__word:nth-child(10) {
+  top: 74%;
+  left: 72%;
+  animation-duration: 30s;
+  animation-delay: -14s;
+}
+
+.floating-tech__word:nth-child(11) {
+  top: 80%;
+  left: 84%;
+  animation-duration: 33s;
+  animation-delay: -19s;
+}
+
+.floating-tech__word:nth-child(12) {
+  top: 12%;
+  left: 40%;
+  animation-duration: 26s;
+  animation-delay: -17s;
+}
+
+.floating-tech__word:nth-child(13) {
+  top: 34%;
+  left: 42%;
+  animation-duration: 29s;
+  animation-delay: -10s;
+}
+
+.floating-tech__word:nth-child(14) {
+  top: 48%;
+  left: 36%;
+  animation-duration: 31s;
+  animation-delay: -22s;
+}
+
+.floating-tech__word:nth-child(15) {
+  top: 62%;
+  left: 28%;
+  animation-duration: 28s;
+  animation-delay: -16s;
+}
+
+.floating-tech__word:nth-child(16) {
+  top: 84%;
+  left: 44%;
+  animation-duration: 34s;
+  animation-delay: -13s;
+}
+
+@keyframes tech-word-float {
+  0% {
+    transform: translate3d(16vw, 2vh, 0) rotate(-2deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.2;
+  }
+  60% {
+    opacity: 0.16;
+  }
+  100% {
+    transform: translate3d(-20vw, -10vh, 0) rotate(1deg);
+    opacity: 0;
+  }
+}
+
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
@@ -1736,6 +1886,10 @@ textarea:focus-visible {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .floating-tech {
+    display: none;
   }
 
   .strengths-snapshot__viewport {

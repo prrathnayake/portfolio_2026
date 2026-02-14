@@ -88,6 +88,25 @@
   <body>
     <a class="skip" href="#content">Skip to content</a>
 
+    <div class="floating-tech" aria-hidden="true">
+      <span class="floating-tech__word">Python</span>
+      <span class="floating-tech__word">FastAPI</span>
+      <span class="floating-tech__word">LangGraph</span>
+      <span class="floating-tech__word">LangChain</span>
+      <span class="floating-tech__word">Docker</span>
+      <span class="floating-tech__word">Kafka</span>
+      <span class="floating-tech__word">RabbitMQ</span>
+      <span class="floating-tech__word">C++</span>
+      <span class="floating-tech__word">JavaScript</span>
+      <span class="floating-tech__word">React</span>
+      <span class="floating-tech__word">Flutter</span>
+      <span class="floating-tech__word">Node.js</span>
+      <span class="floating-tech__word">MySQL</span>
+      <span class="floating-tech__word">MongoDB</span>
+      <span class="floating-tech__word">OpenRouter</span>
+      <span class="floating-tech__word">gRPC</span>
+    </div>
+
     <header class="site-header" data-nav data-open="false">
       <div class="container nav">
         <a class="brand" href="#home" aria-label="Go to top">
@@ -497,12 +516,22 @@
           </button>
         </header>
         <div class="project-window__body">
-          <p class="project-window__summary" data-project-summary></p>
-          <h3 class="project-window__subheading">What this project includes</h3>
-          <ul class="project-window__details" data-project-details></ul>
-          <div class="project-window__learning" data-project-learning-wrap>
-            <h3 class="project-window__subheading">What I learned</h3>
-            <ul class="project-window__details" data-project-learnings></ul>
+          <div class="project-window__loading" data-project-loading hidden aria-live="polite">
+            <div class="project-window__loading-dots" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p>Loading project details...</p>
+          </div>
+          <div class="project-window__content" data-project-content>
+            <p class="project-window__summary" data-project-summary></p>
+            <h3 class="project-window__subheading">What this project includes</h3>
+            <ul class="project-window__details" data-project-details></ul>
+            <div class="project-window__learning" data-project-learning-wrap>
+              <h3 class="project-window__subheading">What I learned</h3>
+              <ul class="project-window__details" data-project-learnings></ul>
+            </div>
           </div>
         </div>
       </section>

@@ -56,3 +56,4 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - Chat modal includes suggestion buttons in `frontend/index.html` (`data-chat-suggestions`) that prefill the input.
 - `frontend/app.js` icon map includes extra project stack labels mapped to existing SVG icons.
 - About section includes a right-to-left animated technical strengths snapshot ticker.
+- Background includes animated floating technology/framework words in the current lo-fi style.

@@ -17,3 +17,4 @@
 - Docker build test workflow lives in `.github/workflows/docker-build-test.yml`.
 - SMTP supports `SMTP_TIMEOUT_SECONDS`; avoid inline comments in Docker env files.
 - About section includes a right-to-left animated technical strengths snapshot ticker.
+- Background includes animated floating technology/framework words in the current lo-fi style.
