@@ -114,7 +114,10 @@
     ).filter((el) => el instanceof HTMLElement);
 
     const noiseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+=";
-    const denoiseLayers = [0.08, 0.16, 0.28, 0.42, 0.58, 0.74, 0.88, 1];
+    const denoiseLayers = [0.04, 0.1, 0.16, 0.24, 0.34, 0.46, 0.58, 0.7, 0.82, 0.92, 1];
+    const diffusionStepDelayMs = 145;
+    const diffusionInitialDelayMs = 220;
+    const diffusionStaggerMs = 140;
     let hasStartedHomeDiffusion = false;
 
     function isStableGlyph(char) {
@@ -146,7 +149,7 @@
 
         if (layerIndex < denoiseLayers.length - 1) {
           layerIndex += 1;
-          window.setTimeout(renderLayer, 92);
+          window.setTimeout(renderLayer, diffusionStepDelayMs);
           return;
         }
 
@@ -163,7 +166,7 @@
       if (hasStartedHomeDiffusion) return;
       hasStartedHomeDiffusion = true;
       homeTextTargets.forEach((element, index) => {
-        runElementDiffusion(element, 120 + index * 95);
+        runElementDiffusion(element, diffusionInitialDelayMs + index * diffusionStaggerMs);
       });
     }
 

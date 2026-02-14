@@ -297,7 +297,7 @@ main,
   --clarity: 0;
   filter: blur(calc((1 - var(--clarity, 1)) * 2.2px));
   opacity: calc(0.68 + var(--clarity, 1) * 0.32);
-  transition: filter 90ms linear, opacity 90ms linear;
+  transition: filter 160ms linear, opacity 160ms linear;
 }
 
 #home .home-text-ready {
