@@ -58,7 +58,3 @@ This repository contains a single-page developer portfolio with a FastAPI backen
 - About section includes a right-to-left animated technical strengths snapshot ticker.
 - Background includes animated floating technology/framework words in the current lo-fi style.
 - Expanded point-form portfolio copy lives in `frontend/index.html`; keep key summaries aligned with `frontend/data/about.json`, `frontend/data/experience.json`, and `frontend/data/education.json`.
-- Journal page lives at `frontend/journal.html` with feed data in `frontend/data/journal_posts.json` and client interactions in `frontend/journal.js`.
-- Journal post content should be written in first-person POV, describing what I did and my opinions.
-- Journal UI actions are `Save` and `Share` only (no like button).
-- Journal writing endpoint is `POST /api/journal/posts` and requires `JOURNAL_ADMIN_TOKEN` (or `API_ACCESS_TOKEN` fallback).
