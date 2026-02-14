@@ -1155,6 +1155,10 @@ textarea:focus-visible {
   text-align: center;
 }
 
+.project-window__loading[hidden] {
+  display: none !important;
+}
+
 .project-window__loading p {
   margin: 0;
   font-size: 0.8rem;
