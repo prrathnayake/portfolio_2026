@@ -87,5 +87,6 @@ Deploy flow on VPS:
 - Stop running container
 - Remove container
 - Remove old image
+- Stop/remove any other container using host port `80`
 - Pull latest image from Docker Hub
 - Run new container on port `80`

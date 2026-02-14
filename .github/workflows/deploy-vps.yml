@@ -25,7 +25,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_SSH_PORT || '22' }}
-          script_stop: true
+          command_timeout: 30m
           script: |
             set -euo pipefail
 
@@ -49,6 +49,18 @@ jobs:
             docker stop "${CONTAINER_NAME}" || true
             docker rm "${CONTAINER_NAME}" || true
             docker image rm -f "${IMAGE}" || true
+
+            CONFLICTING_CONTAINERS="$(docker ps --filter "publish=80" --format '{{.ID}} {{.Names}}')"
+            if [ -n "${CONFLICTING_CONTAINERS}" ]; then
+              echo "${CONFLICTING_CONTAINERS}" | while read -r CID CNAME; do
+                if [ -z "${CID}" ]; then
+                  continue
+                fi
+                echo "Stopping container using host port 80: ${CNAME} (${CID})"
+                docker stop "${CID}" || true
+                docker rm "${CID}" || true
+              done
+            fi
 
             docker pull "${IMAGE}"
 

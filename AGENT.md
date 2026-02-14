@@ -16,6 +16,7 @@
 - Docker image publish workflow lives in `.github/workflows/docker-publish.yml`.
 - Docker build test workflow lives in `.github/workflows/docker-build-test.yml`.
 - VPS auto-deploy workflow lives in `.github/workflows/deploy-vps.yml` and runs after Docker publish succeeds.
+- VPS deploy workflow removes any container currently bound to host port `80` before launching `portfolio`.
 - SMTP supports `SMTP_TIMEOUT_SECONDS`; avoid inline comments in Docker env files.
 - About section includes a right-to-left animated technical strengths snapshot ticker.
 - Background includes animated floating technology/framework words in the current lo-fi style.
