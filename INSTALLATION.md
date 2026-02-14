@@ -33,8 +33,16 @@ Then open `http://127.0.0.1:8000`.
 ## Security Controls (Optional)
 
 - Protect endpoints with `API_ACCESS_TOKEN`.
+- Protect journal publishing with `JOURNAL_ADMIN_TOKEN` (recommended for production).
 - Tune rate limits with `RATE_LIMIT_WINDOW_SECONDS`, `RATE_LIMIT_CHAT_MAX`, and `RATE_LIMIT_CONTACT_MAX`.
 - Control LLM logging with `LLM_LOG_ENABLED` and `LLM_LOG_REDACT`.
+
+## Journal Publishing API
+
+Use `POST /api/journal/posts` to publish a new journal entry in production.
+
+- Header: `Authorization: Bearer <JOURNAL_ADMIN_TOKEN>`
+- Body fields: `title`, `summary`, `mood`, `read_time`, `tags[]`, `points[]`
 
 ## SMTP Notes
 

@@ -7,7 +7,6 @@
   if (!(feedEl instanceof HTMLElement)) return;
   if (!(tagsEl instanceof HTMLElement)) return;
 
-  const likesStorageKey = "portfolio_journal_likes_v1";
   const savedStorageKey = "portfolio_journal_saved_v1";
   const formatter = new Intl.DateTimeFormat("en-AU", {
     year: "numeric",
@@ -18,7 +17,6 @@
   let posts = [];
   let selectedTag = "All";
   let searchTerm = "";
-  let likedIds = readIdSet(likesStorageKey);
   let savedIds = readIdSet(savedStorageKey);
 
   function readIdSet(key) {
@@ -62,10 +60,7 @@
     const points = Array.isArray(post?.points)
       ? post.points.map((point) => String(point ?? "").trim()).filter(Boolean)
       : [];
-    const baseLikes = Number.isFinite(post?.baseLikes)
-      ? Number(post.baseLikes)
-      : Number.parseInt(String(post?.baseLikes ?? "0"), 10) || 0;
-    return { id, title, summary, createdAt, readTime, mood, tags, points, baseLikes };
+    return { id, title, summary, createdAt, readTime, mood, tags, points };
   }
 
   function sortedPosts(items) {
@@ -201,18 +196,7 @@
     const actions = document.createElement("div");
     actions.className = "journal-post__actions";
 
-    const liked = likedIds.has(post.id);
     const saved = savedIds.has(post.id);
-    const likeCount = post.baseLikes + (liked ? 1 : 0);
-
-    actions.appendChild(
-      buildActionButton({
-        action: "like",
-        postId: post.id,
-        text: `♥ Like ${likeCount}`,
-        active: liked,
-      })
-    );
     actions.appendChild(
       buildActionButton({
         action: "save",
@@ -293,14 +277,6 @@
     const action = String(button.dataset.journalAction || "");
     const postId = String(button.dataset.postId || "");
     if (!postId || !action) return;
-
-    if (action === "like") {
-      if (likedIds.has(postId)) likedIds.delete(postId);
-      else likedIds.add(postId);
-      writeIdSet(likesStorageKey, likedIds);
-      renderPosts();
-      return;
-    }
 
     if (action === "save") {
       if (savedIds.has(postId)) savedIds.delete(postId);

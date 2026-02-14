@@ -10,15 +10,17 @@ from fastapi.staticfiles import StaticFiles
 
 from .bored_killer import build_bored_fact_messages
 from .emailer import send_contact_email
+from .journal_store import create_post as create_journal_post
 from .langgraph_agent import build_chat_graph
 from .openrouter_client import openrouter_chat_completion
 from .rag import build_rag_store
-from .schemas import BoredFactRequest, ChatRequest, ContactRequest
+from .schemas import BoredFactRequest, ChatRequest, ContactRequest, JournalPostCreateRequest
 from .settings import get_settings
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"
+JOURNAL_POSTS_PATH = FRONTEND_DIR / "data" / "journal_posts.json"
 
 app = FastAPI(title="Pasan Portfolio")
 logger = logging.getLogger(__name__)
@@ -55,13 +57,28 @@ def _require_api_key(request: Request, settings) -> None:
     token = settings.api_access_token
     if not token:
         return
+    provided = _extract_auth_token(request)
+    if not provided or provided != token:
+        raise HTTPException(status_code=401, detail="Unauthorized.")
+
+
+def _extract_auth_token(request: Request) -> str:
     header = request.headers.get("authorization") or request.headers.get("x-api-key") or ""
     header = header.strip()
     if header.lower().startswith("bearer "):
-        provided = header.split(" ", 1)[1].strip()
-    else:
-        provided = header
-    if not provided or provided != token:
+        return header.split(" ", 1)[1].strip()
+    return header
+
+
+def _require_journal_admin_token(request: Request, settings) -> None:
+    required_token = settings.journal_admin_token or settings.api_access_token
+    if not required_token:
+        raise HTTPException(
+            status_code=503,
+            detail="Journal admin token is not configured.",
+        )
+    provided = _extract_auth_token(request)
+    if not provided or provided != required_token:
         raise HTTPException(status_code=401, detail="Unauthorized.")
 
 
@@ -170,3 +187,32 @@ def bored_fact(payload: BoredFactRequest, request: Request) -> dict:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except Exception as exc:
         raise HTTPException(status_code=502, detail="AI request failed.") from exc
+
+
+@app.post("/api/journal/posts")
+def create_journal(payload: JournalPostCreateRequest, request: Request) -> dict:
+    settings = get_settings()
+    _require_journal_admin_token(request, settings)
+    _enforce_rate_limit(
+        request,
+        bucket="journal",
+        limit=settings.rate_limit_contact_max,
+        window_seconds=settings.rate_limit_window_seconds,
+    )
+
+    try:
+        post = create_journal_post(
+            JOURNAL_POSTS_PATH,
+            title=payload.title,
+            summary=payload.summary,
+            mood=payload.mood,
+            read_time=payload.read_time,
+            tags=payload.tags,
+            points=payload.points,
+        )
+        return {"ok": True, "post": post}
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.exception("Journal post create failed")
+        raise HTTPException(status_code=500, detail="Failed to create journal post.") from exc

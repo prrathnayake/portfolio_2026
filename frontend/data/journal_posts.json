@@ -11,8 +11,7 @@
       "I define timeout, retry, and fallback behavior before I add business logic.",
       "I separate synchronous API paths from asynchronous event processing as early as possible.",
       "I add structured logs up front because I think observability is a core feature, not an afterthought."
-    ],
-    "baseLikes": 19
+    ]
   },
   {
     "id": "kafka-boundaries-vs-shared-state",
@@ -26,8 +25,7 @@
       "I use events to communicate state changes instead of direct service-to-service dependency chains.",
       "I keep event contracts explicit with versioning because I want to avoid downstream breakages.",
       "I treat idempotency as a first-class requirement in consumers because duplicate events are unavoidable in real systems."
-    ],
-    "baseLikes": 23
+    ]
   },
   {
     "id": "langgraph-control-for-ai-workflows",
@@ -41,8 +39,7 @@
       "I use a plan → approval → execution flow for sensitive tool actions.",
       "I store checkpoints so interrupted sessions can resume cleanly.",
       "I add structured JSON outputs and logs because I care about clear post-run analysis."
-    ],
-    "baseLikes": 31
+    ]
   },
   {
     "id": "prompt-guardrails-in-public-chat",
@@ -56,8 +53,7 @@
       "I limit assistant scope to portfolio topics and ignore unrelated misuse attempts.",
       "I apply rate limits and optional API token checks on expensive endpoints.",
       "I use redacted logging by default outside development environments because privacy matters."
-    ],
-    "baseLikes": 27
+    ]
   },
   {
     "id": "from-internship-to-production-mindset",
@@ -71,8 +67,7 @@
       "I balance delivery speed with long-term maintainability decisions.",
       "I write clearer docs because I want to reduce support and onboarding friction.",
       "I treat observability and error handling as part of core feature delivery."
-    ],
-    "baseLikes": 22
+    ]
   },
   {
     "id": "docker-env-gotchas-on-vps",
@@ -86,7 +81,6 @@
       "I avoid inline comments on env value lines when using docker --env-file.",
       "I keep numeric values unquoted where possible to reduce parser surprises.",
       "I verify runtime env values inside containers before doing deeper debugging."
-    ],
-    "baseLikes": 17
+    ]
   }
 ]

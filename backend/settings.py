@@ -67,6 +67,7 @@ class Settings:
     prompts_dir: Path
 
     api_access_token: str | None
+    journal_admin_token: str | None
     rate_limit_window_seconds: int
     rate_limit_contact_max: int
     rate_limit_chat_max: int
@@ -131,6 +132,7 @@ def get_settings() -> Settings:
         rag_top_k=_parse_int(os.getenv("RAG_TOP_K"), default=4),
         prompts_dir=root_dir / "prompts",
         api_access_token=_clean_env(os.getenv("API_ACCESS_TOKEN")),
+        journal_admin_token=_clean_env(os.getenv("JOURNAL_ADMIN_TOKEN")),
         rate_limit_window_seconds=_parse_int(os.getenv("RATE_LIMIT_WINDOW_SECONDS"), default=60),
         rate_limit_contact_max=_parse_int(os.getenv("RATE_LIMIT_CONTACT_MAX"), default=5),
         rate_limit_chat_max=_parse_int(os.getenv("RATE_LIMIT_CHAT_MAX"), default=10),

@@ -23,3 +23,12 @@ class BoredFactRequest(BaseModel):
         "Cybersecurity",
         "Developer productivity",
     ]
+
+
+class JournalPostCreateRequest(BaseModel):
+    title: str = Field(min_length=4, max_length=140)
+    summary: str = Field(min_length=12, max_length=500)
+    mood: str = Field(min_length=2, max_length=40)
+    read_time: str = Field(min_length=2, max_length=20)
+    tags: list[str] = Field(default_factory=list)
+    points: list[str] = Field(default_factory=list)
