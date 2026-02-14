@@ -1093,12 +1093,8 @@
   // Projects (optional JSON file)
   const projectsEl = document.querySelector("[data-projects]");
 
-  projectsEl?.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof Element)) return;
-    const infoButton = target.closest("[data-project-info]");
+  function openProjectFromButton(infoButton) {
     if (!(infoButton instanceof HTMLButtonElement)) return;
-
     const title = String(infoButton.dataset.projectTitle ?? "").trim();
     const summary = String(infoButton.dataset.projectSummary ?? "").trim();
     let details = [];
@@ -1123,6 +1119,14 @@
     }
 
     void openProjectModal({ title, summary, details, learnings });
+  }
+
+  projectsEl?.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const infoButton = target.closest("[data-project-info]");
+    if (!(infoButton instanceof HTMLButtonElement)) return;
+    openProjectFromButton(infoButton);
   });
 
   async function loadProjects() {
@@ -1204,6 +1208,11 @@
           infoButton.dataset.projectSummary = description;
           infoButton.dataset.projectDetails = JSON.stringify(details);
           infoButton.dataset.projectLearnings = JSON.stringify(learnings);
+          infoButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            openProjectFromButton(infoButton);
+          });
         }
         projectsEl.appendChild(card);
       }

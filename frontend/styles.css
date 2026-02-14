@@ -652,6 +652,7 @@ p {
   bottom: 14px;
   display: flex;
   justify-content: flex-end;
+  z-index: 72;
 }
 
 .card__info-link {
