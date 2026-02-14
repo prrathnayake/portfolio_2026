@@ -504,11 +504,29 @@
   const projectDetailsEl = document.querySelector("[data-project-details]");
   const projectLearningWrapEl = document.querySelector("[data-project-learning-wrap]");
   const projectLearningsEl = document.querySelector("[data-project-learnings]");
+  const projectLoadingEl = document.querySelector("[data-project-loading]");
+  const projectContentEl = document.querySelector("[data-project-content]");
+  let projectLoadToken = 0;
 
   function setProjectModalOpen(isOpen) {
     if (!(projectModal instanceof HTMLElement)) return;
     projectModal.dataset.open = String(isOpen);
     projectModal.setAttribute("aria-hidden", String(!isOpen));
+  }
+
+  function setProjectLoading(isLoading) {
+    if (projectLoadingEl instanceof HTMLElement) {
+      projectLoadingEl.hidden = !isLoading;
+    }
+    if (projectContentEl instanceof HTMLElement) {
+      projectContentEl.hidden = isLoading;
+    }
+  }
+
+  function closeProjectModal() {
+    projectLoadToken += 1;
+    setProjectModalOpen(false);
+    setProjectLoading(false);
   }
 
   function normalizeProjectList(items) {
@@ -528,10 +546,16 @@
     });
   }
 
-  function openProjectModal({ title, summary, details, learnings }) {
+  async function openProjectModal({ title, summary, details, learnings }) {
     if (!(projectTitleEl instanceof HTMLElement)) return;
     if (!(projectSummaryEl instanceof HTMLElement)) return;
     if (!(projectDetailsEl instanceof HTMLElement)) return;
+
+    const loadToken = ++projectLoadToken;
+    setProjectModalOpen(true);
+    setProjectLoading(true);
+    await new Promise((resolve) => window.setTimeout(resolve, 260));
+    if (loadToken !== projectLoadToken) return;
 
     const detailItems = normalizeProjectList(details);
     const learningItems = normalizeProjectList(learnings);
@@ -551,16 +575,16 @@
       projectLearningWrapEl.hidden = false;
     }
 
-    setProjectModalOpen(true);
+    setProjectLoading(false);
   }
 
   projectCloseButtons.forEach((button) =>
-    button.addEventListener("click", () => setProjectModalOpen(false))
+    button.addEventListener("click", () => closeProjectModal())
   );
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && projectModal?.dataset.open === "true") {
-      setProjectModalOpen(false);
+      closeProjectModal();
     }
   });
 
@@ -1098,7 +1122,7 @@
       }
     }
 
-    openProjectModal({ title, summary, details, learnings });
+    void openProjectModal({ title, summary, details, learnings });
   });
 
   async function loadProjects() {
