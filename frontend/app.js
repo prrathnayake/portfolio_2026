@@ -1164,9 +1164,9 @@
           <div class="card__footer">
             <button class="card__icon-link card__info-link" type="button" data-project-info>
               <svg class="card__icon" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
-                <circle cx="12" cy="12" r="8.7" fill="none" stroke="currentColor" stroke-width="1.7"></circle>
-                <circle cx="12" cy="8.2" r="1.1" fill="currentColor"></circle>
-                <path d="M12 11.1v5.1" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"></path>
+                <circle cx="12" cy="12" r="9" fill="currentColor"></circle>
+                <circle cx="12" cy="7.8" r="1.05" fill="#050505"></circle>
+                <path d="M12 10.8v5.3" fill="none" stroke="#050505" stroke-width="1.8" stroke-linecap="round"></path>
               </svg>
             </button>
           </div>

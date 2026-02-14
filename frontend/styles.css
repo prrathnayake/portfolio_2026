@@ -434,9 +434,11 @@ p {
 }
 
 .card--project {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  padding-bottom: 56px;
 }
 
 .card__top {
@@ -495,18 +497,27 @@ p {
 }
 
 .card__footer {
-  margin-top: auto;
-  padding-top: 12px;
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
   display: flex;
   justify-content: flex-end;
 }
 
 .card__info-link {
-  color: rgba(247, 247, 247, 0.94);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .card__info-link:hover {
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.card__info-link .card__icon {
+  width: 19px;
+  height: 19px;
+  opacity: 1;
 }
 
 .tag {
