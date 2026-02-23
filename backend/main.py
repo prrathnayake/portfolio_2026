@@ -71,14 +71,25 @@ def _extract_auth_token(request: Request) -> str:
 @app.on_event("startup")
 def load_rag_index() -> None:
     settings = get_settings()
+    app.state.chat_unavailable_reason = None
+    rag_knowledge_dir = settings.rag_knowledge_dir
+    if not rag_knowledge_dir.exists() and rag_knowledge_dir.is_absolute():
+        local_knowledge_dir = ROOT_DIR / "knowledge"
+        if local_knowledge_dir.exists():
+            rag_knowledge_dir = local_knowledge_dir
     app.state.rag_store = build_rag_store(
-        settings.rag_knowledge_dir,
+        rag_knowledge_dir,
         chunk_size=settings.rag_chunk_size,
         chunk_overlap=settings.rag_chunk_overlap,
     )
     app.state.chat_graph = None
     if app.state.rag_store is not None:
         app.state.chat_graph = build_chat_graph(app.state.rag_store, settings)
+    else:
+        app.state.chat_unavailable_reason = (
+            f"Knowledge base is not available (no readable content found in "
+            f"{rag_knowledge_dir})."
+        )
 
 
 @app.get("/", include_in_schema=False)
@@ -130,7 +141,8 @@ def chat(payload: ChatRequest, request: Request) -> dict:
         window_seconds=settings.rate_limit_window_seconds,
     )
     if chat_graph is None:
-        raise HTTPException(status_code=503, detail="Knowledge base is not available.")
+        detail = getattr(app.state, "chat_unavailable_reason", None) or "Knowledge base is not available."
+        raise HTTPException(status_code=503, detail=detail)
 
     try:
         state = chat_graph.invoke({"question": payload.message})
