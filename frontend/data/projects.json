@@ -1,5 +1,22 @@
 [
   {
+    "title": "SLM Platform (Local AI Agent Hub)",
+    "description": "Built a privacy-first local AI platform that exposes a single OpenAI-compatible API for specialized small language model agents. Designed the system so different task-focused agents can be swapped behind one gateway while keeping workloads on local hardware.",
+    "details": [
+      "Built a FastAPI-based gateway that provides an OpenAI-compatible entry point for chat and model-serving workflows.",
+      "Designed the platform around specialized local SLM agents so coding, planning, persona, and tool-use tasks can be routed through one interface.",
+      "Added support for local-first deployment, Docker-based setup, and Redis-backed job queue infrastructure for platform operations.",
+      "Structured the project to support model fine-tuning, Hugging Face integration, and llama.cpp runtime options for practical on-device AI workflows."
+    ],
+    "learnings": [
+      "Learned how to design AI infrastructure that keeps privacy and developer ergonomics aligned.",
+      "Learned the value of OpenAI-compatible interfaces for reducing integration friction across different AI backends.",
+      "Learned how platform design changes when models, runtimes, and training workflows all need to live under one consistent developer experience."
+    ],
+    "stack": ["Python", "FastAPI", "Docker", "Redis", "SQLAlchemy", "Hugging Face", "llama.cpp", "OpenAI API"],
+    "github": "https://github.com/prrathnayake/slm_server"
+  },
+  {
     "title": "Uber Backend (Educational Architecture)",
     "description": "Built an educational C++ backend inspired by Uber’s architecture using a custom modular framework. Implemented three multithreaded microservices and centralized logging via a Singleton pattern for clarity, maintainability, and observability.",
     "details": [
