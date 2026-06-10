@@ -1,5 +1,107 @@
 [
   {
+    "title": "Phantom (Prototype) — AI Security Monitoring System",
+    "description": "Built a centralized security monitoring system with Gateway + Agent architecture for autonomous threat detection and analysis. Features LLM-powered analysis, real-time dashboards, and multiple input interfaces.",
+    "details": [
+      "Designed a Gateway + Agent architecture separating I/O routing from intelligence and analysis layers.",
+      "Implemented LLM-powered security analysis with context-aware session memory and structured reporting.",
+      "Built multiple input interfaces: HTTP API, CLI, Redis/RabbitMQ queues, file triggers, and WebSocket.",
+      "Created a Flask web dashboard with real-time agent reasoning, schedule management, and alert handling."
+    ],
+    "learnings": [
+      "Learned how to design autonomous systems with human-in-the-loop safety controls and approval workflows.",
+      "Learned the value of sensor-agnostic architectures for extensible monitoring systems.",
+      "Learned practical patterns for context management and memory in long-running AI agent sessions."
+    ],
+    "stack": ["Python", "Flask", "Docker", "Redis", "PostgreSQL", "Elasticsearch", "OpenRouter", "Textual"],
+    "github": "https://github.com/prrathnayake/Phantom"
+  },
+  {
+    "title": "Pi Dev Stack (Prototype) — Raspberry Pi Homelab CLI",
+    "description": "Developed a self-hosted homelab CLI for Raspberry Pi managing Docker Compose services including AI runtimes, automation, monitoring, networking, and remote access through a single command interface.",
+    "details": [
+      "Built an interactive CLI orchestrating 15+ Docker services including Ollama, n8n, Pi-hole, and Portainer.",
+      "Integrated MCP server for AI-assisted homelab inspection and safe operational commands.",
+      "Implemented Cloudflare tunnel support for temporary HTTPS access and stable domain routing.",
+      "Added backup/restore commands and local state separation for safe git pull operations."
+    ],
+    "learnings": [
+      "Learned how to design CLI tools that manage complex multi-service Docker Compose stacks.",
+      "Learned practical homelab networking including DNS filtering, tunnel management, and remote access.",
+      "Learned to balance developer experience with operational safety in self-hosted infrastructure."
+    ],
+    "stack": ["Shell", "TypeScript", "Docker Compose", "Ollama", "n8n", "Pi-hole", "Cloudflare", "Tailscale"],
+    "github": "https://github.com/prrathnayake/pi-dev-stack"
+  },
+  {
+    "title": "Plan + Approve Web-Search AI Agent (CLI)",
+    "description": "Implemented a stateful AI agent that plans, pauses for approval, and conditionally performs web search. Used LangGraph for interrupt/resume, conversation summarization, memory checkpointing, and structured JSON planning with detailed logging.",
+    "details": [
+      "Built a LangGraph-based agent workflow that creates plans, pauses for approval, and then continues execution safely.",
+      "Added interrupt/resume support with checkpoints so long-running sessions keep context across turns.",
+      "Implemented structured JSON plans and logging to make each decision traceable during debugging.",
+      "Integrated conditional web-search execution so the agent only calls search tools when needed."
+    ],
+    "learnings": [
+      "Learned how to design AI-agent flows that stay controllable with explicit approval checkpoints.",
+      "Learned to treat observability as a core feature for debugging agent decisions.",
+      "Learned practical patterns for resumable workflows and memory handling in multi-step AI systems."
+    ],
+    "stack": ["Python", "LangGraph", "LangChain", "OpenAI API", "Firecrawl", "dotenv", "Logging"],
+    "github": "https://github.com/prrathnayake/agents_learning"
+  },
+  {
+    "title": "Uber Backend (Educational Architecture)",
+    "description": "Built an educational C++ backend inspired by Uber's architecture using a custom modular framework. Implemented three multithreaded microservices and centralized logging via a Singleton pattern for clarity, maintainability, and observability.",
+    "details": [
+      "Built three microservices for rider requests, driver matching, and trip updates, each running with multithreaded request handling.",
+      "Used gRPC and HTTP endpoints with Protobuf contracts to keep service communication structured and easy to extend.",
+      "Added Kafka and RabbitMQ integrations to model event-driven workflows for ride state updates and async processing.",
+      "Implemented a shared Singleton logger with file and console outputs for better debugging and observability during development."
+    ],
+    "learnings": [
+      "Learned how to split a complex backend into smaller services with clear ownership.",
+      "Learned practical tradeoffs between synchronous APIs and asynchronous event-driven communication.",
+      "Learned that good logging design saves major debugging time in distributed systems."
+    ],
+    "stack": ["C++", "Conan", "appWrite", "HTTP", "gRPC", "Kafka", "RabbitMQ", "H3", "Database", "Protobuf"],
+    "github": "https://github.com/prrathnayake/uber_backend"
+  },
+  {
+    "title": "Instagram Clone (Mobile)",
+    "description": "Built a mobile clone with profile management, image upload/deletion, and post interactions (likes) to demonstrate full-stack mobile workflows.",
+    "details": [
+      "Implemented profile and feed screens with post rendering and user interaction states.",
+      "Added create/delete post flows with image handling and backend API integration.",
+      "Used Redux for predictable state management across authentication, feed, and profile features.",
+      "Connected Node.js and MongoDB backend services to support persistent social interactions."
+    ],
+    "learnings": [
+      "Learned to connect frontend interactions to backend persistence with clean API boundaries.",
+      "Learned how centralized state management helps keep larger mobile apps predictable.",
+      "Learned practical handling of media workflows in social-style applications."
+    ],
+    "stack": ["React Native", "Node.js", "MongoDB", "Redux"],
+    "github": "https://github.com/prrathnayake/Insta-ui-clone"
+  },
+  {
+    "title": "eHealth Medical System (University Final Project)",
+    "description": "Developed a full‑stack web and mobile platform for physiotherapists and clients to manage profiles, appointments, and medical reports with SDLC and unit testing.",
+    "details": [
+      "Built web and mobile interfaces for therapists and clients to manage appointments and medical records.",
+      "Implemented role-based flows for profile updates, scheduling, and treatment report tracking.",
+      "Integrated Dockerized services and shared APIs to support consistent deployments across environments.",
+      "Applied SDLC documentation and unit testing practices as part of the final-year engineering process."
+    ],
+    "learnings": [
+      "Learned to coordinate full-stack delivery across multiple clients and user roles.",
+      "Learned how SDLC planning and testing improve team alignment and system reliability.",
+      "Learned to manage project scope while still delivering both web and mobile features."
+    ],
+    "stack": ["ReactJS", "NodeJS", "Flutter", "Docker", "MySQL", "Python", "Firebase"],
+    "github": "https://github.com/prrathnayake/myHealthSystem"
+  },
+  {
     "title": "SLM Platform (Local AI Agent Hub)",
     "description": "Built a privacy-first local AI platform that exposes a single OpenAI-compatible API for specialized small language model agents. Designed the system so different task-focused agents can be swapped behind one gateway while keeping workloads on local hardware.",
     "details": [
@@ -15,23 +117,6 @@
     ],
     "stack": ["Python", "FastAPI", "Docker", "Redis", "SQLAlchemy", "Hugging Face", "llama.cpp", "OpenAI API"],
     "github": "https://github.com/prrathnayake/slm_server"
-  },
-  {
-    "title": "Uber Backend (Educational Architecture)",
-    "description": "Built an educational C++ backend inspired by Uber’s architecture using a custom modular framework. Implemented three multithreaded microservices and centralized logging via a Singleton pattern for clarity, maintainability, and observability.",
-    "details": [
-      "Built three microservices for rider requests, driver matching, and trip updates, each running with multithreaded request handling.",
-      "Used gRPC and HTTP endpoints with Protobuf contracts to keep service communication structured and easy to extend.",
-      "Added Kafka and RabbitMQ integrations to model event-driven workflows for ride state updates and async processing.",
-      "Implemented a shared Singleton logger with file and console outputs for better debugging and observability during development."
-    ],
-    "learnings": [
-      "Learned how to split a complex backend into smaller services with clear ownership.",
-      "Learned practical tradeoffs between synchronous APIs and asynchronous event-driven communication.",
-      "Learned that good logging design saves major debugging time in distributed systems."
-    ],
-    "stack": ["C++", "Conan", "appWrite", "HTTP", "gRPC", "Kafka", "RabbitMQ", "H3", "Database", "Protobuf"],
-    "github": "https://github.com/prrathnayake/uber_backend"
   },
   {
     "title": "Uber Rider App (Frontend)",
@@ -82,57 +167,6 @@
     ],
     "stack": ["React Native"],
     "github": "https://github.com/prrathnayake/React-Native-WhatsAppUI"
-  },
-  {
-    "title": "Instagram Clone (Mobile)",
-    "description": "Built a mobile clone with profile management, image upload/deletion, and post interactions (likes) to demonstrate full-stack mobile workflows.",
-    "details": [
-      "Implemented profile and feed screens with post rendering and user interaction states.",
-      "Added create/delete post flows with image handling and backend API integration.",
-      "Used Redux for predictable state management across authentication, feed, and profile features.",
-      "Connected Node.js and MongoDB backend services to support persistent social interactions."
-    ],
-    "learnings": [
-      "Learned to connect frontend interactions to backend persistence with clean API boundaries.",
-      "Learned how centralized state management helps keep larger mobile apps predictable.",
-      "Learned practical handling of media workflows in social-style applications."
-    ],
-    "stack": ["React Native", "Node.js", "MongoDB", "Redux"],
-    "github": "https://github.com/prrathnayake/Insta-ui-clone"
-  },
-  {
-    "title": "Plan + Approve Web-Search AI Agent (CLI)",
-    "description": "Implemented a stateful AI agent that plans, pauses for approval, and conditionally performs web search. Used LangGraph for interrupt/resume, conversation summarization, memory checkpointing, and structured JSON planning with detailed logging.",
-    "details": [
-      "Built a LangGraph-based agent workflow that creates plans, pauses for approval, and then continues execution safely.",
-      "Added interrupt/resume support with checkpoints so long-running sessions keep context across turns.",
-      "Implemented structured JSON plans and logging to make each decision traceable during debugging.",
-      "Integrated conditional web-search execution so the agent only calls search tools when needed."
-    ],
-    "learnings": [
-      "Learned how to design AI-agent flows that stay controllable with explicit approval checkpoints.",
-      "Learned to treat observability as a core feature for debugging agent decisions.",
-      "Learned practical patterns for resumable workflows and memory handling in multi-step AI systems."
-    ],
-    "stack": ["Python", "LangGraph", "LangChain", "OpenAI API", "Firecrawl", "dotenv", "Logging"],
-    "github": "https://github.com/prrathnayake/agents_learning"
-  },
-  {
-    "title": "eHealth Medical System (University Final Project)",
-    "description": "Developed a full‑stack web and mobile platform for physiotherapists and clients to manage profiles, appointments, and medical reports with SDLC and unit testing.",
-    "details": [
-      "Built web and mobile interfaces for therapists and clients to manage appointments and medical records.",
-      "Implemented role-based flows for profile updates, scheduling, and treatment report tracking.",
-      "Integrated Dockerized services and shared APIs to support consistent deployments across environments.",
-      "Applied SDLC documentation and unit testing practices as part of the final-year engineering process."
-    ],
-    "learnings": [
-      "Learned to coordinate full-stack delivery across multiple clients and user roles.",
-      "Learned how SDLC planning and testing improve team alignment and system reliability.",
-      "Learned to manage project scope while still delivering both web and mobile features."
-    ],
-    "stack": ["ReactJS", "NodeJS", "Flutter", "Docker", "MySQL", "Python", "Firebase"],
-    "github": "https://github.com/prrathnayake/myHealthSystem"
   },
   {
     "title": "Employee Management System (University Group Project)",

@@ -1,10 +1,10 @@
 {
   "headline": "Graduate Software Engineer — AI Systems & Automation",
-  "summary": "Pasan focuses on backend engineering, distributed systems, and AI automation. His work combines software architecture fundamentals with modern tooling so solutions are easier to scale, operate, and extend.",
+  "summary": "Graduate software engineer with experience in software development, AI-assisted workflows, and distributed systems. Experienced in C++, Python, JavaScript, SQL, Kafka, and containerised tooling. Skilled in building real-time and event-driven systems using LangGraph, LangChain, and modern APIs. Adaptable, systems-focused, and project-driven, with experience across enterprise, eCommerce, and automation-focused environments.",
   "highlights": [
     "Engineers backend APIs in Python and C++ using REST, HTTP, and gRPC service patterns.",
     "Designs event-driven systems with Kafka and RabbitMQ to separate services and improve resilience.",
-    "Builds AI automation workflows with LangGraph, LangChain, and OpenRouter-based LLM integrations.",
+    "Builds AI automation workflows with LangGraph, LangChain, and OpenAI-based LLM integrations.",
     "Applies secure coding practices with validation, guardrails, and threat-aware design.",
     "Uses Docker and GitHub Actions to improve release consistency and development velocity.",
     "Translates product requirements into maintainable code, clear documentation, and testable flows."
