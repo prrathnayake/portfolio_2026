@@ -1,5 +1,22 @@
 [
   {
+    "title": "F.R.I.D.A.Y — Graph-Driven AI Agent Runtime",
+    "description": "Built a graph-driven AI agent runtime with workspace memory, MCP-first tool orchestration, delegated subagent workers, and observable node-level reasoning. Features a reusable Agent Kernel platform with multiple CLI surfaces and channel adapters.",
+    "details": [
+      "Designed a graph-based runtime engine with hop-based execution, state management, and lifecycle orchestration for autonomous agent workflows.",
+      "Implemented MCP-first tool orchestration with a canonical capability registry, local MCP server, and compatibility bridge for legacy tool calls.",
+      "Built delegated subagent workers with planner, sandbox, and review patterns for complex multi-step task execution.",
+      "Created multiple gateway channel adapters (HTTP, Telegram, Slack, Discord, WhatsApp, LiveKit) with normalized message handling."
+    ],
+    "learnings": [
+      "Learned how to design graph-driven agent architectures that stay observable and controllable at each execution node.",
+      "Learned the value of MCP-first tool design for keeping agent capabilities extensible and interoperable.",
+      "Learned practical patterns for workspace memory, context bundling, and long-term retrieval in agentic systems."
+    ],
+    "stack": ["Python", "FastAPI", "Docker", "Redis", "ChromaDB", "MCP", "OpenRouter", "Playwright"],
+    "github": "https://github.com/prrathnayake/F.R.I.D.A.Y"
+  },
+  {
     "title": "Phantom (Prototype) — AI Security Monitoring System",
     "description": "Built a centralized security monitoring system with Gateway + Agent architecture for autonomous threat detection and analysis. Features LLM-powered analysis, real-time dashboards, and multiple input interfaces.",
     "details": [
